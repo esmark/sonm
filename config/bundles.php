@@ -15,4 +15,5 @@ return [
     Misd\PhoneNumberBundle\MisdPhoneNumberBundle::class => ['all' => true],
     Smart\CoreBundle\SmartCoreBundle::class => ['all' => true],
     Sonata\IntlBundle\SonataIntlBundle::class => ['all' => true],
+    Borsaco\TelegramBotApiBundle\TelegramBotApiBundle::class => ['all' => true],
 ];
