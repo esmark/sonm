@@ -183,6 +183,9 @@
     "smart-core/core-bundle": {
         "version": "dev-master"
     },
+    "sonata-project/intl-bundle": {
+        "version": "2.7.0"
+    },
     "symfony/asset": {
         "version": "v4.4.2"
     },
