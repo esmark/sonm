@@ -1,0 +1,5 @@
+telegram_bot_api:
+    default: 'sonm'
+    bots:
+        coop:
+            token: '%env(TG_BOT_TOKEN)%'

@@ -1,0 +1,15 @@
+{% extends 'profile/_layout.html.twig' %}
+
+{% block profile_content %}
+    {% if form is defined %}
+        <p>
+            <b>Логин:</b> {{ app.user.username }}
+        </p>
+
+        <p>
+            <b>Email:</b> {{ app.user.email }}
+        </p>
+
+        {{ form(form) }}
+    {% endif %}
+{% endblock profile_content %}

@@ -3,9 +3,6 @@
 
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
-imports:
-    - { resource: '_local.yaml', ignore_errors: true }
-
 parameters:
 
 services:
@@ -13,6 +10,8 @@ services:
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+        bind:               # defines the scalar arguments once and apply them to any service defined/created in this file
+            $tgBotName:  "%env(default::TG_BOT_NAME)%"
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
@@ -36,8 +35,5 @@ services:
             - { name: knp_menu.menu_builder, method: top, alias: top } # The alias is what is used to retrieve the menu
             - { name: knp_menu.menu_builder, method: profile, alias: profile }
 
-# @todo отрефакторить
-doctrine:
-    orm:
-        resolve_target_entities:
-            Symfony\Component\Security\Core\User\UserInterface: 'App\Entity\User'
+imports:
+    - { resource: '_local.yaml', ignore_errors: true }

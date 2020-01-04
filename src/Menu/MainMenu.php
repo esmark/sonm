@@ -61,7 +61,6 @@ class MainMenu
         $menu->addChild('Common', ['route' => 'profile']);
         $menu->addChild('Telegram', ['route' => 'profile_telegram']);
         $menu->addChild('Geoposition', ['route' => 'profile_geoposition']);
-        $menu->addChild('Invited users', ['route' => 'profile_invited']);
         $menu->addChild('Change password', ['route' => 'profile_password']);
 
         return $menu;

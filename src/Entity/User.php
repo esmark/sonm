@@ -28,6 +28,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class User implements UserInterface
 {
     use ColumnTrait\Uuid;
+    use ColumnTrait\EmailUnique;
     use ColumnTrait\CreatedAt;
     use ColumnTrait\IsEnabled;
 
