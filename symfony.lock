@@ -183,6 +183,9 @@
     "smart-core/core-bundle": {
         "version": "dev-master"
     },
+    "smart-core/db-dumper-bundle": {
+        "version": "dev-master"
+    },
     "sonata-project/intl-bundle": {
         "version": "2.7.0"
     },

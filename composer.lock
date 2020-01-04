@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1cd269274029ffca65161fe124ecb31b",
+    "content-hash": "ea63787d2625af7f522c6046d7b339a9",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -2362,6 +2362,37 @@
             "description": "Core Bundle for rapid development.",
             "homepage": "https://github.com/Smart-Core/CoreBundle",
             "time": "2019-11-24T11:52:42+00:00"
+        },
+        {
+            "name": "smart-core/db-dumper-bundle",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Smart-Core/DbDumperBundle.git",
+                "reference": "a9d7e1c6f57c91227cb5a71ae362f217edf30039"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Smart-Core/DbDumperBundle/zipball/a9d7e1c6f57c91227cb5a71ae362f217edf30039",
+                "reference": "a9d7e1c6f57c91227cb5a71ae362f217edf30039",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4.1"
+            },
+            "type": "symfony-bundle",
+            "autoload": {
+                "psr-4": {
+                    "SmartCore\\Bundle\\DbDumperBundle\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Smart and simple database dumper for Symfony2",
+            "homepage": "http://smart-core.org",
+            "time": "2019-07-13T23:51:31+00:00"
         },
         {
             "name": "sonata-project/intl-bundle",
@@ -7091,7 +7122,8 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "smart-core/core-bundle": 20
+        "smart-core/core-bundle": 20,
+        "smart-core/db-dumper-bundle": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
