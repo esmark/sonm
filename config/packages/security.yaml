@@ -16,7 +16,12 @@ security:
             security: false
         main:
             pattern: ^/
-            anonymous: true
+            anonymous: ~
+
+            guard:
+                authenticators:
+                    - App\Security\LoginFormAuthenticator
+                    #- App\Security\UserAuthenticator
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#firewalls-authentication

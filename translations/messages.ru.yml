@@ -9,6 +9,7 @@ Deal: Сделка
 Deals: Сделки
 Demand: Спрос
 Description: Описание
+Email: Email
 Error: Ошибка
 Firstname: Имя
 Final date: Финальная дата
@@ -36,8 +37,10 @@ Old password: Старый пароль
 Participant: Участник
 Participants: Участники
 Password: Пароль
+Password confirmation: Повтор пароля
 Position: Позиция
 Price: Цена
+Register: Регистрация
 Repeat Password: Повторите пароль
 Sex: Пол
 Sign in: Вход

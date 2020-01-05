@@ -23,7 +23,17 @@ use Symfony\Component\Validator\Constraints as Assert;
  *      },
  * )
  *
- * @UniqueEntity(fields="username", message="Username is already exists")
+ * @UniqueEntity(
+ *     fields="username_canonical",
+ *     errorPath="username",
+ *     message="Username is already exists"
+ * )
+ *
+ * @UniqueEntity(
+ *     fields="email_canonical",
+ *     errorPath="email",
+ *     message="Email is already exists"
+ * )
  */
 class User implements UserInterface
 {
@@ -38,10 +48,38 @@ class User implements UserInterface
     /**
      * @var string
      *
-     * @ORM\Column(type="string", length=40, unique=true)
+     * @ORM\Column(type="string", length=40)
+     * @Assert\Length(min = 3, minMessage = "Username length must be at least {{ limit }} characters long")
      * @Assert\NotNull(message="This value is not valid.")
      */
     protected $username;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string", length=40, unique=true)
+     */
+    protected $username_canonical;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string", length=100)
+     * @Assert\NotBlank()
+     * @Assert\Email(
+     *      checkHost = false,
+     *      checkMX = false,
+     *      strict = true
+     * )
+     */
+    protected $email;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string", length=100, unique=true)
+     */
+    protected $email_canonical;
 
     /**
      * @var string
@@ -50,6 +88,13 @@ class User implements UserInterface
      * @Assert\Length(min = 6, minMessage = "Password length must be at least {{ limit }} characters long")
      */
     protected $password;
+
+    /**
+     * @var string|null
+     *
+     * Plain password. Used for model validation. Must not be persisted.
+     */
+    protected $plain_password;
 
     /**
      * @var array
@@ -88,14 +133,14 @@ class User implements UserInterface
     /**
      * @var float|null
      *
-     * @ORM\Column(type="decimal", precision=10, scale=8, nullable=true)
+     * @ORM\Column(type="decimal", precision=14, scale=11, nullable=true)
      */
     protected $latitude;
 
     /**
      * @var float|null
      *
-     * @ORM\Column(type="decimal", precision=11, scale=8, nullable=true)
+     * @ORM\Column(type="decimal", precision=14, scale=11, nullable=true)
      */
     protected $longitude;
 
@@ -114,15 +159,31 @@ class User implements UserInterface
     protected $telegram_username;
 
     /**
+     * @ORM\ManyToMany(targetEntity="UserGroup")
+     * @ORM\JoinTable(name="users_groups_relations")
+     */
+    protected $groups;
+
+    /**
+     * @var UserOauth[]|ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="UserOauth", mappedBy="user", cascade={"persist"}, fetch="EXTRA_LAZY")
+     */
+    protected $oauths;
+
+    /**
      * User constructor.
      */
     public function __construct()
     {
-        $this->created_at       = new \DateTime();
-        $this->is_enabled       = true;
-        $this->password         = '';
-        $this->roles            = [];
-        $this->username         = '';
+        $this->created_at   = new \DateTime();
+        $this->is_enabled   = true;
+        $this->email        = '';
+        $this->groups       = new ArrayCollection();
+        $this->oauths       = new ArrayCollection();
+        $this->password     = '';
+        $this->roles        = [];
+        $this->username     = '';
     }
 
     /**
@@ -138,21 +199,54 @@ class User implements UserInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @return string
      */
     public function serialize(): string
     {
-        // add $this->salt too if you don't use Bcrypt or Argon2i
-        return serialize([$this->id, $this->username, $this->password]);
+        return serialize([
+            $this->id,
+            $this->is_enabled,
+            $this->email,
+            $this->email_canonical,
+            $this->username,
+            $this->username_canonical,
+            $this->password
+        ]);
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $serialized
      */
     public function unserialize($serialized): void
     {
-        // add $this->salt too if you don't use Bcrypt or Argon2i
-        [$this->id, $this->username, $this->password] = unserialize($serialized, ['allowed_classes' => false]);
+        [
+            $this->id,
+            $this->is_enabled,
+            $this->email,
+            $this->email_canonical,
+            $this->username,
+            $this->username_canonical,
+            $this->password
+        ] = unserialize($serialized, ['allowed_classes' => false]);
+    }
+
+    /**
+     * @param string $string
+     *
+     * @return string|null
+     */
+    static public function canonicalize(string $string): ?string
+    {
+        if (null === $string) {
+            return null;
+        }
+
+        $encoding = mb_detect_encoding($string);
+        $result = $encoding
+            ? mb_convert_case($string, MB_CASE_LOWER, $encoding)
+            : mb_convert_case($string, MB_CASE_LOWER);
+
+        return $result;
     }
 
     /**
@@ -177,7 +271,31 @@ class User implements UserInterface
     public function eraseCredentials(): void
     {
         // if you had a plainPassword property, you'd nullify it here
-        // $this->plainPassword = null;
+        $this->plain_password = null;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSuperAdmin(): bool
+    {
+        return $this->hasRole(static::ROLE_SUPER_ADMIN);
+    }
+
+    /**
+     * @param bool $boolean
+     *
+     * @return $this
+     */
+    public function setSuperAdmin(bool $boolean): self
+    {
+        if (true === $boolean) {
+            $this->addRole(static::ROLE_SUPER_ADMIN);
+        } else {
+            $this->removeRole(static::ROLE_SUPER_ADMIN);
+        }
+
+        return $this;
     }
 
     /**
@@ -195,7 +313,28 @@ class User implements UserInterface
      */
     public function setUsername(string $username): self
     {
-        $this->username = $username;
+        $this->username = trim($username);
+        $this->username_canonical = self::canonicalize($this->username);
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUsernameCanonical(): string
+    {
+        return $this->username_canonical;
+    }
+
+    /**
+     * @param string $username_canonical
+     *
+     * @return $this
+     */
+    public function setUsernameCanonical(string $username_canonical): self
+    {
+        $this->username_canonical = $username_canonical;
 
         return $this;
     }
@@ -221,9 +360,31 @@ class User implements UserInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @return string|null
      */
-    public function addRole($role)
+    public function getPlainPassword(): ?string
+    {
+        return $this->plain_password;
+    }
+
+    /**
+     * @param string|null $plain_password
+     *
+     * @return $this
+     */
+    public function setPlainPassword(?string $plain_password): self
+    {
+        $this->plain_password = $plain_password;
+
+        return $this;
+    }
+
+    /**
+     * @param string $role
+     *
+     * @return $this
+     */
+    public function addRole(string $role): self
     {
         $role = strtoupper($role);
         if ($role === static::ROLE_DEFAULT) {
@@ -238,9 +399,11 @@ class User implements UserInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $role
+     *
+     * @return $this
      */
-    public function removeRole($role)
+    public function removeRole(string $role): self
     {
         if (false !== $key = array_search(strtoupper($role), $this->roles, true)) {
             unset($this->roles[$key]);
@@ -251,9 +414,11 @@ class User implements UserInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $role
+     *
+     * @return bool
      */
-    public function hasRole($role)
+    public function hasRole(string $role): bool
     {
         return in_array(strtoupper($role), $this->getRoles(), true);
     }
@@ -273,7 +438,6 @@ class User implements UserInterface
         }
 
         return array_unique($roles);
-
     }
 
     /**
@@ -424,6 +588,149 @@ class User implements UserInterface
     public function setTelegramUsername(?string $telegram_username): self
     {
         $this->telegram_username = $telegram_username;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEmail(): string
+    {
+        return $this->email;
+    }
+
+    /**
+     * @param string $email
+     *
+     * @return $this
+     */
+    public function setEmail(string $email): self
+    {
+        $this->email = trim($email);
+        $this->email_canonical = self::canonicalize(trim($email));
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEmailCanonical(): string
+    {
+        return $this->email_canonical;
+    }
+
+    /**
+     * @param string $email_canonical
+     *
+     * @return $this
+     */
+    public function setEmailCanonical(string $email_canonical): self
+    {
+        $this->email_canonical = $email_canonical;
+
+        return $this;
+    }
+    /**
+     * @return UserOauth[]|ArrayCollection
+     */
+    public function getOauths()
+    {
+        return $this->oauths;
+    }
+
+    /**
+     * @param UserOauth[]|ArrayCollection $oauths
+     *
+     * @return $this
+     */
+    public function setOauths($oauths): self
+    {
+        $this->oauths = $oauths;
+
+        return $this;
+    }
+
+    /**
+     * @param string $provider
+     *
+     * @return UserOauth|null
+     */
+    public function getOauthByProvider(string $provider): ?UserOauth
+    {
+        foreach ($this->oauths as $oauth) {
+            if ($oauth->getProvider() == $provider) {
+                return $oauth;
+            }
+        }
+
+        throw new \Exception("Провайдер $provider не найден");
+    }
+
+    /**
+     * @return int
+     */
+    public function getVkIdentifier(): int
+    {
+        return (int) $this->getOauthByProvider('vkontakte')->getIdentifier();
+    }
+
+    /**
+     * @return array
+     */
+    public function getGroupNames(): array
+    {
+        $names = [];
+        foreach ($this->getGroups() as $group) {
+            $names[$group->getId()] = $group->getName();
+        }
+
+        return $names;
+    }
+
+    /**
+     * @return UserGroup[]|ArrayCollection
+     */
+    public function getGroups()
+    {
+        return $this->groups ?: $this->groups = new ArrayCollection();
+    }
+
+    /**
+     * @param string $name
+     *
+     * @return bool
+     */
+    public function hasGroup(string $name): bool
+    {
+        return in_array($name, $this->getGroupNames());
+    }
+
+    /**
+     * @param UserGroup $group
+     *
+     * @return $this
+     */
+    public function addGroup(UserGroup $group): self
+    {
+        if (!$this->getGroups()->contains($group)) {
+            $this->getGroups()->add($group);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param UserGroup $group
+     *
+     * @return $this
+     */
+    public function removeGroup(UserGroup $group): self
+    {
+        if ($this->getGroups()->contains($group)) {
+            $this->getGroups()->removeElement($group);
+        }
 
         return $this;
     }
