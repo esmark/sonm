@@ -1,17 +1,17 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Мой профиль{% endblock %}
+{% block title %}Личный кабинет{% endblock %}
 
 {% block content %}
-    <h1>Мой профиль</h1>
+    <h1>Личный кабинет</h1>
 
     <div class="row">
         <div class="col-xl-2">
-            {{ knp_menu_render('profile') }}
+            {{ knp_menu_render('account') }}
         </div>
 
         <div class="col">
-            {% block profile_content '' %}
+            {% block account_content '' %}
         </div>
 
     </div>

@@ -21,12 +21,22 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 /**
- * @Route("/profile")
+ * @Route("/account")
  */
-class ProfileController extends AbstractController
+class AccountController extends AbstractController
 {
     /**
-     * @Route("/", name="profile")
+     * Route("/", name="account")
+     */
+    public function index()
+    {
+        return $this->render('account/index.html.twig', [
+
+        ]);
+    }
+    
+    /**
+     * @Route("/", name="account_profile")
      */
     public function profile(Request $request, EntityManagerInterface $em): Response
     {
@@ -39,19 +49,19 @@ class ProfileController extends AbstractController
                 $em->persist($this->getUser());
                 $em->flush();
 
-                $this->addFlash('success', 'Основные данные обновлены');
+                $this->addFlash('success', 'Основные данные профиля обновлены');
 
-                return $this->redirectToRoute('profile');
+                return $this->redirectToRoute('account_profile');
             }
         }
 
-        return $this->render('profile/profile.html.twig', [
+        return $this->render('account/profile.html.twig', [
             'form' => $form->createView(),
         ]);
     }
 
     /**
-     * @Route("/password/", name="profile_password")
+     * @Route("/password/", name="account_password")
      */
     public function password(Request $request, EntityManagerInterface $em, UserPasswordEncoderInterface $encoder): Response
     {
@@ -69,7 +79,7 @@ class ProfileController extends AbstractController
                 if (!$encoder->isPasswordValid($user, $currentPassword)) {
                     $this->addFlash('error', 'Неверно указан текущий пароль');
 
-                    return $this->redirectToRoute('profile_password');
+                    return $this->redirectToRoute('account_password');
                 }
 
                 $validator = new UserValidator();
@@ -91,17 +101,17 @@ class ProfileController extends AbstractController
                     $this->addFlash('error', $e->getMessage());
                 }
 
-                return $this->redirectToRoute('profile_password');
+                return $this->redirectToRoute('account_password');
             }
         }
 
-        return $this->render('profile/profile.html.twig', [
+        return $this->render('account/password.html.twig', [
             'form' => $form->createView(),
         ]);
     }
 
     /**
-     * @Route("/geoposition/", name="profile_geoposition")
+     * @Route("/geoposition/", name="account_geoposition")
      */
     public function geoposition(Request $request, EntityManagerInterface $em): Response
     {
@@ -119,17 +129,17 @@ class ProfileController extends AbstractController
 
             $this->addFlash('success', 'Координаты сохранены.');
 
-            return $this->redirectToRoute('profile_geoposition');
+            return $this->redirectToRoute('account_geoposition');
         }
 
-        return $this->render('profile/geoposition.html.twig', [
+        return $this->render('account/geoposition.html.twig', [
             'latitude'  => $user->getLatitude(),
             'longitude' => $user->getLongitude(),
         ]);
     }
 
     /**
-     * @Route("/telegram/", name="profile_telegram")
+     * @Route("/telegram/", name="account_telegram")
      */
     public function telegram(Request $request, EntityManagerInterface $em): Response
     {
@@ -141,7 +151,7 @@ class ProfileController extends AbstractController
 
             $em->flush();
 
-            return $this->redirectToRoute('profile_telegram');
+            return $this->redirectToRoute('account_telegram');
         }
 
         $countdown = 0;
@@ -169,7 +179,7 @@ class ProfileController extends AbstractController
             $countdown = $code_item->getMetadata()['expiry'] - time();
         }
 
-        return $this->render('profile/telegram.html.twig', [
+        return $this->render('account/telegram.html.twig', [
             'code' => $code,
             'countdown' => $countdown,
         ]);

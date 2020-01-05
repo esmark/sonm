@@ -50,7 +50,7 @@ class MainMenu
      *
      * @return \Knp\Menu\ItemInterface
      */
-    public function profile(array $options)
+    public function account(array $options)
     {
         $menu = $this->factory->createItem('root', [
             'childrenAttributes'    => [
@@ -58,10 +58,10 @@ class MainMenu
             ],
         ]);
 
-        $menu->addChild('Common', ['route' => 'profile']);
-        $menu->addChild('Telegram', ['route' => 'profile_telegram']);
-        $menu->addChild('Geoposition', ['route' => 'profile_geoposition']);
-        $menu->addChild('Change password', ['route' => 'profile_password']);
+        $menu->addChild('Profile',          ['route' => 'account_profile']);
+        $menu->addChild('Telegram',         ['route' => 'account_telegram']);
+        $menu->addChild('Geoposition',      ['route' => 'account_geoposition']);
+        $menu->addChild('Change password',  ['route' => 'account_password']);
 
         return $menu;
     }

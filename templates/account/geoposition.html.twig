@@ -1,4 +1,4 @@
-{% extends 'profile/_layout.html.twig' %}
+{% extends 'account/_layout.html.twig' %}
 
 {% block css %}
     {{ parent() }}
@@ -21,7 +21,7 @@
     </style>
 {% endblock css %}
 
-{% block profile_content %}
+{% block account_content %}
     <h2>Моё местоположение</h2>
 
     <p>Указывайте место, которое вам удобно для встреч для обмена, а не фактического проживания.</p>
@@ -47,7 +47,7 @@
 
     <div id="mapdiv"></div>
 
-{% endblock profile_content %}
+{% endblock account_content %}
 
 {% block js %}
     {{ parent() }}

@@ -1,6 +1,6 @@
-{% extends 'profile/_layout.html.twig' %}
+{% extends 'account/_layout.html.twig' %}
 
-{% block profile_content %}
+{% block account_content %}
     {% if app.user.telegramUsername %}
         <h2>Телеграм</h2>
 
@@ -51,4 +51,4 @@
             <p>Бот не подключен</p>
         {% endif %}
     {% endif %}
-{% endblock profile_content %}
+{% endblock account_content %}
