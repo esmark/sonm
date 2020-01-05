@@ -72,7 +72,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
         }
 
         /** @var User $user */
-        $user = $this->entityManager->getRepository(User::class)->findOneBy(['username_canonical' => User::canonicalize($credentials['username'])]);
+        $user = $this->entityManager->getRepository(User::class)->findOneByUsername($credentials['username']);
 
         if (!$user) {
             // fail authentication with a custom error

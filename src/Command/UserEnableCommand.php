@@ -13,16 +13,16 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-class UserRoleDemoteCommand extends Command
+class UserEnableCommand extends Command
 {
-    protected static $defaultName = 'user:role:demote';
+    protected static $defaultName = 'user:enable';
 
     /** @var SymfonyStyle */
     protected $io;
     protected $em;
 
     /**
-     * UserRolePromoteCommand constructor.
+     * UserEnableCommand constructor.
      *
      * @param EntityManagerInterface $em
      */
@@ -36,9 +36,8 @@ class UserRoleDemoteCommand extends Command
     protected function configure()
     {
         $this
-            ->setDescription('Demote a user by removing a role')
+            ->setDescription('Activate a user')
             ->addArgument('username', InputArgument::REQUIRED, 'The username')
-            ->addArgument('role', InputArgument::OPTIONAL, 'The role')
         ;
     }
 
@@ -64,27 +63,19 @@ class UserRoleDemoteCommand extends Command
             $username = $this->io->ask('Username');
             $input->setArgument('username', $username);
         }
-
-        $role = $input->getArgument('role');
-        if (null !== $role) {
-            $this->io->text(' > <info>Role</info>: '.$role);
-        } else {
-            $role = $this->io->ask('Role');
-            $input->setArgument('role', $role);
-        }
     }
 
     /**
      * @param InputInterface  $input
      * @param OutputInterface $output
      *
-     * @return int|void
+     * @return int
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $username = $input->getArgument('username');
-        $role = $input->getArgument('role');
 
+        /** @var User $user */
         $user = $this->em->getRepository(User::class)->findOneByUsername($username);
 
         if (empty($user)) {
@@ -93,17 +84,17 @@ class UserRoleDemoteCommand extends Command
             return 0;
         }
 
-        if (!$user->hasRole($role)) {
-            $this->io->warning(sprintf('User "%s" didn\'t have "%s" role.', $username, $role));
+        if ($user->isEnabled()) {
+            $this->io->warning(sprintf('User "%s" is already enabled.', $username));
 
             return 0;
         }
 
-        $user->removeRole($role);
+        $user->setIsEnabled(true);
 
         $this->em->flush();
 
-        $this->io->success(sprintf('User "%s" has been demoted as a simple user. This change will not apply until the user logs out and back in again.', $username));
+        $this->io->success(sprintf('User "%s" has been enabled.', $username));
 
         return 0;
     }

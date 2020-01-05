@@ -85,18 +85,18 @@ class UserRolePromoteCommand extends Command
         $username = $input->getArgument('username');
         $role = $input->getArgument('role');
 
-        $user = $this->em->getRepository(User::class)->findOneBy(['username' => $username]);
+        $user = $this->em->getRepository(User::class)->findOneByUsername($username);
 
         if (empty($user)) {
             $this->io->warning('User not found');
 
-            return;
+            return 0;
         }
 
         if ($user->hasRole($role)) {
             $this->io->warning(sprintf('User "%s" did already have "%s" role.', $username, $role));
 
-            return;
+            return 0;
         }
 
         $user->addRole($role);
@@ -104,5 +104,7 @@ class UserRolePromoteCommand extends Command
         $this->em->flush();
 
         $this->io->success(sprintf('User "%s" has been promoted as a super administrator. This change will not apply until the user logs out and back in again.', $username));
+
+        return 0;
     }
 }

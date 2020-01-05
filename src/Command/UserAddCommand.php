@@ -157,9 +157,12 @@ class UserAddCommand extends Command
         $this->io->success(sprintf('%s was successfully created: %s', 'User', $user->getUsername()));
 
         $event = $stopwatch->stop('add-user-command');
+
         if ($output->isVerbose()) {
             $this->io->comment(sprintf('New user database id: %d / Elapsed time: %.2f ms / Consumed memory: %.2f MB', $user->getId(), $event->getDuration(), $event->getMemory() / (1024 ** 2)));
         }
+
+        return 0;
     }
 
     private function validateUserData($username, $plainPassword): void

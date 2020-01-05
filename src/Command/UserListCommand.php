@@ -82,7 +82,8 @@ class UserListCommand extends Command
             $rows[] = [
                 $user->getUsername(),
                 (string) $user,
-                $user->getEmail(),
+                $user->getEmailCanonical(),
+                $user->isEnabled() ? '+' : '<error>-</error>',
                 $user->getTelegramUsername(),
                 $roles,
                 $user->getCreatedAt()->format('Y-m-d H:i'),
@@ -90,8 +91,10 @@ class UserListCommand extends Command
             ];
         }
 
-        $this->io->table(['Username', 'FIO', 'Email', 'Telegram', 'Roles', 'Created At', 'Last login'], $rows);
+        $this->io->table(['Username', 'FIO', 'Email', 'Enabled', 'Telegram', 'Roles', 'Created At', 'Last login'], $rows);
 
         $this->io->writeln("Всего: ".count($users));
+
+        return 0;
     }
 }

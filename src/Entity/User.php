@@ -66,11 +66,7 @@ class User implements UserInterface
      *
      * @ORM\Column(type="string", length=100)
      * @Assert\NotBlank()
-     * @Assert\Email(
-     *      checkHost = false,
-     *      checkMX = false,
-     *      strict = true
-     * )
+     * @Assert\Email(mode="strict")
      */
     protected $email;
 
