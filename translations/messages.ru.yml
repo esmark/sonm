@@ -1,14 +1,17 @@
+Address: Адрес
 Cancel: Отменить
 Category: Категория
 Create: Создать
 Change password: Сменить пароль
 Common: Основное
+Cooperatives: Кооперативы
 Current password: Текущий пароль
 Day: День
 Deal: Сделка
 Deals: Сделки
 Demand: Спрос
 Description: Описание
+Director: Директор
 Email: Email
 Error: Ошибка
 Firstname: Имя
@@ -22,7 +25,9 @@ Is meat consumption: Потребление мяса?
 Is smoking: Курение?
 Image file: Картинка
 Image: Картинка
+Inn: ИНН
 Joint Purchases: Совместные закупки
+Kpp: КПП
 Lastname: Фамилия
 Measure: Еденицы измерения
 Min quantity: Минимальное кол-во
@@ -33,6 +38,7 @@ New password: Новый пароль
 No: Нет
 Offer: Предложение
 Offers: Предложения
+Ogrn: ОГРН
 Old password: Старый пароль
 Participant: Участник
 Participants: Участники
@@ -62,3 +68,5 @@ Quantity: Количество
 Quantity reserved:  Кол-во в резерве
 Year: Год
 Yes: Да
+
+Technical name, short, latin, with out spaces: Техническое имя, короткое, английскими буквами, без пробелов

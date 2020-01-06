@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Entity\CooperativeHistory;
 use App\Entity\User;
+use App\Form\Type\CooperativeCreateFormType;
+use App\Form\Type\CooperativeFormType;
 use App\Form\Type\UserChangePasswordFormType;
 use App\Form\Type\UserFormType;
 use App\Repository\UserRepository;
@@ -26,17 +29,60 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 class AccountController extends AbstractController
 {
     /**
-     * Route("/", name="account")
+     * @Route("/", name="account")
      */
-    public function index()
+    public function index(): Response
     {
-        return $this->render('account/index.html.twig', [
-
-        ]);
+        return $this->redirectToRoute('account_profile');
     }
     
     /**
-     * @Route("/", name="account_profile")
+     * @Route("/coop/", name="account_coop")
+     */
+    public function coop(): Response
+    {
+        return $this->render('account/coop.html.twig', [
+
+        ]);
+    }
+
+    /**
+     * @Route("/coop/new/", name="account_coop_new")
+     */
+    public function coopNew(Request $request, EntityManagerInterface $em): Response
+    {
+        $form = $this->createForm(CooperativeCreateFormType::class);
+
+        if ($request->isMethod('POST')) {
+            $form->handleRequest($request);
+
+            if ($form->get('create')->isClicked() and $form->isValid()) {
+                $coop = $form->getData();
+
+                $history = new CooperativeHistory();
+                $history
+                    ->setCooperative($coop)
+                    ->setComment('Создана заявка на регистрацию')
+                    ->setUser($this->getUser())
+                ;
+
+                $em->persist($coop);
+                $em->persist($history);
+                $em->flush();
+
+                $this->addFlash('success', 'Заявка на создание кооператива отправлена');
+
+                return $this->redirectToRoute('account_coop');
+            }
+        }
+
+        return $this->render('account/coop_new.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/profile/", name="account_profile")
      */
     public function profile(Request $request, EntityManagerInterface $em): Response
     {

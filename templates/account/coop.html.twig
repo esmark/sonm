@@ -1,0 +1,13 @@
+{% extends 'account/_layout.html.twig' %}
+
+{% block title %}Мои кооперативы - {{ parent() }}{% endblock %}
+
+{% block account_content %}
+    <p style="float: right; margin-top: 8px;">
+        <a href="{{ path('account_coop') }}" class="btn btn-primary">Вступить в существующий кооператив</a>
+        <a href="{{ path('account_coop_new') }}" class="btn btn-success">Заявка на регистрацию нового кооператива</a>
+    </p>
+
+    <h2>Мои кооперативы</h2>
+
+{% endblock %}

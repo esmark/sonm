@@ -35,5 +35,13 @@ services:
             - { name: knp_menu.menu_builder, method: top, alias: top } # The alias is what is used to retrieve the menu
             - { name: knp_menu.menu_builder, method: account, alias: account }
 
+    # Menu selected items
+    app.menu.voter.request:
+        class: App\Menu\RequestVoter
+        arguments:
+            - '@request_stack'
+        tags:
+            - { name: knp_menu.voter }
+
 imports:
     - { resource: '_local.yaml', ignore_errors: true }
