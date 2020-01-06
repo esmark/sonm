@@ -62,4 +62,5 @@ security:
 #        - { path: ^/telegram/, roles: IS_AUTHENTICATED_ANONYMOUSLY }
 #        - { path: ^/register/, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/user/, role: ROLE_USER }
         - { path: ^/profile/, role: ROLE_USER }

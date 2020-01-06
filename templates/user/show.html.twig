@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Участник {{ user }}{% endblock %}
+
+{% block content %}
+    <h1>{{ user }}</h1>
+
+    <table class="table table-bordered table-hover">
+        <tr>
+            <th style="width: 170px;">Телеграм</th>
+            <td>
+                {% if user.telegramUsername %}
+                    <a href="tg://resolve?domain={{ user.telegramUsername }}">
+                        Написать сообщение
+
+                            <span title="Написать сообщение в Телеграм" style="float: left; color: Dodgerblue; padding-right: 8px;">
+                                <i class="fab fa-telegram-plane"></i>
+                            </span>
+                    </a>
+                {% else %}
+                    Не подключен
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <th>Дата регистрации</th>
+            <td>{{ user.createdAt|date }}</td>
+        </tr>
+        <tr>
+            <th>Последний вход</th>
+            <td>{% if user.lastLogin %}
+                    {{ user.lastLogin|date }}
+                {% endif %}
+            </td>
+        </tr>
+    </table>
+
+{% endblock %}

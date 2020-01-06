@@ -34,8 +34,7 @@
                         </span>
                     {% endif %}
 
-{#                    <a href="{{ path('user_show', {'id': user.id}) }}">{{ user }}</a>#}
-                    <a href="#">{{ user }}</a>
+                    <a href="{{ path('user_show', {'id': user.id}) }}">{{ user }}</a>
                 </td>
                 <td>{{ user.createdAt|date }}</td>
                 <td>{% if user.lastLogin %}

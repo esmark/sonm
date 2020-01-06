@@ -26,7 +26,7 @@
         <tbody>
         {% for member in members %}
             <tr>
-                <td>{{ member.cooperative }}</td>
+                <td><a href="{{ path('account_coop_show', {'id': member.cooperative.id}) }}">{{ member.cooperative }}</a></td>
                 <td>{{ member.statusAsText }}</td>
                 <td>{{ member.cooperative.members|length }}</td>
                 <td>{{ member.cooperative.statusAsText }}</td>

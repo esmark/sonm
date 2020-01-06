@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Entity\Cooperative;
 use App\Entity\CooperativeHistory;
 use App\Entity\CooperativeMember;
 use App\Entity\User;
@@ -60,17 +61,17 @@ class AccountController extends AbstractController
             if ($form->get('create')->isClicked() and $form->isValid()) {
                 $coop = $form->getData();
 
-                $history = new CooperativeHistory();
-                $history
-                    ->setCooperative($coop)
-                    ->setAction(CooperativeHistory::ACTION_CREATE)
-                    ->setUser($this->getUser())
-                ;
-
                 $member = new CooperativeMember();
                 $member
                     ->setCooperative($coop)
                     ->setStatus(CooperativeMember::STATUS_CHAIRMAN)
+                    ->setUser($this->getUser())
+                ;
+
+                $history = new CooperativeHistory();
+                $history
+                    ->setCooperative($coop)
+                    ->setAction(CooperativeHistory::ACTION_CREATE)
                     ->setUser($this->getUser())
                 ;
 
@@ -82,9 +83,9 @@ class AccountController extends AbstractController
                 ;
 
                 $em->persist($coop);
+                $em->persist($member);
                 $em->persist($history);
                 $em->persist($history2);
-                $em->persist($member);
                 $em->flush();
 
                 $this->addFlash('success', 'Заявка на создание кооператива отправлена');
@@ -95,6 +96,30 @@ class AccountController extends AbstractController
 
         return $this->render('account/coop_new.html.twig', [
             'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/coop/{id}/", name="account_coop_show")
+     */
+    public function coopShow(Cooperative $coop, Request $request, EntityManagerInterface $em): Response
+    {
+        $isMember = false;
+
+        foreach ($coop->getMembers() as $member) {
+            if ($member->getUser() == $this->getUser()) {
+                $isMember = true;
+
+                break;
+            }
+        }
+
+        if (!$isMember) {
+            return $this->redirectToRoute('account_coop');
+        }
+
+        return $this->render('account/coop_show.html.twig', [
+            'coop' => $coop,
         ]);
     }
 
