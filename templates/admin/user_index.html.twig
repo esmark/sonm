@@ -12,6 +12,7 @@
         <thead>
         <tr>
             <th>Имя</th>
+            <th>Роли</th>
             <th>Дата регистрации</th>
             <th>Последний вход</th>
         </tr>
@@ -35,6 +36,14 @@
                     {% endif %}
 
                     <a href="{{ path('user_show', {'id': user.id}) }}">{{ user }}</a>
+                </td>
+                <td>
+                    {% for role in user.roles %}
+                        {% if role != 'ROLE_USER' %}
+                            {{ role }}
+                            <br>
+                        {% endif %}
+                    {% endfor %}
                 </td>
                 <td>{{ user.createdAt|date }}</td>
                 <td>{% if user.lastLogin %}
