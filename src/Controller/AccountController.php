@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\CooperativeHistory;
+use App\Entity\CooperativeMember;
 use App\Entity\User;
 use App\Form\Type\CooperativeCreateFormType;
 use App\Form\Type\CooperativeFormType;
@@ -39,10 +40,10 @@ class AccountController extends AbstractController
     /**
      * @Route("/coop/", name="account_coop")
      */
-    public function coop(): Response
+    public function coop(EntityManagerInterface $em): Response
     {
         return $this->render('account/coop.html.twig', [
-
+            'members' => $em->getRepository(CooperativeMember::class)->findBy(['user' => $this->getUser()]),
         ]);
     }
 
@@ -62,12 +63,28 @@ class AccountController extends AbstractController
                 $history = new CooperativeHistory();
                 $history
                     ->setCooperative($coop)
-                    ->setComment('Создана заявка на регистрацию')
+                    ->setAction(CooperativeHistory::ACTION_CREATE)
+                    ->setUser($this->getUser())
+                ;
+
+                $member = new CooperativeMember();
+                $member
+                    ->setCooperative($coop)
+                    ->setStatus(CooperativeMember::STATUS_CHAIRMAN)
+                    ->setUser($this->getUser())
+                ;
+
+                $history2 = new CooperativeHistory();
+                $history2
+                    ->setCooperative($coop)
+                    ->setAction(CooperativeHistory::ACTION_MEMBER_ADD)
                     ->setUser($this->getUser())
                 ;
 
                 $em->persist($coop);
                 $em->persist($history);
+                $em->persist($history2);
+                $em->persist($member);
                 $em->flush();
 
                 $this->addFlash('success', 'Заявка на создание кооператива отправлена');

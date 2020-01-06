@@ -4,10 +4,36 @@
 
 {% block account_content %}
     <p style="float: right; margin-top: 8px;">
-        <a href="{{ path('account_coop') }}" class="btn btn-primary">Вступить в существующий кооператив</a>
         <a href="{{ path('account_coop_new') }}" class="btn btn-success">Заявка на регистрацию нового кооператива</a>
+        <br>
+        <a href="{{ path('account_coop') }}" class="btn btn-primary">@todo Вступить в существующий кооператив</a>
     </p>
 
     <h2>Мои кооперативы</h2>
+
+    <p>Всего: {{ members|length }}</p>
+
+    <table class="table table-bordered table-hover">
+        <thead>
+        <tr>
+            <th>Название</th>
+            <th>Мой статус</th>
+            <th>Кол-во участников</th>
+            <th>Статус</th>
+            <th>Дата регистрации</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for member in members %}
+            <tr>
+                <td>{{ member.cooperative }}</td>
+                <td>{{ member.statusAsText }}</td>
+                <td>{{ member.cooperative.members|length }}</td>
+                <td>{{ member.cooperative.statusAsText }}</td>
+                <td>{{ member.createdAt|date }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 
 {% endblock %}

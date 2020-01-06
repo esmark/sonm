@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Пользователи - Админка{% endblock %}
+
+{% block content %}
+
+    <h1>Пользователи</h1>
+
+    <p>Всего: {{ users|length }}</p>
+
+    <table class="table table-bordered table-hover">
+        <thead>
+        <tr>
+            <th>Имя</th>
+            <th>Дата регистрации</th>
+            <th>Последний вход</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for user in users %}
+            <tr>
+                <td>
+                    {% if user.telegramUsername %}
+                        <a href="tg://resolve?domain={{ user.telegramUsername }}">
+                            <span title="Написать сообщение в Телеграм" style="float: right; color: Dodgerblue;">
+                                <i class="fab fa-telegram-plane"></i>
+                            </span>
+                        </a>
+                    {% endif %}
+
+                    {% if user.longitude and user.latitude %}
+                        <span style="float: right; color: Dodgerblue; margin-right: 4px;">
+                            <i class="fa fa-map-marker-alt"></i>
+                        </span>
+                    {% endif %}
+
+{#                    <a href="{{ path('user_show', {'id': user.id}) }}">{{ user }}</a>#}
+                    <a href="#">{{ user }}</a>
+                </td>
+                <td>{{ user.createdAt|date }}</td>
+                <td>{% if user.lastLogin %}
+                        {{ user.lastLogin|date }}
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

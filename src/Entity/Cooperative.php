@@ -41,10 +41,12 @@ class Cooperative
     const STATUS_PENDING   = 0;
     const STATUS_ACTIVE    = 2;
     const STATUS_INACTIVE  = 3;
+    const STATUS_DECLINE   = 4;
     static protected $status_values = [
         self::STATUS_PENDING    => 'Ожидает заверения',
         self::STATUS_ACTIVE     => 'Действующей',
         self::STATUS_INACTIVE   => 'Не действующей',
+        self::STATUS_DECLINE    => 'Заверение отклонено',
     ];
 
     /**
@@ -90,6 +92,7 @@ class Cooperative
      * @var CooperativeMember[]|ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="CooperativeMember", mappedBy="cooperative", cascade={"persist"}, fetch="EXTRA_LAZY")
+     * @ORM\OrderBy({"created_at" = "ASC"})
      */
     protected $members;
 
@@ -107,11 +110,19 @@ class Cooperative
     }
 
     /**
+     * @return string
+     */
+    public function __toString(): string
+    {
+        return $this->getTitle();
+    }
+
+    /**
      * @return int
      */
     public function getOgrn(): int
     {
-        return $this->ogrn;
+        return (int) $this->ogrn;
     }
 
     /**
@@ -131,7 +142,7 @@ class Cooperative
      */
     public function getInn(): int
     {
-        return $this->inn;
+        return (int) $this->inn;
     }
 
     /**
@@ -151,7 +162,7 @@ class Cooperative
      */
     public function getKpp(): int
     {
-        return $this->kpp;
+        return (int) $this->kpp;
     }
 
     /**

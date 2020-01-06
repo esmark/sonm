@@ -11,37 +11,48 @@ use Smart\CoreBundle\Doctrine\ColumnTrait;
  * @ORM\Entity()
  * @ORM\Table("cooperatives_history",
  *      indexes={
+ *          @ORM\Index(columns={"action"}),
  *          @ORM\Index(columns={"created_at"}),
- *          @ORM\Index(columns={"type"}),
  *      },
  * )
  */
 class CooperativeHistory
 {
     use ColumnTrait\Id;
-    use ColumnTrait\Comment;
     use ColumnTrait\User;
     use ColumnTrait\CreatedAt;
 
-    const TYPE_CREATE               = 0;  // Создание кооператива
-    const TYPE_UPDATE               = 1;  // Создание кооператива
+    const ACTION_CREATE               = 0;
+    const ACTION_UPDATE               = 1;
 
-    const TYPE_ASSURANCE_SUCCESS    = 20; // Успешное заверение
-    const TYPE_ASSURANCE_DECLINE    = 21; // Заверение отклонено
+    const ACTION_ASSURANCE_SUCCESS    = 20;
+    const ACTION_ASSURANCE_DECLINE    = 21;
 
-    const TYPE_MEMBER_ADD           = 50; // Добавление участника
-    const TYPE_MEMBER_REMOVE        = 51; // Удаление участника
-    const TYPE_MEMBER_STATUS        = 52; // Изменение статуса участника
+    const ACTION_MEMBER_ADD           = 50;
+    const ACTION_MEMBER_REMOVE        = 51;
+    const ACTION_MEMBER_STATUS        = 52;
+    const ACTION_MEMBER_REQUEST       = 53;
+
+    static protected $action_values = [
+        self::ACTION_CREATE               => 'Создание кооператива',
+        self::ACTION_UPDATE               => 'Обновление данных',
+        self::ACTION_ASSURANCE_SUCCESS    => 'Успешное заверение',
+        self::ACTION_ASSURANCE_DECLINE    => 'Заверение отклонено',
+        self::ACTION_MEMBER_ADD           => 'Добавление участника',
+        self::ACTION_MEMBER_REMOVE        => 'Удаление участника',
+        self::ACTION_MEMBER_STATUS        => 'Изменение статуса участника',
+        self::ACTION_MEMBER_REQUEST       => 'Заявка на вступление',
+    ];
 
     /**
-     * @var array
+     * @var array|null
      *
      * @ORM\Column(type="array", nullable=true)
      */
     protected $new_value;
 
     /**
-     * @var array
+     * @var array|null
      *
      * @ORM\Column(type="array", nullable=true)
      */
@@ -52,7 +63,7 @@ class CooperativeHistory
      *
      * @ORM\Column(type="smallint")
      */
-    protected $type;
+    protected $action;
 
     /**
      * @var Cooperative
@@ -68,7 +79,7 @@ class CooperativeHistory
     {
         $this->created_at   = new \DateTime();
         $this->cooperative  = $cooperative;
-        $this->type         = self::TYPE_CREATE;
+        $this->action       = self::ACTION_CREATE;
     }
 
     /**
@@ -92,41 +103,73 @@ class CooperativeHistory
     }
 
     /**
-     * @return array
+     * @return int
      */
-    public function getOldValue(): array
+    public function getActionAsText(): string
     {
-        return $this->old_value;
+        if (isset(self::$action_values[$this->action])) {
+            return self::$action_values[$this->action];
+        }
+
+        return 'N/A';
     }
 
     /**
-     * @param array $old_value
+     * @return int
+     */
+    public function getAction(): int
+    {
+        return $this->action;
+    }
+
+    /**
+     * @param int $action
      *
      * @return $this
      */
-    public function setOldValue(array $old_value): self
+    public function setAction(int $action): self
     {
-        $this->old_value = $old_value;
+        $this->action = $action;
 
         return $this;
     }
 
     /**
-     * @return array
+     * @return array|null
      */
-    public function getNewValue(): array
+    public function getNewValue(): ?array
     {
         return $this->new_value;
     }
 
     /**
-     * @param array $new_value
+     * @param array|null $new_value
      *
      * @return $this
      */
-    public function setNewValue(array $new_value): self
+    public function setNewValue(?array $new_value): self
     {
         $this->new_value = $new_value;
+
+        return $this;
+    }
+
+    /**
+     * @return array|null
+     */
+    public function getOldValue(): ?array
+    {
+        return $this->old_value;
+    }
+
+    /**
+     * @param array|null $old_value
+     *
+     * @return $this
+     */
+    public function setOldValue(?array $old_value): self
+    {
+        $this->old_value = $old_value;
 
         return $this;
     }

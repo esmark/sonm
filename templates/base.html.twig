@@ -116,6 +116,12 @@
                     <ul class="navbar-nav">
                         {% if app.user %}
                             <ul class="navbar-nav">
+                                {% if is_granted('ROLE_ADMIN') %}
+                                    <li class="nav-item">
+                                        <a class="nav-link py-0 {% if 'admin_' in app.request.get('_route') %} active{% endif %}" href="{{ path('admin') }}">Админка</a>
+                                    </li>
+                                {% endif %}
+
                                 <li class="nav-item">
                                     <a class="nav-link py-0 {% if 'account_' in app.request.get('_route') %} active{% endif %}" href="{{ path('account_profile') }}">Личный кабинет</a>
                                 </li>
@@ -128,12 +134,6 @@
                                     {{ app.user }}
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                    {% if app.user.hasRole('ROLE_ADMIN') %}
-
-                                        <a class="dropdown-item" href="{{ path('admin') }}">Admin</a>
-                                        <div class="dropdown-divider"></div>
-                                    {% endif %}
-
                                     <a class="dropdown-item" href="{{ path('security_logout') }}">Выход</a>
                                 </div>
                             </li>
