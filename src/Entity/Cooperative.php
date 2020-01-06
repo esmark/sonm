@@ -85,6 +85,7 @@ class Cooperative
      * @var CooperativeHistory[]|ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="CooperativeHistory", mappedBy="cooperative", cascade={"persist"}, fetch="EXTRA_LAZY")
+     * @ORM\OrderBy({"created_at" = "DESC"})
      */
     protected $history;
 

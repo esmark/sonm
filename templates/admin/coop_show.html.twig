@@ -95,18 +95,17 @@
             <table class="table table-bordered table-hover">
                 <thead>
                 <tr>
-                    <th>#</th>
+                    <th>Дата</th>
                     <th>Действие</th>
                     <th>Пользователь</th>
                     <th>Старые значения</th>
                     <th>Новые значения</th>
-                    <th>Дата регистрации</th>
                 </tr>
                 </thead>
                 <tbody>
                 {% for history in coop.history %}
                     <tr>
-                        <td>{{ loop.index }}</td>
+                        <td>{{ history.createdAt|date }}</td>
                         <td>{{ history.actionAsText }}</td>
                         <td><a href="{{ path('user_show', {'id': history.user.id}) }}">{{ history.user }}</a></td>
                         <td>
@@ -123,7 +122,6 @@
                                 {% endfor %}
                             </ul>
                         </td>
-                        <td>{{ history.createdAt|date }}</td>
                     </tr>
                 {% endfor %}
                 </tbody>

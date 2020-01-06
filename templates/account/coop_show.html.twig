@@ -4,6 +4,12 @@
 
 {% block account_content %}
 
+    {% if is_allow_edit %}
+        <p style="float: right; margin-top: 8px;">
+            <a href="{{ path('account_coop_edit', {'id': coop.id}) }}" class="btn btn-success">Изменить</a>
+        </p>
+    {% endif %}
+
     <h1>{{ coop }}</h1>
 
     <nav>
@@ -25,9 +31,8 @@
                     <th>Статус</th>
                     <td>
                         {{ coop.statusAsText }}
-                        {% if coop.status == 0 %}
-                            <a href="?approve" class="btn btn-success" onclick="return confirm('Вы уверены, что хотите заверить заявку?')">Заверить</a>
-                            <a href="?decline" class="btn btn-danger" onclick="return confirm('Вы уверены, что хотите отклонить заявку?')">Отклонить</a>
+                        {% if coop.status == 4 and is_allow_edit %}
+                            <a href="?approve_request" class="btn btn-success" onclick="return confirm('Вы уверены, что хотите повторить заявку?')">Отправить повторно</a>
                         {% endif %}
                     </td>
                 </tr>
@@ -95,18 +100,17 @@
             <table class="table table-bordered table-hover">
                 <thead>
                 <tr>
-                    <th>#</th>
+                    <th>Дата</th>
                     <th>Действие</th>
                     <th>Пользователь</th>
                     <th>Старые значения</th>
                     <th>Новые значения</th>
-                    <th>Дата регистрации</th>
                 </tr>
                 </thead>
                 <tbody>
                 {% for history in coop.history %}
                     <tr>
-                        <td>{{ loop.index }}</td>
+                        <td>{{ history.createdAt|date }}</td>
                         <td>{{ history.actionAsText }}</td>
                         <td><a href="{{ path('user_show', {'id': history.user.id}) }}">{{ history.user }}</a></td>
                         <td>
@@ -123,7 +127,6 @@
                                 {% endfor %}
                             </ul>
                         </td>
-                        <td>{{ history.createdAt|date }}</td>
                     </tr>
                 {% endfor %}
                 </tbody>

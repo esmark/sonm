@@ -17,6 +17,7 @@ class CooperativeCreateFormType extends CooperativeFormType
         parent::buildForm($builder, $options);
 
         $builder
+            ->remove('cancel')
             ->remove('update')
             ->add('create', SubmitType::class, ['attr' => ['class' => 'btn-success']])
         ;

@@ -24,6 +24,7 @@ class CooperativeFormType extends AbstractType
             ->add('address')
             ->add('director')
             ->add('update', SubmitType::class, ['attr' => ['class' => 'btn-success']])
+            ->add('cancel', SubmitType::class, ['attr' => ['class' => 'btn-light', 'formnovalidate' => 'formnovalidate']])
         ;
     }
 

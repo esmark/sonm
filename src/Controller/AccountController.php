@@ -105,10 +105,15 @@ class AccountController extends AbstractController
     public function coopShow(Cooperative $coop, Request $request, EntityManagerInterface $em): Response
     {
         $isMember = false;
+        $isAllowEdit = false;
 
         foreach ($coop->getMembers() as $member) {
             if ($member->getUser() == $this->getUser()) {
                 $isMember = true;
+
+                if ($member->getStatus() == CooperativeMember::STATUS_CHAIRMAN) {
+                    $isAllowEdit = true;
+                }
 
                 break;
             }
@@ -118,8 +123,104 @@ class AccountController extends AbstractController
             return $this->redirectToRoute('account_coop');
         }
 
+        if ($isAllowEdit and $coop->getStatus() == Cooperative::STATUS_DECLINE) {
+            if ($request->query->has('approve_request')) {
+                $history = new CooperativeHistory();
+                $history
+                    ->setCooperative($coop)
+                    ->setAction(CooperativeHistory::ACTION_UPDATE)
+                    ->setUser($this->getUser())
+                    ->setOldValue(['status' => $coop->getStatus()])
+                    ->setNewValue(['status' => Cooperative::STATUS_PENDING])
+                ;
+
+                $coop->setStatus(Cooperative::STATUS_PENDING);
+
+                $this->addFlash('success', 'Повторная Заявка на создание кооператива отправлена');
+
+                $em->persist($history);
+                $em->flush();
+
+                return $this->redirectToRoute('account_coop_show', ['id' => $coop->getId()]);
+            }
+        }
+
         return $this->render('account/coop_show.html.twig', [
-            'coop' => $coop,
+            'coop'          => $coop,
+            'is_allow_edit' => $isAllowEdit,
+        ]);
+    }
+
+    /**
+     * @Route("/coop/{id}/edit/", name="account_coop_edit")
+     */
+    public function coopEdit(Cooperative $coop, Request $request, EntityManagerInterface $em): Response
+    {
+        $isAllowEdit = false;
+        foreach ($coop->getMembers() as $member) {
+            if ($member->getUser() == $this->getUser() and $member->getStatus() == CooperativeMember::STATUS_CHAIRMAN) {
+                $isAllowEdit = true;
+
+                break;
+            }
+        }
+
+        if (!$isAllowEdit) {
+            return $this->redirectToRoute('account_coop_show', ['id' => $coop->getId()]);
+        }
+
+        $form = $this->createForm(CooperativeFormType::class, $coop);
+
+        if ($request->isMethod('POST')) {
+            $form->handleRequest($request);
+
+            if ($form->get('cancel')->isClicked()) {
+                return $this->redirectToRoute('account_coop_show', ['id' => $coop->getId()]);
+            }
+
+            if ($form->get('update')->isClicked() and $form->isValid()) {
+                $coop = $form->getData();
+
+                $uow = $em->getUnitOfWork();
+                $uow->computeChangeSets();
+
+                if ($uow->isEntityScheduled($coop)) {
+                    $old = [];
+                    $new = [];
+                    foreach ($uow->getEntityChangeSet($coop) as $key => $val) {
+                        if ($val[0] instanceof \DateTime) {
+                            $val[0] = $val[0]->format('Y-m-d H:i:s');
+                        }
+
+                        if ($val[1] instanceof \DateTime) {
+                            $val[1] = $val[1]->format('Y-m-d H:i:s');
+                        }
+
+                        $old[$key] = (string) $val[0];
+                        $new[$key] = (string) $val[1];
+                    }
+
+                    $history = new CooperativeHistory();
+                    $history
+                        ->setCooperative($coop)
+                        ->setAction(CooperativeHistory::ACTION_UPDATE)
+                        ->setUser($this->getUser())
+                        ->setOldValue($old)
+                        ->setNewValue($new)
+                    ;
+
+                    $em->persist($history);
+                    $em->flush();
+
+                    $this->addFlash('success', 'Данные кооператива ообновлены');
+                }
+
+                return $this->redirectToRoute('account_coop_show', ['id' => $coop->getId()]);
+            }
+        }
+
+        return $this->render('account/coop_edit.html.twig', [
+            'form' => $form->createView(),
         ]);
     }
 
