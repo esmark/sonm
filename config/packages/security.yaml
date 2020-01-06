@@ -63,4 +63,4 @@ security:
 #        - { path: ^/register/, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/user/, role: ROLE_USER }
-        - { path: ^/profile/, role: ROLE_USER }
+        - { path: ^/account/, role: ROLE_USER }
