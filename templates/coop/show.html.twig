@@ -4,6 +4,16 @@
 
 {% block content %}
 
+    {% set member = coop.memberByUser(app.user) %}
+
+    <p style="float: right; margin-top: 8px;">
+        {% if member %}
+            <a href="#" class="btn btn-info">Мой статус: {{ member.statusAsText }}</a>
+        {% else %}
+            <a href="?entry_request" class="btn btn-success" onclick="return confirm('Вы уверены, что хотите отправить заявку?')">Подать заявку на вступление</a>
+        {% endif %}
+    </p>
+
     <h1>{{ coop }}</h1>
 
     <nav>

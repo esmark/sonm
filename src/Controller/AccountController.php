@@ -147,6 +147,72 @@ class AccountController extends AbstractController
             }
         }
 
+        if ($isAllowEdit and $request->query->has('approve_member')) {
+            /** @var CooperativeMember $member */
+            $member = $em->getRepository(CooperativeMember::class)->findOneBy([
+                'id' => $request->query->get('approve_member'),
+                'status' => CooperativeMember::STATUS_PENDING,
+            ]);
+
+            if ($member) {
+                $member->setStatus(CooperativeMember::STATUS_FULL);
+
+                $history = new CooperativeHistory();
+                $history
+                    ->setCooperative($coop)
+                    ->setAction(CooperativeHistory::ACTION_MEMBER_ADD)
+                    ->setNewValue([
+                        'member_name' => (string) $member->getUser(),
+                        'member_id  ' => (string) $member->getUser()->getId(),
+                    ])
+                    ->setUser($this->getUser())
+                ;
+
+                $em->persist($member);
+                $em->persist($history);
+
+                $em->flush();
+
+                $this->addFlash('success', 'Участник добавлен, как действительный член');
+            } else {
+                $this->addFlash('error', 'Неверно указан участник');
+            }
+
+            return $this->redirectToRoute('account_coop_show', ['id' => $coop->getId()]);
+        }
+
+        if ($isAllowEdit and $request->query->has('decline_member')) {
+            $member = $em->getRepository(CooperativeMember::class)->findOneBy([
+                'id' => $request->query->get('decline_member'),
+                'status' => CooperativeMember::STATUS_PENDING,
+            ]);
+
+            if ($member) {
+                $history = new CooperativeHistory();
+                $history
+                    ->setCooperative($coop)
+                    ->setAction(CooperativeHistory::ACTION_MEMBER_DECLINE)
+                    ->setNewValue([
+                        'member_name' => (string) $member->getUser(),
+                        'member_id  ' => (string) $member->getUser()->getId(),
+                    ])
+                    ->setUser($this->getUser())
+                ;
+
+                $em->persist($history);
+                $em->flush();
+
+                $em->remove($member);
+                $em->flush();
+
+                $this->addFlash('success', 'Заявка на вступление в кооператив отклонена');
+            } else {
+                $this->addFlash('error', 'Неверно указан участник');
+            }
+
+            return $this->redirectToRoute('account_coop_show', ['id' => $coop->getId()]);
+        }
+
         return $this->render('account/coop_show.html.twig', [
             'coop'          => $coop,
             'is_allow_edit' => $isAllowEdit,

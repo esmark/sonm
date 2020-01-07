@@ -32,6 +32,7 @@ class CooperativeHistory
     const ACTION_MEMBER_REMOVE        = 51;
     const ACTION_MEMBER_STATUS        = 52;
     const ACTION_MEMBER_REQUEST       = 53;
+    const ACTION_MEMBER_DECLINE       = 54;
 
     static protected $action_values = [
         self::ACTION_CREATE               => 'Создание кооператива',
@@ -42,6 +43,7 @@ class CooperativeHistory
         self::ACTION_MEMBER_REMOVE        => 'Удаление участника',
         self::ACTION_MEMBER_STATUS        => 'Изменение статуса участника',
         self::ACTION_MEMBER_REQUEST       => 'Заявка на вступление',
+        self::ACTION_MEMBER_DECLINE       => 'Заявка на вступление отклонена',
     ];
 
     /**

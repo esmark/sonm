@@ -100,7 +100,7 @@ class Cooperative
     /**
      * @var CooperativeMember[]|ArrayCollection
      *
-     * @ORM\OneToMany(targetEntity="CooperativeMember", mappedBy="cooperative", cascade={"persist"}, fetch="EXTRA_LAZY")
+     * @ORM\OneToMany(targetEntity="CooperativeMember", mappedBy="cooperative", cascade={"persist", "remove"}, fetch="EXTRA_LAZY")
      * @ORM\OrderBy({"created_at" = "ASC"})
      */
     protected $members;
@@ -266,5 +266,21 @@ class Cooperative
         $this->members = $members;
 
         return $this;
+    }
+
+    /**
+     * @param User $user
+     *
+     * @return CooperativeMember|null
+     */
+    public function getMemberByUser(User $user): ?CooperativeMember
+    {
+        foreach ($this->getMembers() as $member) {
+            if ($member->getUser()->getId() == $user->getId()) {
+                return $member;
+            }
+        }
+
+        return null;
     }
 }

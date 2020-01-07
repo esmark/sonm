@@ -7,6 +7,7 @@ namespace App\Entity;
 use App\Doctrine\StatusTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Smart\CoreBundle\Doctrine\ColumnTrait;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity()
@@ -14,7 +15,12 @@ use Smart\CoreBundle\Doctrine\ColumnTrait;
  *      indexes={
  *          @ORM\Index(columns={"created_at"}),
  *      },
+ *      uniqueConstraints={
+ *          @ORM\UniqueConstraint(columns={"user_id", "cooperative_id"}),
+ *      }
  * )
+ *
+ * @UniqueEntity(fields={"user", "cooperative"}, message="User-Cooperative must be unique")
  */
 class CooperativeMember
 {
@@ -44,11 +50,12 @@ class CooperativeMember
     /**
      * CooperativeMember constructor.
      */
-    public function __construct(?Cooperative $cooperative = null)
+    public function __construct(?Cooperative $cooperative = null, ?User $user = null)
     {
         $this->created_at   = new \DateTime();
         $this->status       = self::STATUS_PENDING;
         $this->cooperative  = $cooperative;
+        $this->user         = $user;
     }
 
     /**

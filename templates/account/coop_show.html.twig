@@ -16,7 +16,7 @@
     <nav>
         <div class="nav nav-tabs" id="nav-tab" role="tablist">
             <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Кооператив</a>
-            <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">Участники ({{ coop.members|length }})</a>
+            <a class="nav-item nav-link" id="nav-members-tab" data-toggle="tab" href="#nav-members" role="tab" aria-controls="nav-members" aria-selected="false">Участники ({{ coop.members|length }})</a>
             <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab" aria-controls="nav-contact" aria-selected="false">История изменений ({{ coop.history|length }})</a>
             <a class="nav-item nav-link" id="nav-item-tab" data-toggle="tab" href="#nav-item" role="tab" aria-controls="nav-item" aria-selected="false">Товары и услуги ({{ coop.items|length }})</a>
         </div>
@@ -73,7 +73,7 @@
             </table>
 
         </div>
-        <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+        <div class="tab-pane fade" id="nav-members" role="tabpanel" aria-labelledby="nav-members-tab">
 
             <table class="table table-bordered table-hover">
                 <thead>
@@ -89,7 +89,12 @@
                     <tr>
                         <td>{{ loop.index }}</td>
                         <td><a href="{{ path('user_show', {'id': member.user.id}) }}">{{ member.user }}</a></td>
-                        <td>{{ member.statusAsText }}</td>
+                        <td>{{ member.statusAsText }}
+                            {% if member.status == 0 and is_allow_edit %}
+                                <a href="?approve_member={{ member.id }}" class="btn btn-success btn-sm" onclick="return confirm('Вы уверены, что хотите принять участника как действительного члена?')">Принять как ДЧ</a>
+                                <a href="?decline_member={{ member.id }}" class="btn btn-danger btn-sm" onclick="return confirm('Вы уверены, что хотите отказать в заявке?')">Отклонить</a>
+                            {% endif %}
+                        </td>
                         <td>{{ member.createdAt|date }}</td>
                     </tr>
                 {% endfor %}
