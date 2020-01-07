@@ -88,3 +88,8 @@ WEB_PORT=80 make up
 ```
 http://localhost/
 ``` 
+
+Или можно запустить установку с нуля одной строчкой:
+```
+git clone https://github.com/esmark/sonm.git;cd sonm;make init;make up;
+```
