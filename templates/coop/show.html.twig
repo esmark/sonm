@@ -1,0 +1,133 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Кооператив - {{ coop }}{% endblock %}
+
+{% block content %}
+
+    <h1>{{ coop }}</h1>
+
+    <nav>
+        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+            <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Кооператив</a>
+            <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">Участники ({{ coop.members|length }})</a>
+            <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab" aria-controls="nav-contact" aria-selected="false">История изменений ({{ coop.history|length }})</a>
+        </div>
+    </nav>
+    <div class="tab-content" id="nav-tabContent">
+        <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+
+            <table class="table table-bordered table-hover">
+                <tr>
+                    <th style="width: 170px;">Название</th>
+                    <td>{{ coop }}</td>
+                </tr>
+                <tr>
+                    <th>Статус</th>
+                    <td>
+                        {{ coop.statusAsText }}
+                        {% if coop.status == 0 %}
+                            <a href="?approve" class="btn btn-success" onclick="return confirm('Вы уверены, что хотите заверить заявку?')">Заверить</a>
+                            <a href="?decline" class="btn btn-danger" onclick="return confirm('Вы уверены, что хотите отклонить заявку?')">Отклонить</a>
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <th>Техническое имя</th>
+                    <td>{{ coop.name }}</td>
+                </tr>
+                <tr>
+                    <th>ОГРН</th>
+                    <td>{{ coop.ogrn }}</td>
+                </tr>
+                <tr>
+                    <th>ИНН</th>
+                    <td>{{ coop.inn }}</td>
+                </tr>
+                <tr>
+                    <th>КПП</th>
+                    <td>{{ coop.kpp }}</td>
+                </tr>
+                <tr>
+                    <th>Директор</th>
+                    <td>{{ coop.director }}</td>
+                </tr>
+                <tr>
+                    <th>Описание</th>
+                    <td>{{ coop.description }}</td>
+                </tr>
+                <tr>
+                    <th>Адрес</th>
+                    <td>{{ coop.address }}</td>
+                </tr>
+                <tr>
+                    <th>Дата создания</th>
+                    <td>{{ coop.createdAt|date }}</td>
+                </tr>
+            </table>
+
+        </div>
+        <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+
+            <table class="table table-bordered table-hover">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Имя</th>
+                    <th>Статус</th>
+                    <th>Дата регистрации</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for member in coop.members %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td><a href="{{ path('user_show', {'id': member.user.id}) }}">{{ member.user }}</a></td>
+                        <td>{{ member.statusAsText }}</td>
+                        <td>{{ member.createdAt|date }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+        </div>
+        <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
+
+            <table class="table table-bordered table-hover">
+                <thead>
+                <tr>
+                    <th>Дата</th>
+                    <th>Действие</th>
+                    <th>Пользователь</th>
+                    <th>Старые значения</th>
+                    <th>Новые значения</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for history in coop.history %}
+                    <tr>
+                        <td>{{ history.createdAt|date }}</td>
+                        <td>{{ history.actionAsText }}</td>
+                        <td><a href="{{ path('user_show', {'id': history.user.id}) }}">{{ history.user }}</a></td>
+                        <td>
+                            <ul>
+                                {% for key, val in history.oldValue %}
+                                    <li><b>{{ key }}</b>: {{ val|e }}</li>
+                                {% endfor %}
+                            </ul>
+                        </td>
+                        <td>
+                            <ul>
+                                {% for key, val in history.newValue %}
+                                    <li><b>{{ key }}</b>: {{ val|e }}</li>
+                                {% endfor %}
+                            </ul>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+
+{% endblock %}

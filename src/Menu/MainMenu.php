@@ -40,6 +40,16 @@ class MainMenu
             ->setLinkAttribute('class', 'nav-link py-0')
         ;
 
+        $menu->addChild('Marketplace', ['route' => 'marketplace'])
+            ->setAttribute('class', 'nav-item')
+            ->setLinkAttribute('class', 'nav-link py-0')
+        ;
+
+        $menu->addChild('Cooperatives', ['route' => 'coop'])
+            ->setAttribute('class', 'nav-item')
+            ->setLinkAttribute('class', 'nav-link py-0')
+        ;
+
         return $menu;
     }
 
@@ -61,7 +71,7 @@ class MainMenu
         $menu->addChild('Profile',          ['route' => 'account_profile']);
         $menu->addChild('Cooperatives',     ['route' => 'account_coop']);
         $menu->addChild('Telegram',         ['route' => 'account_telegram']);
-        $menu->addChild('Geoposition',      ['route' => 'account_geoposition']);
+        //$menu->addChild('Geoposition',      ['route' => 'account_geoposition']);
         $menu->addChild('Change password',  ['route' => 'account_password']);
 
         return $menu;

@@ -12,7 +12,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="App\Repository\CooperativeRepository")
  * @ORM\Table("cooperatives",
  *      indexes={
  *          @ORM\Index(columns={"inn"}),

@@ -125,6 +125,10 @@
                                 <li class="nav-item">
                                     <a class="nav-link py-0 {% if 'account_' in app.request.get('_route') %} active{% endif %}" href="{{ path('account_profile') }}">Личный кабинет</a>
                                 </li>
+
+                                <li class="nav-item">
+                                    <a class="nav-link py-0 {% if 'basket' in app.request.get('_route') %} active{% endif %}" href="{{ path('basket') }}">Корзина</a>
+                                </li>
                             </ul>
                         {% endif %}
 

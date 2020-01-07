@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Кооперативы{% endblock %}
+
+{% block content %}
+
+    <h1>Кооперативы</h1>
+
+    <p>Всего: {{ coops|length }}</p>
+
+    <table class="table table-bordered table-hover">
+        <thead>
+        <tr>
+            <th>Название</th>
+            <th>Кол-во участников</th>
+            <th>Статус</th>
+            <th>Дата регистрации</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for coop in coops %}
+            <tr>
+                <td><a href="{{ path('coop_show', {'name': coop.name}) }}">{{ coop }}</a></td>
+                <td>{{ coop.members|length }}</td>
+                <td>{{ coop.statusAsText }}</td>
+                <td>{{ coop.createdAt|date }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

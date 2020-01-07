@@ -7,6 +7,7 @@ namespace App\Controller;
 use App\Entity\Cooperative;
 use App\Entity\CooperativeHistory;
 use App\Entity\User;
+use App\Repository\CooperativeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -39,10 +40,10 @@ class AdminController extends AbstractController
     /**
      * @Route("/coop/", name="admin_coop")
      */
-    public function coopIndex(Request $request, EntityManagerInterface $em): Response
+    public function coopIndex(CooperativeRepository $cooperativeRepository): Response
     {
         return $this->render('admin/coop_index.html.twig', [
-            'coops' => $em->getRepository(Cooperative::class)->findBy([], ['created_at' => 'DESC']),
+            'coops' => $cooperativeRepository->findBy([], ['created_at' => 'DESC']),
         ]);
     }
 
