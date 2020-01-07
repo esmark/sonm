@@ -11,6 +11,7 @@
             <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Кооператив</a>
             <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">Участники ({{ coop.members|length }})</a>
             <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab" aria-controls="nav-contact" aria-selected="false">История изменений ({{ coop.history|length }})</a>
+            <a class="nav-item nav-link" id="nav-item-tab" data-toggle="tab" href="#nav-item" role="tab" aria-controls="nav-item" aria-selected="false">Товары и услуги ({{ coop.items|length }})</a>
         </div>
     </nav>
     <div class="tab-content" id="nav-tabContent">
@@ -122,6 +123,30 @@
                                 {% endfor %}
                             </ul>
                         </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+        </div>
+        <div class="tab-pane fade" id="nav-item" role="tabpanel" aria-labelledby="nav-item-tab">
+
+            <table class="table table-bordered table-hover">
+                <thead>
+                <tr>
+                    <th>Название</th>
+                    <th>Краткое описание</th>
+                    <th>Цена</th>
+                    <th>Дата добавления</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for item in coop.items %}
+                    <tr>
+                        <td><a href="#{{ path('account_item_edit', {'id': item.id}) }}">{{ item.title }}</a></td>
+                        <td>{{ item.shortDescription }}</td>
+                        <td>{{ item.price }}</td>
+                        <td>{{ item.createdAt|date }}</td>
                     </tr>
                 {% endfor %}
                 </tbody>

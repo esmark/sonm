@@ -90,6 +90,14 @@ class Cooperative
     protected $history;
 
     /**
+     * @var Item[]|ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="Item", mappedBy="cooperative", cascade={"persist"}, fetch="EXTRA_LAZY")
+     * @ORM\OrderBy({"title" = "ASC"})
+     */
+    protected $items;
+
+    /**
      * @var CooperativeMember[]|ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="CooperativeMember", mappedBy="cooperative", cascade={"persist"}, fetch="EXTRA_LAZY")
@@ -104,6 +112,8 @@ class Cooperative
     {
         $this->created_at   = new \DateTime();
         $this->director     = '';
+        $this->items        = new ArrayCollection();
+        $this->members      = new ArrayCollection();
         $this->inn          = 0;
         $this->kpp          = 0;
         $this->ogrn         = 0;
@@ -214,6 +224,26 @@ class Cooperative
     public function setHistory($history): self
     {
         $this->history = $history;
+
+        return $this;
+    }
+
+    /**
+     * @return Item[]|ArrayCollection
+     */
+    public function getItems()
+    {
+        return $this->items;
+    }
+
+    /**
+     * @param Item[]|ArrayCollection $items
+     *
+     * @return $this
+     */
+    public function setItems($items): self
+    {
+        $this->items = $items;
 
         return $this;
     }

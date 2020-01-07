@@ -7,9 +7,11 @@ namespace App\Controller;
 use App\Entity\Cooperative;
 use App\Entity\CooperativeHistory;
 use App\Entity\CooperativeMember;
+use App\Entity\Item;
 use App\Entity\User;
 use App\Form\Type\CooperativeCreateFormType;
 use App\Form\Type\CooperativeFormType;
+use App\Form\Type\ItemFormType;
 use App\Form\Type\UserChangePasswordFormType;
 use App\Form\Type\UserFormType;
 use App\Repository\UserRepository;
@@ -220,6 +222,72 @@ class AccountController extends AbstractController
         }
 
         return $this->render('account/coop_edit.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @todo права доступа: председатель кооп,...
+     *
+     * @Route("/item/new/{coop}/", name="account_item_new")
+     */
+    public function itemNew(Cooperative $coop, Request $request, EntityManagerInterface $em): Response
+    {
+        $item = new Item();
+        $item
+            ->setCooperative($coop)
+            ->setUser($this->getUser())
+        ;
+
+        $form = $this->createForm(ItemFormType::class, $item);
+        $form->remove('update');
+
+        if ($request->isMethod('POST')) {
+            $form->handleRequest($request);
+
+            if ($form->get('create')->isClicked() and $form->isValid()) {
+                $em->persist($item);
+                $em->flush();
+
+                $this->addFlash('success', 'Товар добавлен');
+
+                return $this->redirectToRoute('account_coop_show', ['id' => $coop->getId()]);
+            }
+        }
+
+        return $this->render('account/item_new.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @todo права доступа: председатель кооп,...
+     *
+     * @Route("/item/{id}/", name="account_item_edit")
+     */
+    public function itemEdit(Item $item, Request $request, EntityManagerInterface $em): Response
+    {
+        $form = $this->createForm(ItemFormType::class, $item);
+        $form->remove('create');
+
+        if ($request->isMethod('POST')) {
+            $form->handleRequest($request);
+
+            if ($form->get('cancel')->isClicked()) {
+                return $this->redirectToRoute('account_coop_show', ['id' => $item->getCooperative()->getId()]);
+            }
+
+            if ($form->get('update')->isClicked() and $form->isValid()) {
+                $em->persist($item);
+                $em->flush();
+
+                $this->addFlash('success', 'Товар добавлен');
+
+                return $this->redirectToRoute('account_coop_show', ['id' => $item->getCooperative()->getId()]);
+            }
+        }
+
+        return $this->render('account/item_edit.html.twig', [
             'form' => $form->createView(),
         ]);
     }

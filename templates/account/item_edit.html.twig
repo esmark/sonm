@@ -1,0 +1,32 @@
+{% extends 'account/_layout.html.twig' %}
+
+{% block account_content %}
+    <h2>Изменение товара или услуги</h2>
+
+    {{ form(form) }}
+{% endblock account_content %}
+
+{% block js %}
+    {{ parent() }}
+    <script>
+      $('#item_measure').on('change', function() {
+        if (this.value == 0) {
+          quantityHide();
+        } else {
+          quantityShow();
+        }
+      });
+
+      function quantityHide() {
+        $('#item_quantity').closest('.form-group').hide();
+        //$('#offer_quantity_reserved').closest('.form-group').hide();
+      }
+
+      function quantityShow() {
+        $('#item_quantity').closest('.form-group').show();
+        //$('#offer_quantity_reserved').closest('.form-group').show();
+      }
+
+      quantityHide();
+    </script>
+{% endblock js %}
