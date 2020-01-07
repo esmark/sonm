@@ -6,6 +6,91 @@
 
     <h1>Стол заказов</h1>
 
-    @todo
+    <form method="get">
+        <table width="100%" style="margin-bottom: 12px;">
+            <tr>
+                <td style="width: 200px;">
+                    <select name="category" class="form-control">
+                        <option value="">Любоая категория</option>
+                        {% for c in categories %}
+                            <option value="{{ c.id }}"
+                                    {% if app.request.query.get('category') == c.id %} selected {% endif %}
+                            >{{ c }}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+                <td>
+                    <input name="search" value="{{ app.request.query.get('search') }}" class="form-control" type="text" placeholder="Поиск по каталогу">
+                </td>
+                <td style="width: 50px;">
+                    <button>Найти</button>
+                </td>
+            </tr>
+        </table>
+    </form>
+
+    <p>Всего: {{ items|length }}</p>
+
+    <div class="py-1 bg-light">
+        <div class="container">
+            <div class="row">
+
+                {% for item in items %}
+                    <div class="col-md-4">
+                        <div class="card mb-4 shadow-sm">
+
+                            <a href="#{{ path('account_item_edit', {'id': item.id}) }}">
+                                <svg class="card-img-top"
+                                     width="90%" height="180"
+                                     xmlns="http://www.w3.org/2000/svg"
+                                     preserveAspectRatio="xMidYMid slice"
+                                     focusable="false"
+                                     role="img"
+                                     style=" background-image: url('{{ asset('assets/image-not-found-png-6-300x200.png') }}');
+                                            {# background-image: url('{{ path('image', {'filter': 'items_list_thumbnail', 'id': item.imageId ?:0 }) }}'); #}
+                                             background-repeat: no-repeat;
+                                             background-position: center;
+                                             "
+                                >
+                                </svg>
+                            </a>
+
+                            <div class="card-body" style="padding-top: 0px !important;">
+                                <p class="card-text">
+                                    <b>
+                                        <a href="#{{ path('account_item_edit', {'id': item.id}) }}">{{ item.title }}</a>
+                                    </b>
+
+                                </p>
+                                {% include 'marketplace/_status.html.twig' %}
+                                <p class="card-text">
+                                    {{ item.shortDescription }}
+                                </p>
+                                <p class="card-text">
+                                    <b>
+                                        {% if item.price == 0 %}
+                                            Договорная
+                                        {% else %}
+                                            {{ item.price|number_format(0, ' ', ' ') }} ₽
+                                        {% endif %}
+                                    </b>
+
+                                    <span style="float: right;">{{ item.quantity }} {{ item.quantity ? item.measureAsText : '' }}</span>
+                                </p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    {{ item.user }}
+                                    {#                                <div class="btn-group">#}
+                                    {#                                    <button type="button" class="btn btn-sm btn-outline-warning" title="Добавить в избранное @todo "><i class="far fa-heart"></i></button>#}
+                                    {#                                </div>#}
+                                    <small class="text-muted">{{ item.createdAt|date('d.m.Y H:i') }}</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+
+            </div>
+        </div>
+    </div>
 
 {% endblock %}

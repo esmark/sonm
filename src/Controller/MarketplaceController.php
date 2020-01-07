@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Entity\Category;
+use App\Entity\Item;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -16,8 +19,11 @@ class MarketplaceController extends AbstractController
     /**
      * @Route("/", name="marketplace")
      */
-    public function index(): Response
+    public function index(EntityManagerInterface $em): Response
     {
-        return $this->render('marketplace/index.html.twig');
+        return $this->render('marketplace/index.html.twig', [
+            'categories' => $em->getRepository(Category::class)->findBy([], ['position' => 'ASC', 'title' => 'ASC']),
+            'items'      => $em->getRepository(Item::class)->findAll(),
+        ]);
     }
 }
