@@ -39,7 +39,7 @@
                     <div class="col-md-4">
                         <div class="card mb-4 shadow-sm">
 
-                            <a href="#{{ path('account_item_edit', {'id': item.id}) }}">
+                            <a href="{{ path('marketplace_item', {'id': item.id}) }}">
                                 <svg class="card-img-top"
                                      width="90%" height="180"
                                      xmlns="http://www.w3.org/2000/svg"
@@ -58,7 +58,7 @@
                             <div class="card-body" style="padding-top: 0px !important;">
                                 <p class="card-text">
                                     <b>
-                                        <a href="#{{ path('account_item_edit', {'id': item.id}) }}">{{ item.title }}</a>
+                                        <a href="{{ path('marketplace_item', {'id': item.id}) }}">{{ item.title }}</a>
                                     </b>
 
                                 </p>

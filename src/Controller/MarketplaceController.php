@@ -26,4 +26,14 @@ class MarketplaceController extends AbstractController
             'items'      => $em->getRepository(Item::class)->findAll(),
         ]);
     }
+
+    /**
+     * @Route("/{id}/", name="marketplace_item")
+     */
+    public function item(Item $item): Response
+    {
+        return $this->render('marketplace/item.html.twig', [
+            'item' => $item,
+        ]);
+    }
 }

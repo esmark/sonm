@@ -1,0 +1,196 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} {{ item }} - от {{ item.cooperative }} {% endblock %}
+
+{% block content %}
+
+    <h2>Просмотр предложения</h2>
+    <div class="clear"></div>
+
+    <div class="row">
+        <div class="col-md-8">
+            <p>Категория <a href="#">{{ item.category }}</a></p>
+            <div class="clear"></div>
+
+            <h1>{{ item.title }}</h1>
+
+            <p>
+                <a href="#" data-toggle="modal" data-target="#image_modal_{{ item.id }}">
+{#                    <img src="{{ path('image', {'filter': 'items_list_thumbnail', 'id': item.imageId ?:0 }) }}">#}
+                    <img src="{{ asset('assets/image-not-found-png-6-300x200.png') }}">
+                </a>
+                <br>
+
+                <div class="modal fade" id="image_modal_{{ item.id }}" tabindex="-1" role="dialog" aria-labelledby="order_modal_label" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 1200px !important; max-height: 800px !important;">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="order_modal_label">{{ item }}</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body" style="text-align: center;">
+{#                                <img src="{{ path('image', {'filter': 'compress_original', 'id': item.imageId ?:0 }) }}" class="img-fluid">#}
+                                <img src="{{ asset('assets/image-not-found-png-6-300x200.png') }}" class="img-fluid">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </p>
+
+            <h3>
+                <span class="badge badge-secondary">
+                {% if item.price == 0 %}
+                    Договорная
+                {% else %}
+                    {{ item.price|number_format(0, ' ', ' ') }} ₽
+                {% endif %}
+                </span>
+
+                {% include 'marketplace/_status.html.twig' %}
+
+                {% if item.isStatusAccessToOrder %}
+                    <button type="button" class="btn btn-sm btn-outline-success" data-toggle="modal" data-target="#exampleModal"><i class="far fa-handshake"></i> Получить</button>
+                {% endif %}
+{#                <button type="button" class="btn btn-sm btn-outline-danger"><i class="far fa-heart"></i> В избравнное</button>#}
+            </h3>
+
+            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Новая сделка</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p><i class="fas fa-cart-plus"></i> {{ item }}</p>
+
+                            <form id="myform" action="#" method="post" >
+                                <input type="hidden" name="item_id" value="{{ item.id }}">
+
+                                <div class="form-group">
+                                    <label for="recipient-name" class="col-form-label">Количество</label>
+                                    <input type="number" id="order-quantity" class="form-control" min="1" name="quantity" value="1" title="Максимум {{ item.quantity }}">
+                                </div>
+{#
+                                <div class="form-group">
+                                    <label for="message-text" class="col-form-label">Комментарий</label>
+                                    <textarea class="form-control" id="message-text" name="comment" rows="4"></textarea>
+                                </div>
+#}
+                                <div class="modal-footer">
+                                    <div style="float: left; margin-right: 14px;">Сумма <strong id="order-amount">{{ item.price }} ₽</strong></div>
+                                    <button type="button" class="btn btn-light" data-dismiss="modal">Закрыть</button>
+                                    <button type="submit" class="btn btn-success" id="form_submit">Отправить запрос</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+{#            <p>Статус: {% include 'item/_status.html.twig' %}</p>#}
+
+            <p style="float: right;">Добавлено: {{ item.createdAt|format_datetime }}</p>
+
+            {% if item.quantity %}
+                <p>Количество: {{ item.quantity }}</p>
+            {% endif %}
+            <div class="clear"></div>
+
+            {% if item.shortDescription or item.description %}
+                <p>{{ item.shortDescription }}</p>
+                {% if item.description %}
+                    <p>{{ item.description|nl2br }}</p>
+                {% endif %}
+            {% endif %}
+
+            {% if item.user == app.user %}
+                <p>
+                    <a href="{{ path('account_item_edit', {'id': item.id}) }}" class="btn btn-sm btn-success">Редактировать</a>
+                </p>
+            {% endif %}
+
+            {% if item.user.longitude and item.user.latitude %}
+                <style type="text/css">
+                    #mapdiv {
+                        height: 500px;
+                        width: 100%;
+                    }
+                </style>
+
+                <div id="mapdiv"></div>
+
+                <script>
+                  var mymap = L.map('mapdiv', { attributionControl:false }).setView([{{ item.user.latitude }}, {{ item.user.longitude }}], 15);
+
+                  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    // __dummy
+                  }).addTo(mymap);
+
+                  var marker = L.marker([{{ item.user.latitude }}, {{ item.user.longitude }}]).addTo(mymap);
+
+                  //marker.bindPopup("<b>Hello world!</b><br>I am a popup.").openPopup();
+                  marker.bindPopup("<b>{{ item.user }}</b>")
+                </script>
+            {% endif %}
+
+        </div>
+
+        <div class="col-md-4">
+            <div class="alert alert-warning" role="alert">
+                <h4 class="alert-heading">{{ item.cooperative }}</h4>
+                <p><b>О кооперативе</b></p>
+                <p>{{ item.cooperative.description }}</p>
+                <p><i class="far fa-calendar-check"></i> Дата регистрации {{ item.cooperative.createdAt|format_date }}</p>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+
+{% block js %}
+    {{ parent() }}
+
+    <script>
+        $(document).ready( function() {
+          $('#myform').on('submit', function(event) {
+            event.preventDefault();
+            $('#form_submit').attr('disabled', true);
+
+            $.post( $(this).attr('action'), $(this).serialize(), function(data) {
+              //console.log(data);
+              if(data.status == 'success') {
+                // Success code here
+                location.reload();
+              } else {
+                // Error code here
+                new PNotify({
+                  title: '{{ 'Error'|trans }}!',
+                  text: data.message,
+                  type: 'error'
+                });
+
+                $('#form_submit').attr('disabled', false);
+              }
+            }, 'json')
+          });
+
+          $('#exampleModal').on('shown.bs.modal', function (e) {
+            $('#order-quantity').focus();
+          });
+
+          $('#order-quantity').bind('keyup mouseup', function () {
+            price = $('#order-price').val();
+            $('#order-amount').text(this.value * price + ' ₽');
+          });
+
+          $('#order-price').bind('keyup mouseup', function () {
+            price = $('#order-quantity').val();
+            $('#order-amount').text(this.value * price + ' ₽');
+          });
+        });
+    </script>
+{% endblock js %}
