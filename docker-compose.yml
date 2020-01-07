@@ -1,0 +1,39 @@
+version: '3.7'
+services:
+    nginx:
+        build:
+            context: ./.docker/development
+            dockerfile: nginx.docker
+        volumes:
+            - ./:/app
+        depends_on:
+            - php
+        ports:
+            - "${WEB_PORT}:80"
+    php:
+        build:
+            context: ./.docker/development
+            dockerfile: php-fpm.docker
+        volumes:
+            - ./:/app
+            - composer:/root/.composer/cache
+        environment:
+            APP_ENV: dev
+            APP_DEBUG: 1
+            DATABASE_URL: 'pgsql://sonm:1234@db:5432/sonm'
+#        depends_on:
+#            - db
+    db:
+        build:
+            context: ./.docker/development
+            dockerfile: postgres.docker
+        restart: unless-stopped # always
+        environment:
+            POSTGRES_USER: sonm
+            POSTGRES_PASSWORD: 1234
+            POSTGRES_DB: sonm
+        volumes:
+            - sonm-db:/var/lib/postgresql/data
+volumes:
+    composer:
+    sonm-db:
