@@ -93,3 +93,24 @@ http://localhost/
 ```
 git clone https://github.com/esmark/sonm.git;cd sonm;make init;make up;start http://localhost:8089/
 ```
+
+Дополнительные команды
+----------------------
+
+Посмотреть список всех пользователей:
+```
+bin/console user:list
+```
+
+Назначить роль пользователю: (ROLE_SUPER_ADMIN)
+```
+bin/console user:role:promote <username> <role>
+```
+
+Для запуска команд в докере, нужно перед командой написать: `docker-compose run php` итого формат будет такой: 
+
+```
+docker-compose run php <command>
+#например:
+docker-compose run php bin/console user:list
+```
