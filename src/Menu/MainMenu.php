@@ -68,8 +68,8 @@ class MainMenu
             ],
         ]);
 
-        $menu->addChild('Profile',          ['route' => 'account_profile']);
         $menu->addChild('Cooperatives',     ['route' => 'account_coop']);
+        $menu->addChild('Profile',          ['route' => 'account_profile']);
         $menu->addChild('Telegram',         ['route' => 'account_telegram']);
         //$menu->addChild('Geoposition',      ['route' => 'account_geoposition']);
         $menu->addChild('Change password',  ['route' => 'account_password']);
