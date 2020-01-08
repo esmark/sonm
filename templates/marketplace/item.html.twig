@@ -108,34 +108,11 @@
                 {% endif %}
             {% endif %}
 
+            {# @todo разрешения на редактированеие другим участничкам #}
             {% if item.user == app.user %}
                 <p>
                     <a href="{{ path('account_item_edit', {'id': item.id}) }}" class="btn btn-sm btn-success">Редактировать</a>
                 </p>
-            {% endif %}
-
-            {% if item.user.longitude and item.user.latitude %}
-                <style type="text/css">
-                    #mapdiv {
-                        height: 500px;
-                        width: 100%;
-                    }
-                </style>
-
-                <div id="mapdiv"></div>
-
-                <script>
-                  var mymap = L.map('mapdiv', { attributionControl:false }).setView([{{ item.user.latitude }}, {{ item.user.longitude }}], 15);
-
-                  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                    // __dummy
-                  }).addTo(mymap);
-
-                  var marker = L.marker([{{ item.user.latitude }}, {{ item.user.longitude }}]).addTo(mymap);
-
-                  //marker.bindPopup("<b>Hello world!</b><br>I am a popup.").openPopup();
-                  marker.bindPopup("<b>{{ item.user }}</b>")
-                </script>
             {% endif %}
 
         </div>

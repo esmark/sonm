@@ -8,6 +8,7 @@ use App\Entity\Category;
 use App\Entity\Item;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -19,11 +20,20 @@ class MarketplaceController extends AbstractController
     /**
      * @Route("/", name="marketplace")
      */
-    public function index(EntityManagerInterface $em): Response
+    public function index(Request $request, EntityManagerInterface $em): Response
     {
+        $items = $em->getRepository(Item::class)
+            ->getFindQueryBuilder([
+                'category' => $request->query->get('category'),
+                'search' => $request->query->get('search'),
+            ])
+            ->getQuery()
+            ->getResult()
+        ;
+
         return $this->render('marketplace/index.html.twig', [
             'categories' => $em->getRepository(Category::class)->findBy([], ['position' => 'ASC', 'title' => 'ASC']),
-            'items'      => $em->getRepository(Item::class)->findAll(),
+            'items'      => $items,
         ]);
     }
 

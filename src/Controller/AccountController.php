@@ -300,6 +300,8 @@ class AccountController extends AbstractController
     }
 
     /**
+     * @todo права доступа
+     *
      * @Route("/coop/member/{id}/", name="account_coop_member")
      */
     public function coopMember(CooperativeMember $member, Request $request, EntityManagerInterface $em): Response
@@ -337,12 +339,35 @@ class AccountController extends AbstractController
     }
     
     /**
-     * @todo права доступа: председатель кооп,...
+     * @todo историю
      *
      * @Route("/item/new/{coop}/", name="account_item_new")
      */
     public function itemNew(Cooperative $coop, Request $request, EntityManagerInterface $em): Response
     {
+        $isAllowAccess = false;
+        foreach ($coop->getMembers() as $member) {
+            if ($member->getUser() == $this->getUser()
+                and (
+                    $member->getStatus() == CooperativeMember::STATUS_CHAIRMAN
+                    or $member->isIsAllowMarketplace()
+                )
+            ) {
+                $isAllowAccess = true;
+
+                break;
+            }
+        }
+
+        if (!$isAllowAccess) {
+            $this->addFlash('error', 'Нет доступа для добавления товаров');
+
+            return $this->redirectToRoute('account_coop_show', [
+                'id'  => $coop->getId(),
+                'tab' => 'nav-item-tab',
+            ]);
+        }
+
         $item = new Item();
         $item
             ->setCooperative($coop)
@@ -355,13 +380,23 @@ class AccountController extends AbstractController
         if ($request->isMethod('POST')) {
             $form->handleRequest($request);
 
+            if ($form->get('cancel')->isClicked()) {
+                return $this->redirectToRoute('account_coop_show', [
+                    'id' => $coop->getId(),
+                    'tab' => 'nav-item-tab',
+                ]);
+            }
+
             if ($form->get('create')->isClicked() and $form->isValid()) {
                 $em->persist($item);
                 $em->flush();
 
                 $this->addFlash('success', 'Товар добавлен');
 
-                return $this->redirectToRoute('account_coop_show', ['id' => $coop->getId()]);
+                return $this->redirectToRoute('account_coop_show', [
+                    'id' => $coop->getId(),
+                    'tab' => 'nav-item-tab',
+                ]);
             }
         }
 
@@ -371,12 +406,38 @@ class AccountController extends AbstractController
     }
 
     /**
-     * @todo права доступа: председатель кооп,...
+     * @todo историю
      *
      * @Route("/item/{id}/", name="account_item_edit")
      */
     public function itemEdit(Item $item, Request $request, EntityManagerInterface $em): Response
     {
+        $coop = $item->getCooperative();
+
+        $isAllowAccess = false;
+        foreach ($coop->getMembers() as $member) {
+            if ($member->getUser() == $this->getUser()
+                and (
+                    $member->getStatus() == CooperativeMember::STATUS_CHAIRMAN
+                    or $member->isIsAllowMarketplace()
+                )
+            ) {
+                $isAllowAccess = true;
+
+                break;
+            }
+        }
+
+        if (!$isAllowAccess) {
+            $this->addFlash('error', 'Нет доступа для изменения товаров');
+
+            return $this->redirectToRoute('account_coop_show', [
+                'id'  => $coop->getId(),
+                'tab' => 'nav-item-tab',
+            ]);
+        }
+
+        $coop = $item->getCooperative();
         $form = $this->createForm(ItemFormType::class, $item);
         $form->remove('create');
 
@@ -384,16 +445,23 @@ class AccountController extends AbstractController
             $form->handleRequest($request);
 
             if ($form->get('cancel')->isClicked()) {
-                return $this->redirectToRoute('account_coop_show', ['id' => $item->getCooperative()->getId()]);
+                return $this->redirectToRoute('account_coop_show', [
+                    'id'  => $coop->getId(),
+                    'tab' => 'nav-item-tab',
+                ]);
+
             }
 
             if ($form->get('update')->isClicked() and $form->isValid()) {
                 $em->persist($item);
                 $em->flush();
 
-                $this->addFlash('success', 'Товар добавлен');
+                $this->addFlash('success', 'Товар обновлён');
 
-                return $this->redirectToRoute('account_coop_show', ['id' => $item->getCooperative()->getId()]);
+                return $this->redirectToRoute('account_coop_show', [
+                    'id'  => $coop->getId(),
+                    'tab' => 'nav-item-tab',
+                ]);
             }
         }
 

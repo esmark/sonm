@@ -4,12 +4,15 @@
 
 {% block account_content %}
 
-    {% if is_allow_edit %}
-        <p style="float: right; margin-top: 8px;">
+    <p style="float: right; margin-top: 8px;">
+        {% if is_allow_edit %}
             <a href="{{ path('account_coop_edit', {'id': coop.id}) }}" class="btn btn-success">Изменить</a>
+        {% endif %}
+
+        {% if is_allow_edit or coop.memberByUser(app.user).isAllowMarketplace %}
             <a href="{{ path('account_item_new', {'coop': coop.id}) }}" class="btn btn-primary">Добавить товар/услугу</a>
-        </p>
-    {% endif %}
+        {% endif %}
+    </p>
 
     <h1>{{ coop }}</h1>
 
