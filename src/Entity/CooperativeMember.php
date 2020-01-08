@@ -41,6 +41,15 @@ class CooperativeMember
     ];
 
     /**
+     * Доступ для публикации и изменению товаров от имени кооператива
+     *
+     * @var bool
+     *
+     * @ORM\Column(type="boolean", nullable=false,  options={"default":0})
+     */
+    protected $is_allow_marketplace;
+
+    /**
      * @var Cooperative
      *
      * @ORM\ManyToOne(targetEntity="Cooperative", inversedBy="members", cascade={"persist"})
@@ -53,6 +62,7 @@ class CooperativeMember
     public function __construct(?Cooperative $cooperative = null, ?User $user = null)
     {
         $this->created_at   = new \DateTime();
+        $this->is_allow_marketplace = false;
         $this->status       = self::STATUS_PENDING;
         $this->cooperative  = $cooperative;
         $this->user         = $user;
@@ -74,6 +84,26 @@ class CooperativeMember
     public function setCooperative(Cooperative $cooperative): self
     {
         $this->cooperative = $cooperative;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isIsAllowMarketplace(): bool
+    {
+        return $this->is_allow_marketplace;
+    }
+
+    /**
+     * @param bool $is_allow_marketplace
+     *
+     * @return $this
+     */
+    public function setIsAllowMarketplace(bool $is_allow_marketplace): self
+    {
+        $this->is_allow_marketplace = $is_allow_marketplace;
 
         return $this;
     }

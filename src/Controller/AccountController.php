@@ -11,6 +11,7 @@ use App\Entity\Item;
 use App\Entity\User;
 use App\Form\Type\CooperativeCreateFormType;
 use App\Form\Type\CooperativeFormType;
+use App\Form\Type\CooperativeMemberFormType;
 use App\Form\Type\ItemFormType;
 use App\Form\Type\UserChangePasswordFormType;
 use App\Form\Type\UserFormType;
@@ -178,7 +179,10 @@ class AccountController extends AbstractController
                 $this->addFlash('error', 'Неверно указан участник');
             }
 
-            return $this->redirectToRoute('account_coop_show', ['id' => $coop->getId()]);
+            return $this->redirectToRoute('account_coop_show', [
+                'id' => $coop->getId(),
+                'tab' => 'nav-members-tab',
+            ]);
         }
 
         if ($isAllowEdit and $request->query->has('decline_member')) {
@@ -210,7 +214,10 @@ class AccountController extends AbstractController
                 $this->addFlash('error', 'Неверно указан участник');
             }
 
-            return $this->redirectToRoute('account_coop_show', ['id' => $coop->getId()]);
+            return $this->redirectToRoute('account_coop_show', [
+                'id' => $coop->getId(),
+                'tab' => 'nav-members-tab',
+            ]);
         }
 
         return $this->render('account/coop_show.html.twig', [
@@ -292,6 +299,43 @@ class AccountController extends AbstractController
         ]);
     }
 
+    /**
+     * @Route("/coop/member/{id}/", name="account_coop_member")
+     */
+    public function coopMember(CooperativeMember $member, Request $request, EntityManagerInterface $em): Response
+    {
+        $coop = $member->getCooperative();
+        $form = $this->createForm(CooperativeMemberFormType::class, $member);
+
+        if ($request->isMethod('POST')) {
+            $form->handleRequest($request);
+
+            if ($form->get('cancel')->isClicked()) {
+                return $this->redirectToRoute('account_coop_show', [
+                    'id' => $coop->getId(),
+                    'tab' => 'nav-members-tab',
+                ]);
+            }
+
+            if ($form->get('update')->isClicked() and $form->isValid()) {
+                $em->persist($form->getData());
+                $em->flush();
+
+                $this->addFlash('success', 'Участник обновлён: '.(string) $member->getUser());
+
+                return $this->redirectToRoute('account_coop_show', [
+                    'id' => $coop->getId(),
+                    'tab' => 'nav-members-tab',
+                ]);
+            }
+        }
+
+        return $this->render('account/coop_member.html.twig', [
+            'form'   => $form->createView(),
+            'member' => $member,
+        ]);
+    }
+    
     /**
      * @todo права доступа: председатель кооп,...
      *

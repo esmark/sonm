@@ -81,6 +81,7 @@
                     <th>#</th>
                     <th>Имя</th>
                     <th>Статус</th>
+                    <th>Разренения</th>
                     <th>Дата регистрации</th>
                 </tr>
                 </thead>
@@ -88,12 +89,19 @@
                 {% for member in coop.members %}
                     <tr>
                         <td>{{ loop.index }}</td>
-                        <td><a href="{{ path('user_show', {'id': member.user.id}) }}">{{ member.user }}</a></td>
+                        <td><a href="{{ path('account_coop_member', {'id': member.id}) }}">{{ member.user }}</a></td>
                         <td>{{ member.statusAsText }}
                             {% if member.status == 0 and is_allow_edit %}
                                 <a href="?approve_member={{ member.id }}" class="btn btn-success btn-sm" onclick="return confirm('Вы уверены, что хотите принять участника как действительного члена?')">Принять как ДЧ</a>
                                 <a href="?decline_member={{ member.id }}" class="btn btn-danger btn-sm" onclick="return confirm('Вы уверены, что хотите отказать в заявке?')">Отклонить</a>
                             {% endif %}
+                        </td>
+                        <td>
+                            <ul>
+                                {% if member.isAllowMarketplace %}
+                                    <li>Стол заказов</li>
+                                {% endif %}
+                            </ul>
                         </td>
                         <td>{{ member.createdAt|date }}</td>
                     </tr>
@@ -166,4 +174,16 @@
         </div>
     </div>
 
+{% endblock %}
+
+{% block js %}
+    {{ parent() }}
+
+    {% if app.request.query.has('tab') %}
+        <script>
+          $(function () {
+            $('#{{ app.request.query.get('tab') }}').tab('show')
+          })
+        </script>
+    {% endif %}
 {% endblock %}
