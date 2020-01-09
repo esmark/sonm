@@ -10,7 +10,7 @@ use Smart\CoreBundle\Doctrine\ColumnTrait;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="App\Repository\CooperativeMemberRepository")
  * @ORM\Table("cooperatives_members",
  *      indexes={
  *          @ORM\Index(columns={"created_at"}),
@@ -29,14 +29,16 @@ class CooperativeMember
     use ColumnTrait\CreatedAt;
     use StatusTrait;
 
-    const STATUS_PENDING   = 0;
-    const STATUS_ASSOCIATE = 2;
-    const STATUS_FULL      = 3;
-    const STATUS_CHAIRMAN  = 4;
+    const STATUS_PENDING_ASSOC  = 0;
+    const STATUS_PENDING_REAL   = 1;
+    const STATUS_ASSOCIATE      = 2;
+    const STATUS_REAL           = 3;
+    const STATUS_CHAIRMAN       = 4;
     static protected $status_values = [
-        self::STATUS_PENDING    => 'Ожидает заверения',
+        self::STATUS_PENDING_ASSOC  => 'Ожидает заверения в качестве АЧ',
+        self::STATUS_PENDING_REAL   => 'Ожидает заверения в качестве ДЧ',
         self::STATUS_ASSOCIATE  => 'Ассоциативный член',
-        self::STATUS_FULL       => 'Действительный член',
+        self::STATUS_REAL       => 'Действительный член',
         self::STATUS_CHAIRMAN   => 'Председатель',
     ];
 
@@ -63,7 +65,7 @@ class CooperativeMember
     {
         $this->created_at   = new \DateTime();
         $this->is_allow_marketplace = false;
-        $this->status       = self::STATUS_PENDING;
+        $this->status       = self::STATUS_PENDING_ASSOC;
         $this->cooperative  = $cooperative;
         $this->user         = $user;
     }

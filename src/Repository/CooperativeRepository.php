@@ -16,13 +16,13 @@ class CooperativeRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param array|null $order
+     * @param array|null $orderBy
      *
      * @return Cooperative[]|null
      */
     public function findActive(?array $orderBy = null): ?array
     {
-        if (empty($order)) {
+        if (empty($orderBy)) {
             $orderBy = ['id' => 'DESC'];
         }
 

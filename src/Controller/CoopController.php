@@ -47,6 +47,14 @@ class CoopController extends AbstractController
             } else {
                 $member = new CooperativeMember($coop, $this->getUser());
 
+                if ($request->query->get('entry_request') === 'assoc') {
+                    $member->setStatus(CooperativeMember::STATUS_PENDING_ASSOC);
+                } elseif ($request->query->get('entry_request') === 'real') {
+                    $member->setStatus(CooperativeMember::STATUS_PENDING_REAL);
+                } else {
+                    throw new \Exception('Недопустимый формат запроса: '.$request->query->get('entry_request'));
+                }
+
                 $history = new CooperativeHistory();
                 $history
                     ->setCooperative($coop)

@@ -150,21 +150,25 @@ class AccountController extends AbstractController
 
         if ($isAllowEdit and $request->query->has('approve_member')) {
             /** @var CooperativeMember $member */
-            $member = $em->getRepository(CooperativeMember::class)->findOneBy([
-                'id' => $request->query->get('approve_member'),
-                'status' => CooperativeMember::STATUS_PENDING,
-            ]);
+            $member = $em->getRepository(CooperativeMember::class)->findForPending($request->query->get('approve_member'));
 
             if ($member) {
-                $member->setStatus(CooperativeMember::STATUS_FULL);
+                if ($member->getStatus() == CooperativeMember::STATUS_PENDING_ASSOC) {
+                    $member->setStatus(CooperativeMember::STATUS_ASSOCIATE);
+                } elseif ($member->getStatus() == CooperativeMember::STATUS_PENDING_REAL) {
+                    $member->setStatus(CooperativeMember::STATUS_REAL);
+                } else {
+                    throw new \Exception('Bad pending status: '.$member->getStatus());
+                }
 
                 $history = new CooperativeHistory();
                 $history
                     ->setCooperative($coop)
                     ->setAction(CooperativeHistory::ACTION_MEMBER_ADD)
                     ->setNewValue([
-                        'member_name' => (string) $member->getUser(),
-                        'member_id  ' => (string) $member->getUser()->getId(),
+                        'member_name'   => (string) $member->getUser(),
+                        'member_status' => $member->getStatusAsText(),
+                        'member_id  '   => (string) $member->getUser()->getId(),
                     ])
                     ->setUser($this->getUser())
                 ;
@@ -186,10 +190,7 @@ class AccountController extends AbstractController
         }
 
         if ($isAllowEdit and $request->query->has('decline_member')) {
-            $member = $em->getRepository(CooperativeMember::class)->findOneBy([
-                'id' => $request->query->get('decline_member'),
-                'status' => CooperativeMember::STATUS_PENDING,
-            ]);
+            $member = $em->getRepository(CooperativeMember::class)->findForPending($request->query->get('decline_member'));
 
             if ($member) {
                 $history = new CooperativeHistory();

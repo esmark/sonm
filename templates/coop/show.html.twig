@@ -4,15 +4,24 @@
 
 {% block content %}
 
-    {% set member = coop.memberByUser(app.user) %}
+    {% if app.user %}
+        {% set member = coop.memberByUser(app.user) %}
 
-    <p style="float: right; margin-top: 8px;">
-        {% if member %}
-            <a href="#" class="btn btn-info">Мой статус: {{ member.statusAsText }}</a>
-        {% else %}
-            <a href="?entry_request" class="btn btn-success" onclick="return confirm('Вы уверены, что хотите отправить заявку?')">Подать заявку на вступление</a>
-        {% endif %}
-    </p>
+        <p style="float: right; margin-top: 8px;">
+            {% if member %}
+                <a href="#" class="btn btn-info">Мой статус: {{ member.statusAsText }}</a>
+            {% else %}
+                <a href="?entry_request=assoc" class="btn btn-success" onclick="return confirm('Вы уверены, что хотите отправить заявку в качестве АЧ?')">
+                    Подать заявку на вступление как АЧ
+                </a>
+
+                <a href="?entry_request=real" class="btn btn-success" onclick="return confirm('Вы уверены, что хотите отправить заявку в качестве ДЧ?')">
+                    Подать заявку на вступление как ДЧ
+                </a>
+            {% endif %}
+        </p>
+    {% endif %}
+
 
     <h1>{{ coop }}</h1>
 

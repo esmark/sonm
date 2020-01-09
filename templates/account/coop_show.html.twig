@@ -94,8 +94,8 @@
                         <td>{{ loop.index }}</td>
                         <td><a href="{{ path('account_coop_member', {'id': member.id}) }}">{{ member.user }}</a></td>
                         <td>{{ member.statusAsText }}
-                            {% if member.status == 0 and is_allow_edit %}
-                                <a href="?approve_member={{ member.id }}" class="btn btn-success btn-sm" onclick="return confirm('Вы уверены, что хотите принять участника как действительного члена?')">Принять как ДЧ</a>
+                            {% if (member.status == 0 or member.status == 1) and is_allow_edit %}
+                                <a href="?approve_member={{ member.id }}" class="btn btn-success btn-sm" onclick="return confirm('Вы уверены, что хотите принять участника как действительного члена?')">Принять</a>
                                 <a href="?decline_member={{ member.id }}" class="btn btn-danger btn-sm" onclick="return confirm('Вы уверены, что хотите отказать в заявке?')">Отклонить</a>
                             {% endif %}
                         </td>
