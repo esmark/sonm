@@ -228,6 +228,8 @@ class User implements UserInterface
                 return true;
             }
         }
+
+        return false;
     }
     
     /**
