@@ -29,7 +29,6 @@
         <div class="nav nav-tabs" id="nav-tab" role="tablist">
             <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Кооператив</a>
             <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">Участники ({{ coop.members|length }})</a>
-            <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab" aria-controls="nav-contact" aria-selected="false">История изменений ({{ coop.history|length }})</a>
             <a class="nav-item nav-link" id="nav-item-tab" data-toggle="tab" href="#nav-item" role="tab" aria-controls="nav-item" aria-selected="false">Товары и услуги ({{ coop.items|length }})</a>
         </div>
     </nav>
@@ -41,6 +40,7 @@
                     <th style="width: 170px;">Название</th>
                     <td>{{ coop }}</td>
                 </tr>
+{#
                 <tr>
                     <th>Статус</th>
                     <td>
@@ -51,9 +51,23 @@
                         {% endif %}
                     </td>
                 </tr>
+
                 <tr>
                     <th>Техническое имя</th>
                     <td>{{ coop.name }}</td>
+                </tr>
+#}
+                <tr>
+                    <th>Адрес</th>
+                    <td>{{ coop.address }}</td>
+                </tr>
+                <tr>
+                    <th>Председатель</th>
+                    <td>{{ coop.director }}</td>
+                </tr>
+                <tr>
+                    <th>Описание</th>
+                    <td>{{ coop.description }}</td>
                 </tr>
                 <tr>
                     <th>ОГРН</th>
@@ -68,19 +82,11 @@
                     <td>{{ coop.kpp }}</td>
                 </tr>
                 <tr>
-                    <th>Директор</th>
-                    <td>{{ coop.director }}</td>
+                    <th>Дата регистрации</th>
+                    <td>@todo</td>
                 </tr>
                 <tr>
-                    <th>Описание</th>
-                    <td>{{ coop.description }}</td>
-                </tr>
-                <tr>
-                    <th>Адрес</th>
-                    <td>{{ coop.address }}</td>
-                </tr>
-                <tr>
-                    <th>Дата создания</th>
+                    <th>Дата создания на сайте</th>
                     <td>{{ coop.createdAt|date }}</td>
                 </tr>
             </table>
@@ -110,44 +116,7 @@
             </table>
 
         </div>
-        <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
 
-            <table class="table table-bordered table-hover">
-                <thead>
-                <tr>
-                    <th>Дата</th>
-                    <th>Действие</th>
-                    <th>Пользователь</th>
-                    <th>Старые значения</th>
-                    <th>Новые значения</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for history in coop.history %}
-                    <tr>
-                        <td>{{ history.createdAt|date }}</td>
-                        <td>{{ history.actionAsText }}</td>
-                        <td><a href="{{ path('user_show', {'id': history.user.id}) }}">{{ history.user }}</a></td>
-                        <td>
-                            <ul>
-                                {% for key, val in history.oldValue %}
-                                    <li><b>{{ key }}</b>: {{ val|e }}</li>
-                                {% endfor %}
-                            </ul>
-                        </td>
-                        <td>
-                            <ul>
-                                {% for key, val in history.newValue %}
-                                    <li><b>{{ key }}</b>: {{ val|e }}</li>
-                                {% endfor %}
-                            </ul>
-                        </td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-
-        </div>
         <div class="tab-pane fade" id="nav-item" role="tabpanel" aria-labelledby="nav-item-tab">
 
             <table class="table table-bordered table-hover">
