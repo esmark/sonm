@@ -44,8 +44,8 @@ class Cooperative
     const STATUS_DECLINE   = 4;
     static protected $status_values = [
         self::STATUS_PENDING    => 'Ожидает заверения',
-        self::STATUS_ACTIVE     => 'Действующей',
-        self::STATUS_INACTIVE   => 'Не действующей',
+        self::STATUS_ACTIVE     => 'Действующий',
+        self::STATUS_INACTIVE   => 'Не действующий',
         self::STATUS_DECLINE    => 'Заверение отклонено',
     ];
 
