@@ -30,15 +30,15 @@ class CooperativeMember
 
     const STATUS_PENDING_ASSOC  = 0;
     const STATUS_PENDING_REAL   = 1;
-    const STATUS_ASSOCIATE      = 2;
+    const STATUS_ASSOC          = 2;
     const STATUS_REAL           = 3;
     const STATUS_CHAIRMAN       = 4;
     static protected $status_values = [
-        self::STATUS_PENDING_ASSOC  => 'Ожидает заверения в качестве АЧ',
-        self::STATUS_PENDING_REAL   => 'Ожидает заверения в качестве ДЧ',
-        self::STATUS_ASSOCIATE  => 'Ассоциативный член',
-        self::STATUS_REAL       => 'Действительный член',
-        self::STATUS_CHAIRMAN   => 'Председатель',
+        self::STATUS_PENDING_ASSOC  => 'Ожидает заверения в качестве АП',
+        self::STATUS_PENDING_REAL   => 'Ожидает заверения в качестве ДП',
+        self::STATUS_ASSOC          => 'Ассоциированный пайщик',
+        self::STATUS_REAL           => 'Действительный пайщик',
+        self::STATUS_CHAIRMAN       => 'Председатель',
     ];
 
     /**

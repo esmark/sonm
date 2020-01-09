@@ -11,12 +11,12 @@
             {% if member %}
                 <a href="#" class="btn btn-info">Мой статус: {{ member.statusAsText }}</a>
             {% else %}
-                <a href="?entry_request=assoc" class="btn btn-success" onclick="return confirm('Вы уверены, что хотите отправить заявку в качестве АЧ?')">
-                    Подать заявку на вступление как АЧ
+                <a href="?entry_request=assoc" class="btn btn-success" onclick="return confirm('Вы уверены, что хотите отправить заявку в качестве АП?')">
+                    Подать заявку на вступление как АП
                 </a>
 
-                <a href="?entry_request=real" class="btn btn-success" onclick="return confirm('Вы уверены, что хотите отправить заявку в качестве ДЧ?')">
-                    Подать заявку на вступление как ДЧ
+                <a href="?entry_request=real" class="btn btn-success" onclick="return confirm('Вы уверены, что хотите отправить заявку в качестве ДП?')">
+                    Подать заявку на вступление как ДП
                 </a>
             {% endif %}
         </p>

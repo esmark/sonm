@@ -154,7 +154,7 @@ class AccountController extends AbstractController
 
             if ($member) {
                 if ($member->getStatus() == CooperativeMember::STATUS_PENDING_ASSOC) {
-                    $member->setStatus(CooperativeMember::STATUS_ASSOCIATE);
+                    $member->setStatus(CooperativeMember::STATUS_ASSOC);
                 } elseif ($member->getStatus() == CooperativeMember::STATUS_PENDING_REAL) {
                     $member->setStatus(CooperativeMember::STATUS_REAL);
                 } else {
