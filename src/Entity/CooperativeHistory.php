@@ -19,7 +19,7 @@ use Smart\CoreBundle\Doctrine\ColumnTrait;
 class CooperativeHistory
 {
     use ColumnTrait\Id;
-    use ColumnTrait\User;
+    use ColumnTrait\UserNotNull;
     use ColumnTrait\CreatedAt;
 
     const ACTION_CREATE               = 0;

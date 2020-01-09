@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Smart\CoreBundle\Doctrine\ColumnTrait;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -36,7 +37,7 @@ class Item
     use ColumnTrait\IsEnabled;
     use ColumnTrait\TitleNotBlank;
     use ColumnTrait\Description;
-    use ColumnTrait\User;
+    use ColumnTrait\UserNotNull;
 
     // Еденицы измерения
     const MEASURE_NONE  = 0;
@@ -126,6 +127,14 @@ class Item
      * @ORM\Column(type="string", length=36, nullable=true)
      */
     protected $image_id;
+
+    /**
+     * @var Basket[]|ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="Basket", mappedBy="item", cascade={"persist"}, fetch="EXTRA_LAZY")
+     * @ORM\OrderBy({"created_at" = "DESC"})
+     */
+    protected $baskets;
 
     /**
      * @var Category
@@ -404,6 +413,26 @@ class Item
     public function setCooperative(Cooperative $cooperative): self
     {
         $this->cooperative = $cooperative;
+
+        return $this;
+    }
+
+    /**
+     * @return Basket[]|ArrayCollection
+     */
+    public function getBaskets()
+    {
+        return $this->baskets;
+    }
+
+    /**
+     * @param Basket[]|ArrayCollection $baskets
+     *
+     * @return $this
+     */
+    public function setBaskets($baskets): self
+    {
+        $this->baskets = $baskets;
 
         return $this;
     }

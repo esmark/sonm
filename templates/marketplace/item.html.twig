@@ -50,8 +50,8 @@
 
                 {% include 'marketplace/_status.html.twig' %}
 
-                {% if item.isStatusAccessToOrder %}
-                    <button type="button" class="btn btn-sm btn-outline-success" data-toggle="modal" data-target="#exampleModal"><i class="far fa-handshake"></i> Получить</button>
+                {% if item.isStatusAccessToOrder and app.user is not null and app.user.isMember %}
+                    <button type="button" class="btn btn-sm btn-outline-success" data-toggle="modal" data-target="#exampleModal"><i class="far fa-handshake"></i> В корзину</button>
                 {% endif %}
 {#                <button type="button" class="btn btn-sm btn-outline-danger"><i class="far fa-heart"></i> В избравнное</button>#}
             </h3>
@@ -60,7 +60,7 @@
                 <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Новая сделка</h5>
+                            <h5 class="modal-title" id="exampleModalLabel">Добавить в корзину</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -68,7 +68,7 @@
                         <div class="modal-body">
                             <p><i class="fas fa-cart-plus"></i> {{ item }}</p>
 
-                            <form id="myform" action="#" method="post" >
+                            <form id="myform" action="{{ path('basket_add_item', {'id': item.id}) }}" method="post" >
                                 <input type="hidden" name="item_id" value="{{ item.id }}">
 
                                 <div class="form-group">
@@ -84,7 +84,7 @@
                                 <div class="modal-footer">
                                     <div style="float: left; margin-right: 14px;">Сумма <strong id="order-amount">{{ item.price }} ₽</strong></div>
                                     <button type="button" class="btn btn-light" data-dismiss="modal">Закрыть</button>
-                                    <button type="submit" class="btn btn-success" id="form_submit">Отправить запрос</button>
+                                    <button type="submit" class="btn btn-success" id="form_submit">Добавить</button>
                                 </div>
                             </form>
                         </div>
@@ -160,12 +160,14 @@
           });
 
           $('#order-quantity').bind('keyup mouseup', function () {
-            price = $('#order-price').val();
+            //price = $('#order-price').val();
+            price = {{ item.price }};
             $('#order-amount').text(this.value * price + ' ₽');
           });
 
           $('#order-price').bind('keyup mouseup', function () {
-            price = $('#order-quantity').val();
+            //price = $('#order-quantity').val();
+            price = {{ item.price }};
             $('#order-amount').text(this.value * price + ' ₽');
           });
         });

@@ -155,6 +155,24 @@ class User implements UserInterface
     protected $telegram_username;
 
     /**
+     * @var Basket[]|ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="Basket", mappedBy="user", cascade={"persist"}, fetch="EXTRA_LAZY")
+     * @ORM\OrderBy({"created_at" = "DESC"})
+     */
+    protected $baskets;
+
+    /**
+     * @var CooperativeMember[]|ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="CooperativeMember", mappedBy="user", cascade={"persist"}, fetch="EXTRA_LAZY")
+     * @ORM\OrderBy({"created_at" = "DESC"})
+     */
+    protected $members;
+
+    /**
+     * @var UserGroup[]|ArrayCollection
+     *
      * @ORM\ManyToMany(targetEntity="UserGroup")
      * @ORM\JoinTable(name="users_groups_relations")
      */
@@ -194,6 +212,24 @@ class User implements UserInterface
         return $this->getFirstname().' '.$this->getLastname();
     }
 
+    /**
+     * Является ли юзер действующим участником какого-либо кооператива?
+     *
+     * @return bool
+     */
+    public function isMember(): bool
+    {
+        foreach ($this->members as $member) {
+            if ($member->getStatus() == CooperativeMember::STATUS_PENDING_ASSOC
+                or $member->getStatus() == CooperativeMember::STATUS_PENDING_REAL
+            ) {
+                // pending
+            } else {
+                return true;
+            }
+        }
+    }
+    
     /**
      * @return string
      */
@@ -727,6 +763,60 @@ class User implements UserInterface
         if ($this->getGroups()->contains($group)) {
             $this->getGroups()->removeElement($group);
         }
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getBasketAmount(): int
+    {
+        $amount = 0;
+
+        foreach ($this->baskets as $basket) {
+            $amount += $basket->getItem()->getPrice() * $basket->getQuantity();
+        }
+
+        return $amount;
+    }
+    
+    /**
+     * @return Basket[]|ArrayCollection
+     */
+    public function getBaskets()
+    {
+        return $this->baskets;
+    }
+
+    /**
+     * @param Basket[]|ArrayCollection $baskets
+     *
+     * @return $this
+     */
+    public function setBaskets($baskets): self
+    {
+        $this->baskets = $baskets;
+
+        return $this;
+    }
+
+    /**
+     * @return CooperativeMember[]|ArrayCollection
+     */
+    public function getMembers()
+    {
+        return $this->members;
+    }
+
+    /**
+     * @param CooperativeMember[]|ArrayCollection $members
+     *
+     * @return $this
+     */
+    public function setMembers($members): self
+    {
+        $this->members = $members;
 
         return $this;
     }

@@ -25,7 +25,6 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 class CooperativeMember
 {
     use ColumnTrait\Id;
-    use ColumnTrait\User;
     use ColumnTrait\CreatedAt;
     use StatusTrait;
 
@@ -57,6 +56,14 @@ class CooperativeMember
      * @ORM\ManyToOne(targetEntity="Cooperative", inversedBy="members", cascade={"persist"})
      */
     protected $cooperative;
+
+    /**
+     * @var User
+     *
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="members", cascade={"persist"})
+     * @ORM\JoinColumn(nullable=false)
+     */
+    protected $user;
 
     /**
      * CooperativeMember constructor.
@@ -106,6 +113,26 @@ class CooperativeMember
     public function setIsAllowMarketplace(bool $is_allow_marketplace): self
     {
         $this->is_allow_marketplace = $is_allow_marketplace;
+
+        return $this;
+    }
+
+    /**
+     * @return User
+     */
+    public function getUser(): User
+    {
+        return $this->user;
+    }
+
+    /**
+     * @param User $user
+     *
+     * @return $this
+     */
+    public function setUser(User $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }

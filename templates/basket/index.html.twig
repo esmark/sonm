@@ -6,6 +6,31 @@
 
     <h1>Корзина</h1>
 
-    @todo
+    <p>Всего позиций: {{ app.user.baskets|length }}</p>
+
+    <table class="table table-bordered table-hover">
+        <thead>
+        <tr>
+            <th>Название</th>
+            <th>Кол-во</th>
+            <th>Цена</th>
+            <th>Сумма</th>
+            <th>Дата</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for basket in app.user.baskets %}
+            <tr>
+                <td><a href="{{ path('marketplace_item', {'id': basket.item.id}) }}">{{ basket.item }}</a></td>
+                <td>{{ basket.quantity }} @todo изменение</td>
+                <td>{{ basket.item.price }}</td>
+                <td>{{ basket.item.price * basket.quantity }}</td>
+                <td>{{ basket.createdAt|date }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <p>Итого на сумму: <b>{{ app.user.basketAmount }}</b></p>
 
 {% endblock %}
