@@ -90,8 +90,15 @@ http://localhost/
 ``` 
 
 Или можно запустить установку с нуля одной строчкой:
+
+Для Windows:
 ```
 git clone https://github.com/esmark/sonm.git;cd sonm;make init;make up;start http://localhost:8089/
+```
+
+Для Linux:
+```
+git clone https://github.com/esmark/sonm.git;cd sonm;make init;make up;xdg-open http://localhost:8089/
 ```
 
 Дополнительные команды
