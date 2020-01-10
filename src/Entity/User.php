@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\DTO\Worksheet;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Smart\CoreBundle\Doctrine\ColumnTrait;
@@ -155,6 +156,13 @@ class User implements UserInterface
     protected $telegram_username;
 
     /**
+     * @var Worksheet
+     *
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $worksheet;
+
+    /**
      * @var Basket[]|ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="Basket", mappedBy="user", cascade={"persist"}, fetch="EXTRA_LAZY")
@@ -198,6 +206,7 @@ class User implements UserInterface
         $this->password     = '';
         $this->roles        = [];
         $this->username     = '';
+
     }
 
     /**
@@ -819,6 +828,30 @@ class User implements UserInterface
     public function setMembers($members): self
     {
         $this->members = $members;
+
+        return $this;
+    }
+
+    /**
+     * @return Worksheet|null
+     */
+    public function getWorksheet(): Worksheet
+    {
+        if (empty($this->worksheet)) {
+            return new Worksheet();
+        }
+
+        return unserialize($this->worksheet);
+    }
+
+    /**
+     * @param Worksheet|null $worksheet
+     *
+     * @return $this
+     */
+    public function setWorksheet(Worksheet $worksheet): self
+    {
+        $this->worksheet = serialize($worksheet);
 
         return $this;
     }

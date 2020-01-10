@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\DTO\Worksheet;
 use App\Entity\Cooperative;
 use App\Entity\CooperativeHistory;
 use App\Entity\CooperativeMember;
@@ -15,6 +16,7 @@ use App\Form\Type\CooperativeMemberFormType;
 use App\Form\Type\ItemFormType;
 use App\Form\Type\UserChangePasswordFormType;
 use App\Form\Type\UserFormType;
+use App\Form\Type\WorksheetFormType;
 use App\Repository\UserRepository;
 use App\Utils\UserValidator;
 use Doctrine\ORM\EntityManagerInterface;
@@ -450,7 +452,6 @@ class AccountController extends AbstractController
                     'id'  => $coop->getId(),
                     'tab' => 'nav-item-tab',
                 ]);
-
             }
 
             if ($form->get('update')->isClicked() and $form->isValid()) {
@@ -492,6 +493,37 @@ class AccountController extends AbstractController
         }
 
         return $this->render('account/profile.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/worksheet/", name="account_worksheet")
+     */
+    public function worksheet(Request $request, EntityManagerInterface $em): Response
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+
+        $worksheet = $user->getWorksheet();
+
+        $form = $this->createForm(WorksheetFormType::class, $worksheet);
+
+        if ($request->isMethod('POST')) {
+            $form->handleRequest($request);
+
+            if ($form->get('save')->isClicked()) {
+                $user->setWorksheet($worksheet);
+                $em->persist($user);
+                $em->flush();
+
+                $this->addFlash('success', 'Анкета обновлена');
+
+                return $this->redirectToRoute('account_worksheet');
+            }
+        }
+
+        return $this->render('account/worksheet.html.twig', [
             'form' => $form->createView(),
         ]);
     }
