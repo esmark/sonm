@@ -67,7 +67,7 @@ class AdminController extends AbstractController
 
                 $coop->setStatus(Cooperative::STATUS_ACTIVE);
 
-                $this->addFlash('success', 'Заявка на создание кооператива одобрена');
+                $this->addFlash('success', 'Заявка на добавление кооператива одобрена');
 
                 $em->persist($history);
                 $em->flush();
@@ -87,7 +87,7 @@ class AdminController extends AbstractController
 
                 $coop->setStatus(Cooperative::STATUS_DECLINE);
 
-                $this->addFlash('error', 'Заявка на создание кооператива отклонена');
+                $this->addFlash('error', 'Заявка на добавление кооператива отклонена');
 
                 $em->persist($history);
                 $em->flush();

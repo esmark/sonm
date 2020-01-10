@@ -91,7 +91,7 @@ class AccountController extends AbstractController
                 $em->persist($history2);
                 $em->flush();
 
-                $this->addFlash('success', 'Заявка на создание кооператива отправлена');
+                $this->addFlash('success', 'Заявка на добавление кооператива отправлена');
 
                 return $this->redirectToRoute('account_coop');
             }
