@@ -69,7 +69,7 @@ class MainMenu
         ]);
 
         $menu->addChild('My cooperatives',  ['route' => 'account_coop']);
-        $menu->addChild('Worksheet',        ['route' => 'account_worksheet']);
+        $menu->addChild('Profile of intentions', ['route' => 'account_worksheet']);
         $menu->addChild('Profile',          ['route' => 'account_profile']);
         $menu->addChild('Telegram',         ['route' => 'account_telegram']);
         $menu->addChild('Geoposition',      ['route' => 'account_geoposition']);

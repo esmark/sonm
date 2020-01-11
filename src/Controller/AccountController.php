@@ -16,6 +16,7 @@ use App\Form\Type\CooperativeMemberFormType;
 use App\Form\Type\ItemFormType;
 use App\Form\Type\UserChangePasswordFormType;
 use App\Form\Type\UserFormType;
+use App\Form\Type\UserWorksheetPurposeFormType;
 use App\Form\Type\WorksheetFormType;
 use App\Repository\UserRepository;
 use App\Utils\UserValidator;
@@ -505,15 +506,12 @@ class AccountController extends AbstractController
         /** @var User $user */
         $user = $this->getUser();
 
-        $worksheet = $user->getWorksheet();
-
-        $form = $this->createForm(WorksheetFormType::class, $worksheet);
+        $form = $this->createForm(UserWorksheetPurposeFormType::class, $user);
 
         if ($request->isMethod('POST')) {
             $form->handleRequest($request);
 
             if ($form->get('save')->isClicked()) {
-                $user->setWorksheet($worksheet);
                 $em->persist($user);
                 $em->flush();
 

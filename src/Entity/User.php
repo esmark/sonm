@@ -159,8 +159,28 @@ class User implements UserInterface
      * @var Worksheet
      *
      * @ORM\Column(type="text", nullable=true)
+     *
+     * @deprecated пока не используется
      */
     protected $worksheet;
+
+    /**
+     * Анкета намерений - Что я могу дать ПСК?
+     *
+     * @var string|null
+     *
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $purpose_give;
+
+    /**
+     * Анкета намерений - Что я хочу получить от работы в ПСК?
+     *
+     * @var string|null
+     *
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $purpose_take;
 
     /**
      * @var Basket[]|ArrayCollection
@@ -828,6 +848,46 @@ class User implements UserInterface
     public function setMembers($members): self
     {
         $this->members = $members;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getPurposeGive(): ?string
+    {
+        return $this->purpose_give;
+    }
+
+    /**
+     * @param string|null $purpose_give
+     *
+     * @return $this
+     */
+    public function setPurposeGive(?string $purpose_give): self
+    {
+        $this->purpose_give = $purpose_give;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getPurposeTake(): ?string
+    {
+        return $this->purpose_take;
+    }
+
+    /**
+     * @param string|null $purpose_take
+     *
+     * @return $this
+     */
+    public function setPurposeTake(?string $purpose_take): self
+    {
+        $this->purpose_take = $purpose_take;
 
         return $this;
     }
