@@ -121,6 +121,104 @@ class User implements UserInterface
     protected $lastname;
 
     /**
+     * Отчество
+     *
+     * @var string|null
+     *
+     * @ORM\Column(type="string", length=30, nullable=true)
+     * @Assert\NotNull(message="This value is not valid.")
+     */
+    protected $patronymic;
+
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(type="string", length=30, nullable=true)
+     */
+    protected $phone;
+
+    /**
+     * Образование
+     *
+     * @var string|null
+     *
+     * @ORM\Column(type="string", length=30, nullable=true)
+     */
+    protected $education;
+
+    /**
+     * Учебные заведения
+     *
+     * @var string|null
+     *
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $schools;
+
+    /**
+     * Положение (производитель, потребитель, другое)
+     *
+     * @var string|null
+     *
+     * @ORM\Column(type="string", length=30, nullable=true)
+     */
+    protected $state;
+
+    /**
+     * "Вы сейчас" (пенсионер, ИП и т.д.)
+     *
+     * @var string|null
+     *
+     * @ORM\Column(type="string", length=30, nullable=true)
+     */
+    protected $status;
+
+    /**
+     * Каким направлением хозяйственной деятельности хотел бы заняться?
+     *
+     * @var string|null
+     *
+     * @ORM\Column(type="string", length=30, nullable=true)
+     */
+    protected $activity;
+
+    /**
+     * Выберите направление, в котором готовы принять участие:
+     *
+     * @var string|null
+     *
+     * @ORM\Column(type="string", length=30, nullable=true)
+     */
+    protected $participate;
+
+    /**
+     * Ссылки в социальных сетях (ВК, ОК, FB и т.д.)
+     *
+     * @var string|null
+     *
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $social_links;
+
+    /**
+     * Профессиональные навыки
+     *
+     * @var string|null
+     *
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $skills;
+
+    /**
+     * Есть ли у вас родственники в Кооперативе?
+     *
+     * @var bool
+     *
+     * @ORM\Column(type="boolean", nullable=false, options={"default":0})
+     */
+    protected $has_relative;
+
+    /**
      * @var \DateTime|null
      *
      * @ORM\Column(type="datetime", nullable=true)
@@ -912,6 +1010,234 @@ class User implements UserInterface
     public function setWorksheet(Worksheet $worksheet): self
     {
         $this->worksheet = serialize($worksheet);
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getPatronymic(): ?string
+    {
+        return $this->patronymic;
+    }
+
+    /**
+     * @param string|null $patronymic
+     *
+     * @return $this
+     */
+    public function setPatronymic(?string $patronymic): self
+    {
+        $this->patronymic = $patronymic;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getPhone(): ?string
+    {
+        return $this->phone;
+    }
+
+    /**
+     * @param string|null $phone
+     *
+     * @return $this
+     */
+    public function setPhone(?string $phone): self
+    {
+        $this->phone = $phone;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getSocialLinks(): ?string
+    {
+        return $this->social_links;
+    }
+
+    /**
+     * @param string|null $social_links
+     *
+     * @return $this
+     */
+    public function setSocialLinks(?string $social_links): self
+    {
+        $this->social_links = $social_links;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getEducation(): ?string
+    {
+        return $this->education;
+    }
+
+    /**
+     * @param string|null $education
+     *
+     * @return $this
+     */
+    public function setEducation(?string $education): self
+    {
+        $this->education = $education;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getState(): ?string
+    {
+        return $this->state;
+    }
+
+    /**
+     * @param string|null $state
+     *
+     * @return $this
+     */
+    public function setState(?string $state): self
+    {
+        $this->state = $state;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getSchools(): ?string
+    {
+        return $this->schools;
+    }
+
+    /**
+     * @param string|null $schools
+     *
+     * @return $this
+     */
+    public function setSchools(?string $schools): self
+    {
+        $this->schools = $schools;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getActivity(): ?string
+    {
+        return $this->activity;
+    }
+
+    /**
+     * @param string|null $activity
+     *
+     * @return $this
+     */
+    public function setActivity(?string $activity): self
+    {
+        $this->activity = $activity;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getParticipate(): ?string
+    {
+        return $this->participate;
+    }
+
+    /**
+     * @param string|null $participate
+     *
+     * @return $this
+     */
+    public function setParticipate(?string $participate): self
+    {
+        $this->participate = $participate;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getSkills(): ?string
+    {
+        return $this->skills;
+    }
+
+    /**
+     * @param string|null $skills
+     *
+     * @return $this
+     */
+    public function setSkills(?string $skills): self
+    {
+        $this->skills = $skills;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasRelative(): bool
+    {
+        return $this->has_relative;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getHasRelative(): bool
+    {
+        return $this->has_relative;
+    }
+
+    /**
+     * @param bool $has_relative
+     *
+     * @return $this
+     */
+    public function setHasRelative(bool $has_relative): self
+    {
+        $this->has_relative = $has_relative;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getStatus(): ?string
+    {
+        return $this->status;
+    }
+
+    /**
+     * @param string|null $status
+     *
+     * @return $this
+     */
+    public function setStatus(?string $status): self
+    {
+        $this->status = $status;
 
         return $this;
     }

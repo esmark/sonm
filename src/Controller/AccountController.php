@@ -483,7 +483,7 @@ class AccountController extends AbstractController
         if ($request->isMethod('POST')) {
             $form->handleRequest($request);
 
-            if ($form->get('update')->isClicked() and $form->isValid()) {
+            if ($form->get('save')->isClicked() and $form->isValid()) {
                 $em->persist($this->getUser());
                 $em->flush();
 

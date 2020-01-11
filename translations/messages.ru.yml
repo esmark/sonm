@@ -15,6 +15,7 @@ Description: Описание
 Director: Директор
 Email: Email
 Error: Ошибка
+Education: Образование
 Firstname: Имя
 Final date: Финальная дата
 Geoposition: Местоположение
@@ -45,6 +46,8 @@ Participant: Участник
 Participants: Участники
 Password: Пароль
 Password confirmation: Повтор пароля
+Patronymic: Отчество
+Phone: Телефон
 Position: Позиция
 Price: Цена
 Profile: Профиль
@@ -52,11 +55,14 @@ Profile of intentions: Анкета намерений
 Register: Регистрация
 Repeat Password: Повторите пароль
 Save: Сохранить
+Schools: Учебные заведения
 Sex: Пол
 Sign in: Вход
 Shipping cost: Стоимость доставки
 Shipping type: Тип доставки
 Short description: Краткое описание
+Skills: Профессиональные навыки
+Social links: Ссылки на соц.сети
 Stats: Статистика
 Status: Статус
 Success: Успешно

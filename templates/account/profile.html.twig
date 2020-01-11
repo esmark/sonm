@@ -11,6 +11,13 @@
             <b>Email:</b> {{ app.user.email }}
         </p>
 
+
+        <h3>@todo:</h3>
+        <ul>
+            <li>Город или село (место фактического проживания) - выбор из геобазы</li>
+        </ul>
+
         {{ form(form) }}
+
     {% endif %}
 {% endblock account_content %}

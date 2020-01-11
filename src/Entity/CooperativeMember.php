@@ -46,7 +46,7 @@ class CooperativeMember
      *
      * @var bool
      *
-     * @ORM\Column(type="boolean", nullable=false,  options={"default":0})
+     * @ORM\Column(type="boolean", nullable=false, options={"default":0})
      */
     protected $is_allow_marketplace;
 
