@@ -107,6 +107,7 @@ class User implements UserInterface
      *
      * @ORM\Column(type="string", length=30)
      * @Assert\NotNull(message="This value is not valid.")
+     * @Assert\Length(max = 30)
      */
     protected $firstname;
 
@@ -117,6 +118,7 @@ class User implements UserInterface
      *
      * @ORM\Column(type="string", length=30)
      * @Assert\NotNull(message="This value is not valid.")
+     * @Assert\Length(max = 30)
      */
     protected $lastname;
 
@@ -127,13 +129,15 @@ class User implements UserInterface
      *
      * @ORM\Column(type="string", length=30, nullable=true)
      * @Assert\NotNull(message="This value is not valid.")
+     * @Assert\Length(max = 30)
      */
     protected $patronymic;
 
     /**
      * @var string|null
      *
-     * @ORM\Column(type="string", length=30, nullable=true)
+     * @ORM\Column(type="string", length=190, nullable=true)
+     * @Assert\Length(max = 190)
      */
     protected $phone;
 
@@ -142,7 +146,7 @@ class User implements UserInterface
      *
      * @var string|null
      *
-     * @ORM\Column(type="string", length=30, nullable=true)
+     * @ORM\Column(type="text", nullable=true)
      */
     protected $education;
 
@@ -161,6 +165,7 @@ class User implements UserInterface
      * @var string|null
      *
      * @ORM\Column(type="string", length=30, nullable=true)
+     * @Assert\Length(max = 30)
      */
     protected $state;
 
@@ -170,6 +175,7 @@ class User implements UserInterface
      * @var string|null
      *
      * @ORM\Column(type="string", length=30, nullable=true)
+     * @Assert\Length(max = 30)
      */
     protected $status;
 
@@ -178,7 +184,7 @@ class User implements UserInterface
      *
      * @var string|null
      *
-     * @ORM\Column(type="string", length=30, nullable=true)
+     * @ORM\Column(type="text", nullable=true)
      */
     protected $activity;
 
@@ -187,7 +193,7 @@ class User implements UserInterface
      *
      * @var string|null
      *
-     * @ORM\Column(type="string", length=30, nullable=true)
+     * @ORM\Column(type="text", nullable=true)
      */
     protected $participate;
 
@@ -250,6 +256,7 @@ class User implements UserInterface
      * @var string|null
      *
      * @ORM\Column(type="string", length=100, nullable=true)
+     * @Assert\Length(max = 100)
      */
     protected $telegram_username;
 
