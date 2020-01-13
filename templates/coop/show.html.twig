@@ -83,7 +83,11 @@
                 </tr>
                 <tr>
                     <th>Дата регистрации</th>
-                    <td>@todo</td>
+                    <td>
+                        {% if coop.registerDate is not empty %}
+                            {{ coop.registerDate|date }}
+                        {% endif %}
+                    </td>
                 </tr>
                 <tr>
                     <th>Дата создания на сайте</th>

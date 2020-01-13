@@ -82,6 +82,13 @@ class Cooperative
     protected $director;
 
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(type="date", nullable=true)
+     */
+    protected $register_date;
+
+    /**
      * @var CooperativeHistory[]|ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="CooperativeHistory", mappedBy="cooperative", cascade={"persist"}, fetch="EXTRA_LAZY")
@@ -282,5 +289,25 @@ class Cooperative
         }
 
         return null;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getRegisterDate(): ?\DateTime
+    {
+        return $this->register_date;
+    }
+
+    /**
+     * @param \DateTime $register_date
+     *
+     * @return $this
+     */
+    public function setRegisterDate(\DateTime $register_date): self
+    {
+        $this->register_date = $register_date;
+
+        return $this;
     }
 }

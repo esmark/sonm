@@ -70,6 +70,14 @@
                     <td>{{ coop.address }}</td>
                 </tr>
                 <tr>
+                    <th>Дата регистрации</th>
+                    <td>
+                        {% if coop.registerDate is not empty %}
+                            {{ coop.registerDate|date }}
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
                     <th>Дата создания</th>
                     <td>{{ coop.createdAt|date }}</td>
                 </tr>
