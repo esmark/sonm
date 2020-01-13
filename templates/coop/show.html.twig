@@ -85,7 +85,7 @@
                     <th>Дата регистрации</th>
                     <td>
                         {% if coop.registerDate is not empty %}
-                            {{ coop.registerDate|date }}
+                            {{ coop.registerDate|date('d-M-Y') }}
                         {% endif %}
                     </td>
                 </tr>

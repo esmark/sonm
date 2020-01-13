@@ -20,6 +20,7 @@
             <th>Товаров и услуг</th>
             <th>Статус</th>
             <th>Дата регистрации</th>
+            <th>Дата добавления на сайт</th>
         </tr>
         </thead>
         <tbody>
@@ -30,6 +31,11 @@
                 <td>{{ member.cooperative.members|length }}</td>
                 <td>{{ member.cooperative.items|length }}</td>
                 <td>{{ member.cooperative.statusAsText }}</td>
+                <td>
+                    {% if member.cooperative.registerDate is not empty %}
+                        {{ member.cooperative.registerDate|date('d-M-Y') }}
+                    {% endif %}
+                </td>
                 <td>{{ member.createdAt|date }}</td>
             </tr>
         {% endfor %}
