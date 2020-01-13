@@ -8,28 +8,40 @@
 
     <p>Всего позиций: {{ app.user.baskets|length }}</p>
 
-    <table class="table table-bordered table-hover">
-        <thead>
-        <tr>
-            <th>Название</th>
-            <th>Кол-во</th>
-            <th>Цена</th>
-            <th>Сумма</th>
-            <th>Дата</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for basket in app.user.baskets %}
+    {% for coop in coops %}
+        <h2>{{ coop.title }}</h2>
+        <table class="table table-bordered table-hover">
+            <thead>
             <tr>
-                <td><a href="{{ path('marketplace_item', {'id': basket.item.id}) }}">{{ basket.item }}</a></td>
-                <td>{{ basket.quantity }} @todo изменение</td>
-                <td>{{ basket.item.price }}</td>
-                <td>{{ basket.item.price * basket.quantity }}</td>
-                <td>{{ basket.createdAt|date }}</td>
+                <th>Название</th>
+                <th>Кол-во</th>
+                <th>Цена</th>
+                <th>Сумма</th>
+                <th>Дата</th>
             </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+            {% set coopBasketAmount = 0 %}
+            {% for basket in app.user.baskets %}
+                {% if coop.id == basket.item.cooperative.id %}
+                    {% set coopBasketAmount = coopBasketAmount + basket.item.price * basket.quantity %}
+                <tr>
+                    <td><a href="{{ path('marketplace_item', {'id': basket.item.id}) }}">{{ basket.item }}</a></td>
+                    <td>{{ basket.quantity }} @todo изменение</td>
+                    <td>{{ basket.item.price }}</td>
+                    <td>{{ basket.item.price * basket.quantity }}</td>
+                    <td>{{ basket.createdAt|date }}</td>
+                </tr>
+                {% endif %}
+            {% endfor %}
+                <tr>
+                    <td colspan="5">
+                        <p style="float: right;">Итого на сумму: <b>{{ coopBasketAmount }}</b></p>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    {% endfor %}
 
     <p>Итого на сумму: <b>{{ app.user.basketAmount }}</b></p>
 

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\Basket;
+use App\Entity\Cooperative;
 use App\Entity\Item;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
@@ -27,7 +28,17 @@ class BasketController extends AbstractController
      */
     public function index(): Response
     {
-        return $this->render('basket/index.html.twig');
+        /** @var Cooperative[] $coops */
+        $coops = [];
+
+        /** @var Basket $basket */
+        foreach ($this->getUser()->getBaskets() as $basket) {
+            $coops[$basket->getItem()->getCooperative()->getId()] = $basket->getItem()->getCooperative();
+        }
+
+        return $this->render('basket/index.html.twig', [
+            'coops' => $coops,
+        ]);
     }
 
     /**
