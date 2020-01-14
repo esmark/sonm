@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Точки выдачи - Админка{% endblock %}
+
+{% block content %}
+
+    <p style="float: right; margin-top: 16px;">
+        <a href="{{ path('admin_pick_up_location_new') }}" class="btn btn-success">Добавить</a>
+    </p>
+
+    <h1>Точки выдачи</h1>
+
+    <p>Всего: {{ pick_up_locations|length }}</p>
+
+    <table class="table table-bordered table-hover">
+        <thead>
+        <tr>
+            <th>Название</th>
+            <th>Адрес</th>
+            <th>Активно</th>
+            <th>Кол-во кооп</th>
+            <th>Кто добавил</th>
+            <th>Дата добавления на сайт</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for loc in pick_up_locations %}
+            <tr>
+                <td><a href="{{ path('admin_pick_up_location_edit', {'id': loc.id}) }}">{{ loc.title }}</a></td>
+                <td>{{ loc.address }}</td>
+                <td>{{ loc.isEnabled }}</td>
+                <td>{{ loc.cooperatives|length }}</td>
+                <td>{{ loc.user }}</td>
+                <td>{{ loc.createdAt|date }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

@@ -113,6 +113,12 @@ class Cooperative
     protected $members;
 
     /**
+     * @ORM\ManyToMany(targetEntity="PickUpLocation", inversedBy="cooperatives")
+     * @ORM\JoinTable(name="cooperatives_pick_up_locations_relations")
+     */
+    protected $pick_up_locations;
+
+    /**
      * Cooperative constructor.
      */
     public function __construct()
@@ -307,6 +313,26 @@ class Cooperative
     public function setRegisterDate(\DateTime $register_date): self
     {
         $this->register_date = $register_date;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPickUpLocations()
+    {
+        return $this->pick_up_locations;
+    }
+
+    /**
+     * @param mixed $pick_up_locations
+     *
+     * @return $this
+     */
+    public function setPickUpLocations($pick_up_locations): self
+    {
+        $this->pick_up_locations = $pick_up_locations;
 
         return $this;
     }

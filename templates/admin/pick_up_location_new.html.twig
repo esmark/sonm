@@ -1,0 +1,152 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Добавление точки выдачи - Админка{% endblock %}
+
+{% block css %}
+    {{ parent() }}
+    <style type="text/css">
+        #geocoding_form {
+            margin: 0px auto 10px;
+        }
+        .find-me.btn:focus {
+            border-color: transparent;
+            outline: 0;
+        }
+        .no-browser-support {
+            font-size: 18px;
+            opacity: 0;
+            display: none;
+        }
+        .coordinates b:first-child {
+            margin-right: 15px;
+        }
+    </style>
+{% endblock css %}
+
+{% block content %}
+    <h1>Добавление точки выдачи</h1>
+
+    {{ form_start(form) }}
+    {{ form_row(form.title) }}
+    {{ form_row(form.address) }}
+
+    <div class="form-group row">
+        <label class="col-form-label col-sm-3" for="pick_up_location_address">Геолокация</label>
+        <div class="col-sm-9">
+            <div class="form-group form-row">
+                <div class="col">
+                    <button type="button" id="find-me" class="btn btn-sm btn-outline-info">Определить автоматически</button>
+                </div>
+                <div class="col">
+                    {{ form_widget(form.latitude) }}
+                </div>
+                <div class="col">
+                    {{ form_widget(form.longitude) }}
+                </div>
+            </div>
+
+            <p class="no-browser-support">Sorry, the Geolocation API isn't supported in Your browser.</p>
+
+            <div id="mapdiv"></div>
+        </div>
+    </div>
+
+    {{ form_end(form) }}
+
+{% endblock %}
+
+{% block js %}
+    {{ parent() }}
+
+    {% set latitude  = form.vars.data.latitude %}
+    {% set longitude = form.vars.data.longitude %}
+
+    <script>
+      var mymap = L.map('mapdiv', { attributionControl:false }).setView([{{ latitude ? latitude : 55.03023587}}, {{ longitude ? longitude : 82.92034149 }}], 14);
+
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        // __dummy
+      }).addTo(mymap);
+
+      var marker = L.marker([{{ latitude ? latitude : 55.03023587}}, {{ longitude ? longitude : 82.92034149 }}]).addTo(mymap);
+
+      //marker.bindPopup("<b>Hello world!</b><br>I am a popup.").openPopup();
+      //marker.bindPopup("<b>Hello world!</b><br>I am a popup.");
+
+      mymap.on('move', function () {
+        marker.setLatLng(mymap.getCenter());
+
+        var position = marker.getLatLng();
+        lat = Number(position['lat']).toFixed(12);
+        lng = Number(position['lng']).toFixed(12);
+
+        $('#pick_up_location_latitude').attr('value', lat);
+        $('#pick_up_location_longitude').attr('value', lng);
+
+        //console.log(mymap.getCenter());
+      });
+
+      mymap.on('zoomanim', function () {
+        marker.setLatLng(mymap.getCenter());
+
+        var position = marker.getLatLng();
+        lat = Number(position['lat']).toFixed(12);
+        lng = Number(position['lng']).toFixed(12);
+
+        $('#pick_up_location_latitude').attr('value', lat);
+        $('#pick_up_location_longitude').attr('value', lng);
+
+        //console.log(mymap.getCenter());
+      });
+
+      {#
+      // Dragend event of map for update marker position
+      mymap.on('dragend', function(e) {
+        var cnt = mymap.getCenter();
+        var position = marker.getLatLng();
+        lat = Number(position['lat']).toFixed(5);
+        lng = Number(position['lng']).toFixed(5);
+        console.log(position);
+        //setLeafLatLong(lat, lng);
+      });
+        #}
+
+      function noLocation() {
+        alert(55555555);
+      }
+
+      var findMeButton = $('#find-me');
+
+      // Check if the browser has support for the Geolocation API
+      if (!navigator.geolocation) {
+        findMeButton.addClass("disabled");
+        $('.no-browser-support').addClass("visible");
+      } else {
+        findMeButton.on('click', function(e) {
+          e.preventDefault();
+          navigator.geolocation.getCurrentPosition(function(position) {
+            // Get the coordinates of the current possition.
+            var lat = position.coords.latitude;
+            var lon = position.coords.longitude;
+
+            // alert(lat + ' ' + lon);
+
+            $('#form_latitude').attr('value', lat.toFixed(12));
+            $('#form_longitude').attr('value', lon.toFixed(12));
+
+            mymap.setView([lat.toFixed(12), lon.toFixed(12)], 15);
+
+            // $('#mapdiv').empty()
+
+            //renderDragableMap(position.coords.longitude, position.coords.latitude)
+
+          });
+          // }, noLocation, {timeout:10000});
+
+          // alert(444444444);
+        });
+      }
+
+    </script>
+
+{% endblock js %}

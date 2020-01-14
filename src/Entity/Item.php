@@ -120,6 +120,42 @@ class Item
     protected $quantity_reserved;
 
     /**
+     * Ширина
+     *
+     * @var int|null
+     *
+     * @ORM\Column(type="smallint", nullable=true)
+     */
+    protected $width;
+
+    /**
+     * Высота
+     *
+     * @var int|null
+     *
+     * @ORM\Column(type="smallint", nullable=true)
+     */
+    protected $height;
+
+    /**
+     * Глубина
+     *
+     * @var int|null
+     *
+     * @ORM\Column(type="smallint", nullable=true)
+     */
+    protected $depth;
+
+    /**
+     * Вес в кг.
+     *
+     * @var float|null
+     *
+     * @ORM\Column(type="decimal", precision=8, scale=5, nullable=true)
+     */
+    protected $weight;
+
+    /**
      * ИД файла в медиалибе
      *
      * @var string|null
@@ -433,6 +469,86 @@ class Item
     public function setBaskets($baskets): self
     {
         $this->baskets = $baskets;
+
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getWidth(): ?int
+    {
+        return $this->width;
+    }
+
+    /**
+     * @param int|null $width
+     *
+     * @return $this
+     */
+    public function setWidth(?int $width): self
+    {
+        $this->width = $width;
+
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getHeight(): ?int
+    {
+        return $this->height;
+    }
+
+    /**
+     * @param int|null $height
+     *
+     * @return $this
+     */
+    public function setHeight(?int $height): self
+    {
+        $this->height = $height;
+
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getDepth(): ?int
+    {
+        return $this->depth;
+    }
+
+    /**
+     * @param int|null $depth
+     *
+     * @return $this
+     */
+    public function setDepth(?int $depth): self
+    {
+        $this->depth = $depth;
+
+        return $this;
+    }
+
+    /**
+     * @return float|null
+     */
+    public function getWeight(): ?float
+    {
+        return $this->weight;
+    }
+
+    /**
+     * @param float|null $weight
+     *
+     * @return $this
+     */
+    public function setWeight(?float $weight): self
+    {
+        $this->weight = $weight;
 
         return $this;
     }

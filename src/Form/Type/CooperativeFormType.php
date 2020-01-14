@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace App\Form\Type;
 
 use App\Entity\Cooperative;
+use App\Entity\PickUpLocation;
+use Doctrine\ORM\EntityRepository;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -24,6 +27,16 @@ class CooperativeFormType extends AbstractType
             ->add('address')
             ->add('director')
             ->add('register_date')
+            ->add('pick_up_locations', EntityType::class, [
+                'class'         => PickUpLocation::class,
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('e')->where('e.is_enabled = true')->orderBy('e.title', 'ASC');
+                },
+                'multiple' => true,
+                'expanded' => true,
+                'by_reference' => false,
+            ])
+
             ->add('update', SubmitType::class, ['attr' => ['class' => 'btn-success']])
             ->add('cancel', SubmitType::class, ['attr' => ['class' => 'btn-light', 'formnovalidate' => 'formnovalidate']])
         ;

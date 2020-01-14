@@ -11,6 +11,7 @@ Day: День
 Deal: Сделка
 Deals: Сделки
 Demand: Спрос
+Depth: Глубина
 Description: Описание
 Director: Директор
 Email: Email
@@ -19,10 +20,12 @@ Education: Образование
 Firstname: Имя
 Final date: Финальная дата
 Geoposition: Местоположение
+Height: Высота
 Homepage: Главная
 Invite: Приглашение участника
 Invited users: Приглашенные участники
 Is allow marketplace: Доступ к "Столу заказов"
+Is enabled: Включено
 Image file: Картинка
 Image: Картинка
 Inn: ИНН
@@ -48,6 +51,8 @@ Password: Пароль
 Password confirmation: Повтор пароля
 Patronymic: Отчество
 Phone: Телефон
+Pick up location: Точка выдачи
+Pick up locations: Точки выдачи
 Position: Позиция
 Price: Цена
 Profile: Профиль
@@ -76,6 +81,8 @@ Update: Обновить
 Users: Пользователи
 Quantity: Количество
 Quantity reserved:  Кол-во в резерве
+Weight: Вес
+Width: Ширина
 Worksheet: Анкета
 Year: Год
 Yes: Да

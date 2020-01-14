@@ -55,6 +55,10 @@ class ItemFormType extends AbstractType
                 'choice_translation_domain' => false,
             ])
             ->add('quantity')
+            ->add('weight')
+            ->add('width')
+            ->add('height')
+            ->add('depth')
             ->add('status', ChoiceType::class, [
                 'choices' => array_flip(Item::getStatusChoiceValues()),
                 'choice_translation_domain' => false,

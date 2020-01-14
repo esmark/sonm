@@ -16,8 +16,7 @@
         <tr>
             <th>Название</th>
             <th>Мой статус</th>
-            <th>Кол-во участников</th>
-            <th>Товаров и услуг</th>
+            <th>Статистика</th>
             <th>Статус</th>
             <th>Дата регистрации</th>
             <th>Дата добавления на сайт</th>
@@ -28,15 +27,29 @@
             <tr>
                 <td><a href="{{ path('account_coop_show', {'id': member.cooperative.id}) }}">{{ member.cooperative }}</a></td>
                 <td>{{ member.statusAsText }}</td>
-                <td>{{ member.cooperative.members|length }}</td>
-                <td>{{ member.cooperative.items|length }}</td>
+                <td style="padding: 0;">
+                    <table style="width: 100%;">
+                        <tr>
+                            <td>Кол-во участников:</td>
+                            <th>{{ member.cooperative.members|length }}</th>
+                        </tr>
+                        <tr>
+                            <td>Товаров и услуг:</td>
+                            <th>{{ member.cooperative.items|length }}</th>
+                        </tr>
+                        <tr>
+                            <td>Точек выдачи:</td>
+                            <th>{{ member.cooperative.pickUpLocations|length }}</th>
+                        </tr>
+                    </table>
+                </td>
                 <td>{{ member.cooperative.statusAsText }}</td>
                 <td>
                     {% if member.cooperative.registerDate is not empty %}
                         {{ member.cooperative.registerDate|date('d-M-Y') }}
                     {% endif %}
                 </td>
-                <td>{{ member.createdAt|date }}</td>
+                <td style="width: 40px;">{{ member.createdAt|date }}</td>
             </tr>
         {% endfor %}
         </tbody>

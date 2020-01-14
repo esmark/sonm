@@ -7,8 +7,10 @@ namespace App\Controller;
 use App\Entity\Category;
 use App\Entity\Cooperative;
 use App\Entity\CooperativeHistory;
+use App\Entity\PickUpLocation;
 use App\Entity\User;
 use App\Form\Type\CategoryFormType;
+use App\Form\Type\PickUpLocationFormType;
 use App\Repository\CooperativeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -157,6 +159,77 @@ class AdminController extends AbstractController
         }
 
         return $this->render('admin/category/edit.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/pick_up_location/", name="admin_pick_up_location")
+     */
+    public function pickUpLocation(EntityManagerInterface $em): Response
+    {
+        return $this->render('admin/pick_up_location_index.html.twig', [
+            'pick_up_locations' => $em->getRepository(PickUpLocation::class)->findBy([], ['title' => 'ASC']),
+        ]);
+    }
+
+    /**
+     * @Route("/pick_up_location/new/", name="admin_pick_up_location_new")
+     */
+    public function pickUpLocationNew(Request $request, EntityManagerInterface $em): Response
+    {
+        $form = $this->createForm(PickUpLocationFormType::class, new PickUpLocation());
+        $form->remove('update');
+
+        if ($request->isMethod('POST')) {
+            $form->handleRequest($request);
+
+            if ($form->get('cancel')->isClicked()) {
+                return $this->redirectToRoute('admin_pick_up_location');
+            }
+
+            if ($form->get('create')->isClicked() and $form->isValid()) {
+                $form->getData()->setUser($this->getUser());
+                $em->persist($form->getData());
+                $em->flush();
+
+                $this->addFlash('success', 'Точка выдачи добавлена');
+
+                return $this->redirectToRoute('admin_pick_up_location');
+            }
+        }
+
+        return $this->render('admin/pick_up_location_new.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/pick_up_location/{id}/", name="admin_pick_up_location_edit")
+     */
+    public function pickUpLocationEdit(PickUpLocation $pickUpLocation, Request $request, EntityManagerInterface $em): Response
+    {
+        $form = $this->createForm(PickUpLocationFormType::class, $pickUpLocation);
+        $form->remove('create');
+
+        if ($request->isMethod('POST')) {
+            $form->handleRequest($request);
+
+            if ($form->get('cancel')->isClicked()) {
+                return $this->redirectToRoute('admin_pick_up_location');
+            }
+
+            if ($form->get('update')->isClicked() and $form->isValid()) {
+                $em->persist($form->getData());
+                $em->flush();
+
+                $this->addFlash('success', 'Точка выдачи обновлена');
+
+                return $this->redirectToRoute('admin_pick_up_location');
+            }
+        }
+
+        return $this->render('admin/pick_up_location_edit.html.twig', [
             'form' => $form->createView(),
         ]);
     }

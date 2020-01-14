@@ -27,6 +27,9 @@
         //$('#offer_quantity_reserved').closest('.form-group').show();
       }
 
-      quantityHide();
+      {% if form.vars.data.measure == 0 %}
+          quantityHide();
+      {% endif %}
+
     </script>
 {% endblock js %}
