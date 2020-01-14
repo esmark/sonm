@@ -4,14 +4,20 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
-use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\Query;
+use App\Entity\Item;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
+use Doctrine\Persistence\ManagerRegistry;
 use Smart\CoreBundle\Doctrine\RepositoryTrait;
 
-class ItemRepository extends EntityRepository
+class ItemRepository extends ServiceEntityRepository
 {
     use RepositoryTrait\FindByQuery;
+
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, Item::class);
+    }
 
     /**
      * @param array $filters

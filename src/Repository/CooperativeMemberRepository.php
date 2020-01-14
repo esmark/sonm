@@ -10,6 +10,11 @@ use Doctrine\Persistence\ManagerRegistry;
 
 class CooperativeMemberRepository extends ServiceEntityRepository
 {
+    /**
+     * CooperativeMemberRepository constructor.
+     *
+     * @param ManagerRegistry $registry
+     */
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, CooperativeMember::class);

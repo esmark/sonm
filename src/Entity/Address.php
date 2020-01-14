@@ -239,7 +239,7 @@ class Address
      *
      * @return $this
      */
-    public function setPostcode(string $postcode): self
+    public function setPostcode(?string $postcode): self
     {
         $this->postcode = $postcode;
 
@@ -279,7 +279,7 @@ class Address
      *
      * @return $this
      */
-    public function setProvince(string $province): self
+    public function setProvince(?string $province): self
     {
         $this->province = $province;
 
@@ -299,7 +299,7 @@ class Address
      *
      * @return $this
      */
-    public function setCity(string $city): self
+    public function setCity(?string $city): self
     {
         $this->city = $city;
 
@@ -319,7 +319,7 @@ class Address
      *
      * @return $this
      */
-    public function setStreet(string $street): self
+    public function setStreet(?string $street): self
     {
         $this->street = $street;
 
@@ -339,7 +339,7 @@ class Address
      *
      * @return $this
      */
-    public function setHouse(string $house): self
+    public function setHouse(?string $house): self
     {
         $this->house = $house;
 
