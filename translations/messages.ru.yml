@@ -1,11 +1,12 @@
 Address: Адрес
 Cancel: Отменить
 Category: Категория
-Create: Создать
+City: Населенный пункт
 Change password: Сменить пароль
 Common: Основное
 Cooperative: Кооператив
 Cooperatives: Кооперативы
+Create: Создать
 Current password: Текущий пароль
 Day: День
 Deal: Сделка
@@ -19,9 +20,11 @@ Error: Ошибка
 Education: Образование
 Firstname: Имя
 Final date: Финальная дата
+Flat: Квартира
 Geoposition: Местоположение
 Height: Высота
 Homepage: Главная
+House: Дом
 Invite: Приглашение участника
 Invited users: Приглашенные участники
 Is allow marketplace: Доступ к "Столу заказов"
@@ -35,6 +38,7 @@ Lastname: Фамилия
 Marketplace: Стол заказов
 Measure: Еденицы измерения
 Min quantity: Минимальное кол-во
+My addresses: Мои адреса
 My cooperatives: Мои кооперативы
 My geolocation: Моё местоположение
 Month: Месяц
@@ -54,9 +58,11 @@ Phone: Телефон
 Pick up location: Точка выдачи
 Pick up locations: Точки выдачи
 Position: Позиция
+Postcode: Почтовый индекс
 Price: Цена
 Profile: Профиль
 Profile of intentions: Анкета намерений
+Province: Область
 Register: Регистрация
 Register date: Дата регистрации
 Repeat Password: Повторите пароль
@@ -71,6 +77,7 @@ Skills: Профессиональные навыки
 Social links: Ссылки на соц.сети
 Stats: Статистика
 Status: Статус
+Street: Улица
 Success: Успешно
 Telegram: Телеграм
 Telegram chat link: Ссылка на чат в Телеграм

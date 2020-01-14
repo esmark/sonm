@@ -1,0 +1,35 @@
+{% extends 'account/_layout.html.twig' %}
+
+{% block title %}Мои адреса доставки - {{ parent() }}{% endblock %}
+
+{% block account_content %}
+    <p style="float: right; margin-top: 8px;">
+        <a href="{{ path('account_address_new') }}" class="btn btn-success">Добавить</a>
+    </p>
+
+    <h2>Мои адреса доставки</h2>
+
+    <p>Всего: {{ addresses|length }}</p>
+
+    <table class="table table-bordered table-hover">
+        <thead>
+        <tr>
+            <th>Адрес</th>
+            <th>ФИО</th>
+            <th>Телефон</th>
+            <th>Дата добавления</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for address in addresses %}
+            <tr>
+                <td><a href="{{ path('account_address_edit', {'id': address.id}) }}">{{ address }}</a></td>
+                <td>{{ address.lastname }} {{ address.firstname }} {{ address.patronymic }}</td>
+                <td>{{ address.phone }}</td>
+                <td>{{ address.createdAt|date }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}
