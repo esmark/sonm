@@ -82,7 +82,7 @@ class Cooperative
     protected $director;
 
     /**
-     * @var \DateTime
+     * @var \DateTime|null
      *
      * @ORM\Column(type="date", nullable=true)
      */
@@ -298,7 +298,7 @@ class Cooperative
     }
 
     /**
-     * @return \DateTime
+     * @return \DateTime|null
      */
     public function getRegisterDate(): ?\DateTime
     {
@@ -306,11 +306,11 @@ class Cooperative
     }
 
     /**
-     * @param \DateTime $register_date
+     * @param \DateTime|null $register_date
      *
      * @return $this
      */
-    public function setRegisterDate(\DateTime $register_date): self
+    public function setRegisterDate(?\DateTime $register_date): self
     {
         $this->register_date = $register_date;
 
