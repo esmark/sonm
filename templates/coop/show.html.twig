@@ -30,6 +30,7 @@
             <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Кооператив</a>
             <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">Участники ({{ coop.members|length }})</a>
             <a class="nav-item nav-link" id="nav-item-tab" data-toggle="tab" href="#nav-item" role="tab" aria-controls="nav-item" aria-selected="false">Товары и услуги ({{ coop.items|length }})</a>
+            <a class="nav-item nav-link" id="nav-pickup-tab" data-toggle="tab" href="#nav-pickup" role="tab" aria-controls="nav-pickup" aria-selected="false">Точки выдачи ({{ coop.pickUpLocations|length }})</a>
         </div>
     </nav>
     <div class="tab-content" id="nav-tabContent">
@@ -139,6 +140,28 @@
                         <td>{{ item.shortDescription }}</td>
                         <td>{{ item.price }}</td>
                         <td>{{ item.createdAt|date }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+        </div>
+        <div class="tab-pane fade" id="nav-pickup" role="tabpanel" aria-labelledby="nav-pickup-tab">
+
+            <table class="table table-bordered table-hover">
+                <thead>
+                <tr>
+                    <th>Название</th>
+                    <th>Адрес</th>
+                    <th>Дата добавления</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for loc in coop.pickUpLocations %}
+                    <tr>
+                        <td>{{ loc.title }}</td>
+                        <td>{{ loc.address }}</td>
+                        <td>{{ loc.createdAt|date }}</td>
                     </tr>
                 {% endfor %}
                 </tbody>
