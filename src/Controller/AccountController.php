@@ -104,6 +104,13 @@ class AccountController extends AbstractController
      */
     public function addressEdit(Address $address, Request $request, EntityManagerInterface $em): Response
     {
+        /** @var User $user */
+        $user = $this->getUser();
+
+        if ($user->getId() !== $address->getUser()->getId()) {
+            return $this->redirectToRoute('account_address');
+        }
+
         $form = $this->createForm(AddressFormType::class, $address);
         $form->remove('create');
 
