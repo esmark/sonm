@@ -159,7 +159,7 @@ class Address
      *
      * @return $this
      */
-    public function setFirstname(string $firstname): self
+    public function setFirstname(?string $firstname): self
     {
         $this->firstname = $firstname;
 
@@ -179,7 +179,7 @@ class Address
      *
      * @return $this
      */
-    public function setLastname(string $lastname): self
+    public function setLastname(?string $lastname): self
     {
         $this->lastname = $lastname;
 
