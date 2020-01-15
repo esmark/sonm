@@ -12,7 +12,6 @@ return [
     Symfony\Bundle\DebugBundle\DebugBundle::class => ['dev' => true, 'test' => true],
     Symfony\Bundle\MakerBundle\MakerBundle::class => ['dev' => true],
     Knp\Bundle\MenuBundle\KnpMenuBundle::class => ['all' => true],
-    Misd\PhoneNumberBundle\MisdPhoneNumberBundle::class => ['all' => true],
     Smart\CoreBundle\SmartCoreBundle::class => ['all' => true],
     SmartCore\Bundle\DbDumperBundle\SmartDbDumperBundle::class => ['all' => true],
     Sonata\IntlBundle\SonataIntlBundle::class => ['all' => true],
