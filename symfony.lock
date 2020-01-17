@@ -2,6 +2,12 @@
     "borsaco/telegram-bot-api-bundle": {
         "version": "1.0.3"
     },
+    "composer/ca-bundle": {
+        "version": "1.2.6"
+    },
+    "cravler/maxmind-geoip-bundle": {
+        "version": "v1.4.0"
+    },
     "doctrine/annotations": {
         "version": "1.0",
         "recipe": {
@@ -93,6 +99,9 @@
     "egulias/email-validator": {
         "version": "2.1.13"
     },
+    "geoip2/geoip2": {
+        "version": "v2.10.0"
+    },
     "guzzlehttp/guzzle": {
         "version": "6.5.2"
     },
@@ -122,6 +131,12 @@
     },
     "league/event": {
         "version": "2.2.0"
+    },
+    "maxmind-db/reader": {
+        "version": "v1.6.0"
+    },
+    "maxmind/web-service-common": {
+        "version": "v0.6.0"
     },
     "monolog/monolog": {
         "version": "1.25.3"

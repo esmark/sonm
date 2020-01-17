@@ -8,6 +8,7 @@
         "ext-iconv": "*",
         "ext-intl": "*",
         "borsaco/telegram-bot-api-bundle": "*",
+        "cravler/maxmind-geoip-bundle": "^1.4",
         "knplabs/knp-menu-bundle": "^3.0",
         "sensio/framework-extra-bundle": "^5.1",
         "smart-core/core-bundle": "dev-master",
