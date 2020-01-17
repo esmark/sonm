@@ -99,6 +99,9 @@
     "egulias/email-validator": {
         "version": "2.1.13"
     },
+    "geocoder-php/plugin": {
+        "version": "1.1.0"
+    },
     "geoip2/geoip2": {
         "version": "v2.10.0"
     },
@@ -155,6 +158,12 @@
     },
     "php": {
         "version": "7.3"
+    },
+    "php-http/discovery": {
+        "version": "1.7.4"
+    },
+    "php-http/promise": {
+        "version": "v1.0.0"
     },
     "phpdocumentor/reflection-common": {
         "version": "2.0.0"
@@ -577,6 +586,21 @@
     },
     "webmozart/assert": {
         "version": "1.6.0"
+    },
+    "willdurand/geocoder": {
+        "version": "4.2.1"
+    },
+    "willdurand/geocoder-bundle": {
+        "version": "5.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "5.0",
+            "ref": "b272ad4fbfcd45a20e7cbfdc4ad1b0e27a62fd3b"
+        },
+        "files": [
+            "./config/packages/bazinga_geocoder.yaml"
+        ]
     },
     "zendframework/zend-code": {
         "version": "3.4.1"

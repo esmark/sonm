@@ -34,7 +34,8 @@
         "symfony/validator": "4.4.*",
         "symfony/web-link": "4.4.*",
         "symfony/yaml": "4.4.*",
-        "twig/twig": "^2.1"
+        "twig/twig": "^2.1",
+        "willdurand/geocoder-bundle": "^5.11"
     },
     "require-dev": {
         "symfony/debug-pack": "*",
