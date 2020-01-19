@@ -50,6 +50,11 @@ class MainMenu
             ->setLinkAttribute('class', 'nav-link py-0')
         ;
 
+        $menu->addChild('Programs', ['route' => 'program'])
+            ->setAttribute('class', 'nav-item')
+            ->setLinkAttribute('class', 'nav-link py-0')
+        ;
+
         return $menu;
     }
 
@@ -68,6 +73,7 @@ class MainMenu
             ],
         ]);
 
+        $menu->addChild('My balance',       ['route' => 'account_balance']);
         $menu->addChild('My cooperatives',  ['route' => 'account_coop']);
         $menu->addChild('My addresses',     ['route' => 'account_address']);
         $menu->addChild('Profile of intentions', ['route' => 'account_worksheet']);

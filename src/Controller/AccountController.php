@@ -137,6 +137,16 @@ class AccountController extends AbstractController
     }
 
     /**
+     * @Route("/balance/", name="account_balance")
+     */
+    public function balance(): Response
+    {
+        return $this->render('account/balance.html.twig', [
+
+        ]);
+    }
+
+    /**
      * @Route("/coop/", name="account_coop")
      */
     public function coop(EntityManagerInterface $em): Response

@@ -132,7 +132,15 @@
                                         {% if app.user.basketAmount %}
                                             <span class="badge badge-light">{{ app.user.basketAmount }}</span>
                                         {% endif %}
+                                    </a>
+                                </li>
 
+                                <li class="nav-item">
+                                    <a class="nav-link py-0 {% if 'account_balance' in app.request.get('_route') %} active{% endif %}" href="{{ path('account_balance') }}">
+                                        Баланс
+{#                                        {% if app.user.basketAmount %}#}
+                                            <span class="badge badge-light">0</span>
+{#                                        {% endif %}#}
                                     </a>
                                 </li>
                             </ul>
