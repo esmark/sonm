@@ -51,6 +51,9 @@ security:
                 target: security_login
 
             remember_me:
+                always_remember_me: true
+                httponly: false
+                secure: true
                 secret: "%env(APP_SECRET)%"
                 name: REMEMBER_ME
                 lifetime: 31536000 # 365 days in seconds
