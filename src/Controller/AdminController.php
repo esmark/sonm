@@ -8,9 +8,11 @@ use App\Entity\Category;
 use App\Entity\Cooperative;
 use App\Entity\CooperativeHistory;
 use App\Entity\PickUpLocation;
+use App\Entity\Program;
 use App\Entity\User;
 use App\Form\Type\CategoryFormType;
 use App\Form\Type\PickUpLocationFormType;
+use App\Form\Type\ProgramFormType;
 use App\Repository\CooperativeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -230,6 +232,77 @@ class AdminController extends AbstractController
         }
 
         return $this->render('admin/pick_up_location_edit.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/program/", name="admin_program")
+     */
+    public function program(EntityManagerInterface $em): Response
+    {
+        return $this->render('admin/program_index.html.twig', [
+            'programs' => $em->getRepository(Program::class)->findBy([], ['title' => 'ASC']),
+        ]);
+    }
+
+    /**
+     * @Route("/program/new/", name="admin_program_new")
+     */
+    public function programNew(Request $request, EntityManagerInterface $em): Response
+    {
+        $form = $this->createForm(ProgramFormType::class, new Program());
+        $form->remove('update');
+
+        if ($request->isMethod('POST')) {
+            $form->handleRequest($request);
+
+            if ($form->get('cancel')->isClicked()) {
+                return $this->redirectToRoute('admin_program');
+            }
+
+            if ($form->get('create')->isClicked() and $form->isValid()) {
+                $form->getData()->setUser($this->getUser());
+                $em->persist($form->getData());
+                $em->flush();
+
+                $this->addFlash('success', 'Целевая программа добавлена');
+
+                return $this->redirectToRoute('admin_program');
+            }
+        }
+
+        return $this->render('admin/program_new.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/program/{id}/", name="admin_program_edit")
+     */
+    public function programEdit(Program $program, Request $request, EntityManagerInterface $em): Response
+    {
+        $form = $this->createForm(ProgramFormType::class, $program);
+        $form->remove('create');
+
+        if ($request->isMethod('POST')) {
+            $form->handleRequest($request);
+
+            if ($form->get('cancel')->isClicked()) {
+                return $this->redirectToRoute('admin_program');
+            }
+
+            if ($form->get('update')->isClicked() and $form->isValid()) {
+                $em->persist($form->getData());
+                $em->flush();
+
+                $this->addFlash('success', 'Целевая программа обновлена');
+
+                return $this->redirectToRoute('admin_program');
+            }
+        }
+
+        return $this->render('admin/program_edit.html.twig', [
             'form' => $form->createView(),
         ]);
     }

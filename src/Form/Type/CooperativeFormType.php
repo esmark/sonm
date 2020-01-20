@@ -6,6 +6,7 @@ namespace App\Form\Type;
 
 use App\Entity\Cooperative;
 use App\Entity\PickUpLocation;
+use App\Entity\Program;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -29,6 +30,15 @@ class CooperativeFormType extends AbstractType
             ->add('register_date')
             ->add('pick_up_locations', EntityType::class, [
                 'class'         => PickUpLocation::class,
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('e')->where('e.is_enabled = true')->orderBy('e.title', 'ASC');
+                },
+                'multiple' => true,
+                'expanded' => true,
+                'by_reference' => false,
+            ])
+            ->add('programs', EntityType::class, [
+                'class'         => Program::class,
                 'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('e')->where('e.is_enabled = true')->orderBy('e.title', 'ASC');
                 },

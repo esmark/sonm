@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Целевая программа - {{ program }}{% endblock %}
+
+{% block content %}
+
+    <h1>{{ program }}</h1>
+
+    <nav>
+        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+            <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Целевая программа</a>
+        </div>
+    </nav>
+    <div class="tab-content" id="nav-tabContent">
+        <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+
+            <table class="table table-bordered table-hover">
+                <tr>
+                    <th style="width: 170px;">Название</th>
+                    <td>{{ program }}</td>
+                </tr>
+                <tr>
+                    <th>Описание</th>
+                    <td>{{ program.description }}</td>
+                </tr>
+                <tr>
+                    <th>Дата создания на сайте</th>
+                    <td>{{ program.createdAt|date }}</td>
+                </tr>
+            </table>
+
+        </div>
+    </div>
+
+{% endblock %}

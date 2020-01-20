@@ -14,6 +14,7 @@
             <th>Название</th>
             <th>Кол-во участников</th>
             <th>Товаров и услуг</th>
+            <th>Целевые программы</th>
             <th>Дата регистрации</th>
         </tr>
         </thead>
@@ -23,6 +24,7 @@
                 <td><a href="{{ path('coop_show', {'name': coop.name}) }}">{{ coop }}</a></td>
                 <td>{{ coop.members|length }}</td>
                 <td>{{ coop.items|length }}</td>
+                <td>{{ coop.programs|length }}</td>
                 <td>{{ coop.createdAt|date }}</td>
             </tr>
         {% endfor %}

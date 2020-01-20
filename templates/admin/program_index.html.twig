@@ -1,8 +1,13 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Целевые программы{% endblock %}
+{% block title %}Целевые программы - Админка{% endblock %}
 
 {% block content %}
+
+    <p style="float: right; margin-top: 16px;">
+        <a href="{{ path('admin_program_new') }}" class="btn btn-success">Добавить</a>
+    </p>
+
     <h1>Целевые программы</h1>
 
     <p>Всего: {{ programs|length }}</p>
@@ -11,15 +16,19 @@
         <thead>
         <tr>
             <th>Название</th>
+            <th>Активно</th>
             <th>Кол-во кооп</th>
+            <th>Кто добавил</th>
             <th>Дата добавления на сайт</th>
         </tr>
         </thead>
         <tbody>
         {% for program in programs %}
             <tr>
-                <td><a href="{{ path('program_show', {'id': program.id}) }}">{{ program.title }}</a></td>
+                <td><a href="{{ path('admin_program_edit', {'id': program.id}) }}">{{ program.title }}</a></td>
+                <td>{{ program.isEnabled }}</td>
                 <td>{{ program.cooperatives|length }}</td>
+                <td>{{ program.user }}</td>
                 <td>{{ program.createdAt|date }}</td>
             </tr>
         {% endfor %}

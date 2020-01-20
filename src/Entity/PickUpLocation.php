@@ -49,6 +49,8 @@ class PickUpLocation
     protected $longitude;
 
     /**
+     * @var Cooperative[]|ArrayCollection
+     *
      * @ORM\ManyToMany(targetEntity="Cooperative", mappedBy="pick_up_locations")
      */
     protected $cooperatives;
@@ -58,6 +60,7 @@ class PickUpLocation
      */
     public function __construct()
     {
+        $this->cooperatives = new ArrayCollection();
         $this->created_at   = new \DateTime();
         $this->is_enabled   = true;
     }
@@ -131,7 +134,7 @@ class PickUpLocation
     }
 
     /**
-     * @return mixed
+     * @return Cooperative[]|ArrayCollection
      */
     public function getCooperatives()
     {
@@ -139,7 +142,7 @@ class PickUpLocation
     }
 
     /**
-     * @param mixed $cooperatives
+     * @param Cooperative[]|ArrayCollection $cooperatives
      *
      * @return $this
      */

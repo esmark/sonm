@@ -23,6 +23,7 @@
             <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab" aria-controls="nav-contact" aria-selected="false">История изменений ({{ coop.history|length }})</a>
             <a class="nav-item nav-link" id="nav-item-tab" data-toggle="tab" href="#nav-item" role="tab" aria-controls="nav-item" aria-selected="false">Товары и услуги ({{ coop.items|length }})</a>
             <a class="nav-item nav-link" id="nav-pickup-tab" data-toggle="tab" href="#nav-pickup" role="tab" aria-controls="nav-pickup" aria-selected="false">Точки выдачи ({{ coop.pickUpLocations|length }})</a>
+            <a class="nav-item nav-link" id="nav-program-tab" data-toggle="tab" href="#nav-program" role="tab" aria-controls="nav-program" aria-selected="false">Программы ({{ coop.programs|length }})</a>
         </div>
     </nav>
     <div class="tab-content" id="nav-tabContent">
@@ -203,6 +204,26 @@
                         <td>{{ loc.title }}</td>
                         <td>{{ loc.address }}</td>
                         <td>{{ loc.createdAt|date }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+        </div>
+        <div class="tab-pane fade" id="nav-program" role="tabpanel" aria-labelledby="nav-program-tab">
+
+            <table class="table table-bordered table-hover">
+                <thead>
+                <tr>
+                    <th>Название</th>
+                    <th>Дата добавления</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for program in coop.programs %}
+                    <tr>
+                        <td>{{ program.title }}</td>
+                        <td>{{ program.createdAt|date }}</td>
                     </tr>
                 {% endfor %}
                 </tbody>

@@ -113,10 +113,20 @@ class Cooperative
     protected $members;
 
     /**
+     * @var PickUpLocation[]|ArrayCollection
+     *
      * @ORM\ManyToMany(targetEntity="PickUpLocation", inversedBy="cooperatives")
      * @ORM\JoinTable(name="cooperatives_pick_up_locations_relations")
      */
     protected $pick_up_locations;
+
+    /**
+     * @var Program[]|ArrayCollection
+     *
+     * @ORM\ManyToMany(targetEntity="Program", inversedBy="cooperatives")
+     * @ORM\JoinTable(name="cooperatives_programs_relations")
+     */
+    protected $programs;
 
     /**
      * Cooperative constructor.
@@ -131,6 +141,8 @@ class Cooperative
         $this->kpp          = 0;
         $this->ogrn         = 0;
         $this->status       = self::STATUS_PENDING;
+        $this->pick_up_locations = new ArrayCollection();
+        $this->programs          = new ArrayCollection();
     }
 
     /**
@@ -318,7 +330,7 @@ class Cooperative
     }
 
     /**
-     * @return mixed
+     * @return PickUpLocation[]|ArrayCollection
      */
     public function getPickUpLocations()
     {
@@ -326,13 +338,33 @@ class Cooperative
     }
 
     /**
-     * @param mixed $pick_up_locations
+     * @param PickUpLocation[]|ArrayCollection $pick_up_locations
      *
      * @return $this
      */
     public function setPickUpLocations($pick_up_locations): self
     {
         $this->pick_up_locations = $pick_up_locations;
+
+        return $this;
+    }
+
+    /**
+     * @return Program[]|ArrayCollection
+     */
+    public function getPrograms()
+    {
+        return $this->programs;
+    }
+
+    /**
+     * @param Program[]|ArrayCollection $programs
+     *
+     * @return $this
+     */
+    public function setPrograms($programs): self
+    {
+        $this->programs = $programs;
 
         return $this;
     }
