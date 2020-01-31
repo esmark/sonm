@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Налоговые ставки - Админка{% endblock %}
+
+{% block content %}
+
+    <p style="float: right; margin-top: 16px;">
+        <a href="{{ path('admin_tax_new') }}" class="btn btn-success">Добавить</a>
+    </p>
+
+    <h1>Налоговые ставки</h1>
+
+    <p>Всего: {{ taxes|length }}</p>
+
+    <table class="table table-bordered table-hover">
+        <thead>
+        <tr>
+            <th>Название</th>
+            <th>Процент</th>
+            <th>Дата добавления на сайт</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for tax in taxes %}
+            <tr>
+                <td><a href="{{ path('admin_tax_edit', {'id': tax.id}) }}">{{ tax }}</a></td>
+                <td>{{ tax.percent }}</td>
+{#                <td>{{ tax.cooperatives|length }}</td>#}
+                <td>{{ tax.createdAt|date }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

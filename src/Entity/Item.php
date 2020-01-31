@@ -19,7 +19,6 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  *          @ORM\Index(columns={"is_enabled"}),
  *          @ORM\Index(columns={"price"}),
  *          @ORM\Index(columns={"status"}),
- *          @ORM\Index(columns={"title"}),
  *      },
  *      uniqueConstraints={
  *          @ORM\UniqueConstraint(columns={"user_id", "title"}),
@@ -332,7 +331,7 @@ class Item
     {
         return self::$measure_values;
     }
-    
+
     /**
      * @return int|null
      */

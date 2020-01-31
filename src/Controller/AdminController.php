@@ -9,10 +9,12 @@ use App\Entity\Cooperative;
 use App\Entity\CooperativeHistory;
 use App\Entity\PickUpLocation;
 use App\Entity\Program;
+use App\Entity\TaxRate;
 use App\Entity\User;
 use App\Form\Type\CategoryFormType;
 use App\Form\Type\PickUpLocationFormType;
 use App\Form\Type\ProgramFormType;
+use App\Form\Type\TaxRateFormType;
 use App\Repository\CooperativeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -303,6 +305,76 @@ class AdminController extends AbstractController
         }
 
         return $this->render('admin/program_edit.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/tax/", name="admin_tax")
+     */
+    public function tax(EntityManagerInterface $em): Response
+    {
+        return $this->render('admin/tax_index.html.twig', [
+            'taxes' => $em->getRepository(TaxRate::class)->findBy([], ['percent' => 'ASC']),
+        ]);
+    }
+
+    /**
+     * @Route("/tax/new/", name="admin_tax_new")
+     */
+    public function taxNew(Request $request, EntityManagerInterface $em): Response
+    {
+        $form = $this->createForm(TaxRateFormType::class, new TaxRate());
+        $form->remove('update');
+
+        if ($request->isMethod('POST')) {
+            $form->handleRequest($request);
+
+            if ($form->get('cancel')->isClicked()) {
+                return $this->redirectToRoute('admin_tax');
+            }
+
+            if ($form->get('create')->isClicked() and $form->isValid()) {
+                $em->persist($form->getData());
+                $em->flush();
+
+                $this->addFlash('success', 'Налоговая ставка добавлена');
+
+                return $this->redirectToRoute('admin_tax');
+            }
+        }
+
+        return $this->render('admin/tax_new.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/tax/{id}/", name="admin_tax_edit")
+     */
+    public function taxEdit(TaxRate $tax, Request $request, EntityManagerInterface $em): Response
+    {
+        $form = $this->createForm(TaxRateFormType::class, $tax);
+        $form->remove('create');
+
+        if ($request->isMethod('POST')) {
+            $form->handleRequest($request);
+
+            if ($form->get('cancel')->isClicked()) {
+                return $this->redirectToRoute('admin_tax');
+            }
+
+            if ($form->get('update')->isClicked() and $form->isValid()) {
+                $em->persist($form->getData());
+                $em->flush();
+
+                $this->addFlash('success', 'Налоговая ставка обновлена');
+
+                return $this->redirectToRoute('admin_tax');
+            }
+        }
+
+        return $this->render('admin/tax_edit.html.twig', [
             'form' => $form->createView(),
         ]);
     }

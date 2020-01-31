@@ -6,6 +6,7 @@ namespace App\Entity;
 
 use App\Doctrine\StatusTrait;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Smart\CoreBundle\Doctrine\ColumnTrait;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -89,7 +90,7 @@ class Cooperative
     protected $register_date;
 
     /**
-     * @var CooperativeHistory[]|ArrayCollection
+     * @var CooperativeHistory[]|Collection
      *
      * @ORM\OneToMany(targetEntity="CooperativeHistory", mappedBy="cooperative", cascade={"persist"}, fetch="EXTRA_LAZY")
      * @ORM\OrderBy({"created_at" = "DESC"})
@@ -97,7 +98,7 @@ class Cooperative
     protected $history;
 
     /**
-     * @var Item[]|ArrayCollection
+     * @var Item[]|Collection
      *
      * @ORM\OneToMany(targetEntity="Item", mappedBy="cooperative", cascade={"persist"}, fetch="EXTRA_LAZY")
      * @ORM\OrderBy({"title" = "ASC"})
@@ -105,7 +106,7 @@ class Cooperative
     protected $items;
 
     /**
-     * @var CooperativeMember[]|ArrayCollection
+     * @var CooperativeMember[]|Collection
      *
      * @ORM\OneToMany(targetEntity="CooperativeMember", mappedBy="cooperative", cascade={"persist", "remove"}, fetch="EXTRA_LAZY")
      * @ORM\OrderBy({"created_at" = "ASC"})
@@ -113,7 +114,7 @@ class Cooperative
     protected $members;
 
     /**
-     * @var PickUpLocation[]|ArrayCollection
+     * @var PickUpLocation[]|Collection
      *
      * @ORM\ManyToMany(targetEntity="PickUpLocation", inversedBy="cooperatives")
      * @ORM\JoinTable(name="cooperatives_pick_up_locations_relations")
@@ -121,12 +122,20 @@ class Cooperative
     protected $pick_up_locations;
 
     /**
-     * @var Program[]|ArrayCollection
+     * @var Program[]|Collection
      *
      * @ORM\ManyToMany(targetEntity="Program", inversedBy="cooperatives")
      * @ORM\JoinTable(name="cooperatives_programs_relations")
      */
     protected $programs;
+
+    /**
+     * @var TaxRate[]|Collection
+     *
+     * @ORM\ManyToMany(targetEntity="TaxRate", inversedBy="cooperatives")
+     * @ORM\JoinTable(name="cooperatives_tax_rates_relations")
+     */
+    protected $taxRates;
 
     /**
      * Cooperative constructor.
@@ -365,6 +374,26 @@ class Cooperative
     public function setPrograms($programs): self
     {
         $this->programs = $programs;
+
+        return $this;
+    }
+
+    /**
+     * @return TaxRate[]|Collection
+     */
+    public function getTaxRates(): Collection
+    {
+        return $this->taxRates;
+    }
+
+    /**
+     * @param TaxRate[]|Collection $taxRates
+     *
+     * @return $this
+     */
+    public function setTaxRates(Collection $taxRates): self
+    {
+        $this->taxRates = $taxRates;
 
         return $this;
     }

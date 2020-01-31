@@ -6,6 +6,7 @@ namespace App\Entity;
 
 use App\DTO\Worksheet;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Smart\CoreBundle\Doctrine\ColumnTrait;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -288,7 +289,9 @@ class User implements UserInterface
     protected $purpose_take;
 
     /**
-     * @var Basket[]|ArrayCollection
+     * Товары в корзинке
+     *
+     * @var Basket[]|Collection
      *
      * @ORM\OneToMany(targetEntity="Basket", mappedBy="user", cascade={"persist"}, fetch="EXTRA_LAZY")
      * @ORM\OrderBy({"created_at" = "DESC"})
@@ -296,7 +299,15 @@ class User implements UserInterface
     protected $baskets;
 
     /**
-     * @var CooperativeMember[]|ArrayCollection
+     * @var Order[]|Collection
+     *
+     * @ORM\OneToMany(targetEntity="Order", mappedBy="user", cascade={"persist"}, fetch="EXTRA_LAZY")
+     * @ORM\OrderBy({"created_at" = "DESC"})
+     */
+    protected $orders;
+
+    /**
+     * @var CooperativeMember[]|Collection
      *
      * @ORM\OneToMany(targetEntity="CooperativeMember", mappedBy="user", cascade={"persist"}, fetch="EXTRA_LAZY")
      * @ORM\OrderBy({"created_at" = "DESC"})
@@ -304,7 +315,7 @@ class User implements UserInterface
     protected $members;
 
     /**
-     * @var UserGroup[]|ArrayCollection
+     * @var UserGroup[]|Collection
      *
      * @ORM\ManyToMany(targetEntity="UserGroup")
      * @ORM\JoinTable(name="users_groups_relations")
@@ -312,7 +323,7 @@ class User implements UserInterface
     protected $groups;
 
     /**
-     * @var UserOauth[]|ArrayCollection
+     * @var UserOauth[]|Collection
      *
      * @ORM\OneToMany(targetEntity="UserOauth", mappedBy="user", cascade={"persist"}, fetch="EXTRA_LAZY")
      */
@@ -326,12 +337,13 @@ class User implements UserInterface
         $this->created_at   = new \DateTime();
         $this->is_enabled   = true;
         $this->email        = '';
+        $this->baskets      = new ArrayCollection();
+        $this->orders       = new ArrayCollection();
         $this->groups       = new ArrayCollection();
         $this->oauths       = new ArrayCollection();
         $this->password     = '';
         $this->roles        = [];
         $this->username     = '';
-
     }
 
     /**
@@ -365,7 +377,7 @@ class User implements UserInterface
 
         return false;
     }
-    
+
     /**
      * @return string
      */
@@ -916,7 +928,7 @@ class User implements UserInterface
 
         return $amount;
     }
-    
+
     /**
      * @return Basket[]|ArrayCollection
      */
@@ -933,6 +945,26 @@ class User implements UserInterface
     public function setBaskets($baskets): self
     {
         $this->baskets = $baskets;
+
+        return $this;
+    }
+
+    /**
+     * @return Order[]|ArrayCollection
+     */
+    public function getOrders(): Collection
+    {
+        return $this->orders;
+    }
+
+    /**
+     * @param Order[]|ArrayCollection $orders
+     *
+     * @return $this
+     */
+    public function setOrders($orders): self
+    {
+        $this->orders = $orders;
 
         return $this;
     }
