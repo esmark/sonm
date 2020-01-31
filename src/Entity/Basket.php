@@ -14,7 +14,7 @@ use Smart\CoreBundle\Doctrine\ColumnTrait;
  *          @ORM\Index(columns={"created_at"}),
  *      },
  *      uniqueConstraints={
- *          @ORM\UniqueConstraint(columns={"user_id", "item_id"}),
+ *          @ORM\UniqueConstraint(columns={"user_id", "item_variant_id"}),
  *      }
  * )
  */
@@ -35,10 +35,10 @@ class Basket
     /**
      * @var Item
      *
-     * @ORM\ManyToOne(targetEntity="Item", inversedBy="baskets", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="ItemVariant", inversedBy="baskets", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
      */
-    protected $item;
+    protected $itemVariant;
 
     /**
      * @var User
@@ -79,19 +79,19 @@ class Basket
     /**
      * @return Item
      */
-    public function getItem(): Item
+    public function getItemVariant(): Item
     {
-        return $this->item;
+        return $this->itemVariant;
     }
 
     /**
-     * @param Item $item
+     * @param Item $itemVariant
      *
      * @return $this
      */
-    public function setItem(Item $item): self
+    public function setItemVariant(Item $itemVariant): self
     {
-        $this->item = $item;
+        $this->itemVariant = $itemVariant;
 
         return $this;
     }

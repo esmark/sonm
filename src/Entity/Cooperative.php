@@ -152,6 +152,7 @@ class Cooperative
         $this->status       = self::STATUS_PENDING;
         $this->pick_up_locations = new ArrayCollection();
         $this->programs          = new ArrayCollection();
+        $this->taxRates          = new ArrayCollection();
     }
 
     /**
@@ -243,19 +244,19 @@ class Cooperative
     }
 
     /**
-     * @return CooperativeHistory[]|ArrayCollection
+     * @return CooperativeHistory[]|Collection
      */
-    public function getHistory()
+    public function getHistory(): Collection
     {
         return $this->history;
     }
 
     /**
-     * @param CooperativeHistory[]|ArrayCollection $history
+     * @param CooperativeHistory[]|Collection $history
      *
      * @return $this
      */
-    public function setHistory($history): self
+    public function setHistory(Collection $history): self
     {
         $this->history = $history;
 
@@ -263,19 +264,19 @@ class Cooperative
     }
 
     /**
-     * @return Item[]|ArrayCollection
+     * @return Item[]|Collection
      */
-    public function getItems()
+    public function getItems(): Collection
     {
         return $this->items;
     }
 
     /**
-     * @param Item[]|ArrayCollection $items
+     * @param Item[]|Collection $items
      *
      * @return $this
      */
-    public function setItems($items): self
+    public function setItems(Collection $items): self
     {
         $this->items = $items;
 
@@ -283,19 +284,19 @@ class Cooperative
     }
 
     /**
-     * @return CooperativeMember[]|ArrayCollection
+     * @return CooperativeMember[]|Collection
      */
-    public function getMembers()
+    public function getMembers(): Collection
     {
         return $this->members;
     }
 
     /**
-     * @param CooperativeMember[]|ArrayCollection $members
+     * @param CooperativeMember[]|Collection $members
      *
      * @return $this
      */
-    public function setMembers($members): self
+    public function setMembers(Collection $members): self
     {
         $this->members = $members;
 
@@ -339,19 +340,19 @@ class Cooperative
     }
 
     /**
-     * @return PickUpLocation[]|ArrayCollection
+     * @return PickUpLocation[]|Collection
      */
-    public function getPickUpLocations()
+    public function getPickUpLocations(): Collection
     {
         return $this->pick_up_locations;
     }
 
     /**
-     * @param PickUpLocation[]|ArrayCollection $pick_up_locations
+     * @param PickUpLocation[]|Collection $pick_up_locations
      *
      * @return $this
      */
-    public function setPickUpLocations($pick_up_locations): self
+    public function setPickUpLocations(Collection $pick_up_locations): self
     {
         $this->pick_up_locations = $pick_up_locations;
 
@@ -359,19 +360,19 @@ class Cooperative
     }
 
     /**
-     * @return Program[]|ArrayCollection
+     * @return Program[]|Collection
      */
-    public function getPrograms()
+    public function getPrograms(): Collection
     {
         return $this->programs;
     }
 
     /**
-     * @param Program[]|ArrayCollection $programs
+     * @param Program[]|Collection $programs
      *
      * @return $this
      */
-    public function setPrograms($programs): self
+    public function setPrograms(Collection $programs): self
     {
         $this->programs = $programs;
 

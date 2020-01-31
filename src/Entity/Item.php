@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Smart\CoreBundle\Doctrine\ColumnTrait;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -17,7 +18,6 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  *      indexes={
  *          @ORM\Index(columns={"created_at"}),
  *          @ORM\Index(columns={"is_enabled"}),
- *          @ORM\Index(columns={"price"}),
  *          @ORM\Index(columns={"status"}),
  *      },
  *      uniqueConstraints={
@@ -71,13 +71,6 @@ class Item
     protected $is_enabled;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(type="integer", nullable=false)
-     */
-    protected $price;
-
-    /**
      * @var string|null
      *
      * @ORM\Column(type="text", nullable=true)
@@ -99,24 +92,6 @@ class Item
      * @ORM\Column(type="smallint", nullable=false)
      */
     protected $measure;
-
-    /**
-     * Количество
-     *
-     * @var int|null
-     *
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    protected $quantity;
-
-    /**
-     * Кол-во в резерве
-     *
-     * @var int|null
-     *
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    protected $quantity_reserved;
 
     /**
      * Ширина
@@ -164,14 +139,6 @@ class Item
     protected $image_id;
 
     /**
-     * @var Basket[]|ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Basket", mappedBy="item", cascade={"persist"}, fetch="EXTRA_LAZY")
-     * @ORM\OrderBy({"created_at" = "DESC"})
-     */
-    protected $baskets;
-
-    /**
      * @var Category
      *
      * @ORM\ManyToOne(targetEntity="Category")
@@ -185,6 +152,13 @@ class Item
      * @ORM\ManyToOne(targetEntity="Cooperative", inversedBy="items", cascade={"persist"})
      */
     protected $cooperative;
+
+    /**
+     * @var ItemVariant[]|Collection
+     *
+     * @ORM\OneToMany(targetEntity="ItemVariant", mappedBy="item")
+     */
+    protected $variants;
 
     /**
      * Offer constructor.
@@ -206,7 +180,9 @@ class Item
     }
 
     /**
-     * @ORM\PreFlush()
+     * @todo
+     *
+     * ORM\PreFlush()
      */
     public function preFlush()
     {
@@ -214,38 +190,6 @@ class Item
             $this->setQuantity(null);
             $this->setQuantityReserved(null);
         }
-    }
-
-    /**
-     * @return int
-     */
-    public function getPrice(): ?int
-    {
-        return $this->price;
-    }
-
-    /**
-     * @return int
-     */
-    public function getPriceTotal(): ?int
-    {
-        if (empty($this->quantity)) {
-            return $this->price;
-        }
-
-        return $this->price * $this->quantity;
-    }
-
-    /**
-     * @param int $price
-     *
-     * @return $this
-     */
-    public function setPrice(?int $price): self
-    {
-        $this->price = $price;
-
-        return $this;
     }
 
     /**
@@ -333,46 +277,6 @@ class Item
     }
 
     /**
-     * @return int|null
-     */
-    public function getQuantity(): ?int
-    {
-        return $this->quantity;
-    }
-
-    /**
-     * @param int|null $quantity
-     *
-     * @return $this
-     */
-    public function setQuantity(?int $quantity): self
-    {
-        $this->quantity = $quantity;
-
-        return $this;
-    }
-
-    /**
-     * @return int|null
-     */
-    public function getQuantityReserved(): ?int
-    {
-        return $this->quantity_reserved;
-    }
-
-    /**
-     * @param int|null $quantity_reserved
-     *
-     * @return $this
-     */
-    public function setQuantityReserved(?int $quantity_reserved): self
-    {
-        $this->quantity_reserved = $quantity_reserved;
-
-        return $this;
-    }
-
-    /**
      * @return string|null
      */
     public function getImageId(): ?string
@@ -453,26 +357,6 @@ class Item
     }
 
     /**
-     * @return Basket[]|ArrayCollection
-     */
-    public function getBaskets()
-    {
-        return $this->baskets;
-    }
-
-    /**
-     * @param Basket[]|ArrayCollection $baskets
-     *
-     * @return $this
-     */
-    public function setBaskets($baskets): self
-    {
-        $this->baskets = $baskets;
-
-        return $this;
-    }
-
-    /**
      * @return int|null
      */
     public function getWidth(): ?int
@@ -548,6 +432,26 @@ class Item
     public function setWeight(?float $weight): self
     {
         $this->weight = $weight;
+
+        return $this;
+    }
+
+    /**
+     * @return ItemVariant[]|Collection
+     */
+    public function getVariants(): Collection
+    {
+        return $this->variants;
+    }
+
+    /**
+     * @param ItemVariant[]|Collection $variants
+     *
+     * @return $this
+     */
+    public function setVariants(Collection $variants): self
+    {
+        $this->variants = $variants;
 
         return $this;
     }

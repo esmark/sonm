@@ -180,7 +180,10 @@
                     <tr>
                         <td><a href="{{ path('account_item_edit', {'id': item.id}) }}">{{ item.title }}</a></td>
                         <td>{{ item.shortDescription }}</td>
-                        <td>{{ item.price }}</td>
+                        <td>
+                            @todo
+{#                            {{ item.price }}#}
+                        </td>
                         <td>{{ item.createdAt|date }}</td>
                     </tr>
                 {% endfor %}

@@ -41,11 +41,14 @@
 
             <h3>
                 <span class="badge badge-secondary">
+                    @todo ЦЕНЫ
+                    {#
                 {% if item.price == 0 %}
                     Договорная
                 {% else %}
                     {{ item.price|number_format(0, ' ', ' ') }} ₽
                 {% endif %}
+                #}
                 </span>
 
                 {% include 'marketplace/_status.html.twig' %}
@@ -73,7 +76,10 @@
 
                                 <div class="form-group">
                                     <label for="recipient-name" class="col-form-label">Количество</label>
-                                    <input type="number" id="order-quantity" class="form-control" min="1" name="quantity" value="1" title="Максимум {{ item.quantity }}">
+                                    <input type="number" id="order-quantity" class="form-control" min="1" name="quantity" value="1" title="Максимум
+                                        @todo
+                                        {#{{ item.quantity }}#}
+                                        ">
                                 </div>
 {#
                                 <div class="form-group">
@@ -82,7 +88,11 @@
                                 </div>
 #}
                                 <div class="modal-footer">
-                                    <div style="float: left; margin-right: 14px;">Сумма <strong id="order-amount">{{ item.price }} ₽</strong></div>
+                                    <div style="float: left; margin-right: 14px;">Сумма <strong id="order-amount">
+                                            @todo
+{#                                            {{ item.price }}#}
+                                            ₽
+                                        </strong></div>
                                     <button type="button" class="btn btn-light" data-dismiss="modal">Закрыть</button>
                                     <button type="submit" class="btn btn-success" id="form_submit">Добавить</button>
                                 </div>
@@ -96,9 +106,12 @@
 
             <p style="float: right;">Добавлено: {{ item.createdAt|format_datetime }}</p>
 
+            <p>Количество: @todo </p>
+{#
             {% if item.quantity %}
                 <p>Количество: {{ item.quantity }}</p>
             {% endif %}
+            #}
             <div class="clear"></div>
 
             {% if item.shortDescription or item.description %}
@@ -132,6 +145,7 @@
     {{ parent() }}
 
     <script>
+{#
         $(document).ready( function() {
           $('#myform').on('submit', function(event) {
             event.preventDefault();
@@ -171,5 +185,7 @@
             $('#order-amount').text(this.value * price + ' ₽');
           });
         });
+#}
     </script>
+
 {% endblock js %}

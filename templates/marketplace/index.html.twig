@@ -68,14 +68,22 @@
                                 </p>
                                 <p class="card-text">
                                     <b>
+                                        @todo
+                                        {#
                                         {% if item.price == 0 %}
                                             Договорная
                                         {% else %}
                                             {{ item.price|number_format(0, ' ', ' ') }} ₽
                                         {% endif %}
+                                        #}
                                     </b>
 
-                                    <span style="float: right;">{{ item.quantity }} {{ item.quantity ? item.measureAsText : '' }}</span>
+                                    <span style="float: right;">
+                                        @todo
+                                        {#
+                                        {{ item.quantity }} {{ item.quantity ? item.measureAsText : '' }}
+                                        #}
+                                    </span>
                                 </p>
                                 <div class="d-flex justify-content-between align-items-center">
                                     {{ item.cooperative }}

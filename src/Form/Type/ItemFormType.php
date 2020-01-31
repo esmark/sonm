@@ -49,16 +49,16 @@ class ItemFormType extends AbstractType
             */
             ->add('short_description', null, ['attr' => ['rows' => 2]])
             ->add('description', null, ['attr' => ['rows' => 10]])
-            ->add('price')
+//            ->add('price')
             ->add('measure', ChoiceType::class, [
                 'choices' => array_flip(Item::getMeasureChoiceValues()),
                 'choice_translation_domain' => false,
             ])
-            ->add('quantity')
-            ->add('weight')
-            ->add('width')
-            ->add('height')
-            ->add('depth')
+//            ->add('quantity')
+//            ->add('weight')
+//            ->add('width')
+//            ->add('height')
+//            ->add('depth')
             ->add('status', ChoiceType::class, [
                 'choices' => array_flip(Item::getStatusChoiceValues()),
                 'choice_translation_domain' => false,
