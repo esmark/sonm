@@ -6,7 +6,7 @@ namespace App\Controller;
 
 use App\Entity\Basket;
 use App\Entity\Cooperative;
-use App\Entity\Item;
+use App\Entity\Product;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -42,9 +42,11 @@ class BasketController extends AbstractController
     }
 
     /**
+     * @todo variant
+     *
      * @Route("/add/item/{id}", name="basket_add_item", methods={"POST"})
      */
-    public function addItem(Item $item, Request $request, EntityManagerInterface $em): JsonResponse
+    public function addItem(Product $product, Request $request, EntityManagerInterface $em): JsonResponse
     {
         /** @var User $user */
         $user = $this->getUser();
@@ -65,13 +67,13 @@ class BasketController extends AbstractController
             $quantity = 1;
         }
 
-        $basket = $em->getRepository(Basket::class)->findOneBy(['user' => $this->getUser(), 'item' => $item]);
+        $basket = $em->getRepository(Basket::class)->findOneBy(['user' => $this->getUser(), 'item' => $product]);
 
         if (empty($basket)) {
             $basket = new Basket();
             $basket
                 ->setUser($this->getUser())
-                ->setItem($item)
+                ->setItem($product)
             ;
         }
 

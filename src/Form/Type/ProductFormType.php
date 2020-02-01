@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Form\Type;
 
 use App\Entity\Category;
-use App\Entity\Item;
+use App\Entity\Product;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -16,7 +16,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\File;
 
-class ItemFormType extends AbstractType
+class ProductFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -51,16 +51,16 @@ class ItemFormType extends AbstractType
             ->add('description', null, ['attr' => ['rows' => 10]])
 //            ->add('price')
             ->add('measure', ChoiceType::class, [
-                'choices' => array_flip(Item::getMeasureChoiceValues()),
+                'choices' => array_flip(Product::getMeasureChoiceValues()),
                 'choice_translation_domain' => false,
             ])
 //            ->add('quantity')
-//            ->add('weight')
-//            ->add('width')
-//            ->add('height')
-//            ->add('depth')
+            ->add('weight')
+            ->add('width')
+            ->add('height')
+            ->add('depth')
             ->add('status', ChoiceType::class, [
-                'choices' => array_flip(Item::getStatusChoiceValues()),
+                'choices' => array_flip(Product::getStatusChoiceValues()),
                 'choice_translation_domain' => false,
             ])
 
@@ -73,12 +73,12 @@ class ItemFormType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => Item::class,
+            'data_class' => Product::class,
         ]);
     }
 
     public function getBlockPrefix(): string
     {
-        return 'item';
+        return 'product';
     }
 }

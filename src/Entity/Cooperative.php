@@ -98,12 +98,12 @@ class Cooperative
     protected $history;
 
     /**
-     * @var Item[]|Collection
+     * @var Product[]|Collection
      *
-     * @ORM\OneToMany(targetEntity="Item", mappedBy="cooperative", cascade={"persist"}, fetch="EXTRA_LAZY")
+     * @ORM\OneToMany(targetEntity="Product", mappedBy="cooperative", cascade={"persist"}, fetch="EXTRA_LAZY")
      * @ORM\OrderBy({"title" = "ASC"})
      */
-    protected $items;
+    protected $products;
 
     /**
      * @var CooperativeMember[]|Collection
@@ -264,21 +264,21 @@ class Cooperative
     }
 
     /**
-     * @return Item[]|Collection
+     * @return Product[]|Collection
      */
-    public function getItems(): Collection
+    public function getProducts(): Collection
     {
-        return $this->items;
+        return $this->products;
     }
 
     /**
-     * @param Item[]|Collection $items
+     * @param Product[]|Collection $products
      *
      * @return $this
      */
-    public function setItems(Collection $items): self
+    public function setProducts(Collection $products): self
     {
-        $this->items = $items;
+        $this->products = $products;
 
         return $this;
     }

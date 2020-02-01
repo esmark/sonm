@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %} {{ item }} - от {{ item.cooperative }} {% endblock %}
+{% block title %} {{ product }} - от {{ product.cooperative }} {% endblock %}
 
 {% block content %}
 
@@ -9,29 +9,29 @@
 
     <div class="row">
         <div class="col-md-8">
-            <p>Категория <a href="#">{{ item.category }}</a></p>
+            <p>Категория <a href="#">{{ product.category }}</a></p>
             <div class="clear"></div>
 
-            <h1>{{ item.title }}</h1>
+            <h1>{{ product.title }}</h1>
 
             <p>
-                <a href="#" data-toggle="modal" data-target="#image_modal_{{ item.id }}">
+                <a href="#" data-toggle="modal" data-target="#image_modal_{{ product.id }}">
 {#                    <img src="{{ path('image', {'filter': 'items_list_thumbnail', 'id': item.imageId ?:0 }) }}">#}
                     <img src="{{ asset('assets/image-not-found-png-6-300x200.png') }}">
                 </a>
                 <br>
 
-                <div class="modal fade" id="image_modal_{{ item.id }}" tabindex="-1" role="dialog" aria-labelledby="order_modal_label" aria-hidden="true">
+                <div class="modal fade" id="image_modal_{{ product.id }}" tabindex="-1" role="dialog" aria-labelledby="order_modal_label" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 1200px !important; max-height: 800px !important;">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="order_modal_label">{{ item }}</h5>
+                                <h5 class="modal-title" id="order_modal_label">{{ product }}</h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
                             <div class="modal-body" style="text-align: center;">
-{#                                <img src="{{ path('image', {'filter': 'compress_original', 'id': item.imageId ?:0 }) }}" class="img-fluid">#}
+{#                                <img src="{{ path('image', {'filter': 'compress_original', 'id': product.imageId ?:0 }) }}" class="img-fluid">#}
                                 <img src="{{ asset('assets/image-not-found-png-6-300x200.png') }}" class="img-fluid">
                             </div>
                         </div>
@@ -43,17 +43,17 @@
                 <span class="badge badge-secondary">
                     @todo ЦЕНЫ
                     {#
-                {% if item.price == 0 %}
+                {% if product.price == 0 %}
                     Договорная
                 {% else %}
-                    {{ item.price|number_format(0, ' ', ' ') }} ₽
+                    {{ product.price|number_format(0, ' ', ' ') }} ₽
                 {% endif %}
                 #}
                 </span>
 
                 {% include 'marketplace/_status.html.twig' %}
 
-                {% if item.isStatusAccessToOrder and app.user is not null and app.user.isMember %}
+                {% if product.isStatusAccessToOrder and app.user is not null and app.user.isMember %}
                     <button type="button" class="btn btn-sm btn-outline-success" data-toggle="modal" data-target="#exampleModal"><i class="far fa-handshake"></i> В корзину</button>
                 {% endif %}
 {#                <button type="button" class="btn btn-sm btn-outline-danger"><i class="far fa-heart"></i> В избравнное</button>#}
@@ -69,16 +69,16 @@
                             </button>
                         </div>
                         <div class="modal-body">
-                            <p><i class="fas fa-cart-plus"></i> {{ item }}</p>
+                            <p><i class="fas fa-cart-plus"></i> {{ product }}</p>
 
-                            <form id="myform" action="{{ path('basket_add_item', {'id': item.id}) }}" method="post" >
-                                <input type="hidden" name="item_id" value="{{ item.id }}">
+                            <form id="myform" action="{{ path('basket_add_item', {'id': product.id}) }}" method="post" >
+                                <input type="hidden" name="item_id" value="{{ product.id }}">
 
                                 <div class="form-group">
                                     <label for="recipient-name" class="col-form-label">Количество</label>
                                     <input type="number" id="order-quantity" class="form-control" min="1" name="quantity" value="1" title="Максимум
                                         @todo
-                                        {#{{ item.quantity }}#}
+                                        {#{{ product.quantity }}#}
                                         ">
                                 </div>
 {#
@@ -90,7 +90,7 @@
                                 <div class="modal-footer">
                                     <div style="float: left; margin-right: 14px;">Сумма <strong id="order-amount">
                                             @todo
-{#                                            {{ item.price }}#}
+{#                                            {{ product.price }}#}
                                             ₽
                                         </strong></div>
                                     <button type="button" class="btn btn-light" data-dismiss="modal">Закрыть</button>
@@ -102,29 +102,29 @@
                 </div>
             </div>
 
-{#            <p>Статус: {% include 'item/_status.html.twig' %}</p>#}
+{#            <p>Статус: {% include 'product/_status.html.twig' %}</p>#}
 
-            <p style="float: right;">Добавлено: {{ item.createdAt|format_datetime }}</p>
+            <p style="float: right;">Добавлено: {{ product.createdAt|format_datetime }}</p>
 
             <p>Количество: @todo </p>
 {#
-            {% if item.quantity %}
-                <p>Количество: {{ item.quantity }}</p>
+            {% if product.quantity %}
+                <p>Количество: {{ product.quantity }}</p>
             {% endif %}
             #}
             <div class="clear"></div>
 
-            {% if item.shortDescription or item.description %}
-                <p>{{ item.shortDescription }}</p>
-                {% if item.description %}
-                    <p>{{ item.description|nl2br }}</p>
+            {% if product.shortDescription or product.description %}
+                <p>{{ product.shortDescription }}</p>
+                {% if product.description %}
+                    <p>{{ product.description|nl2br }}</p>
                 {% endif %}
             {% endif %}
 
             {# @todo разрешения на редактированеие другим участничкам #}
-            {% if item.user == app.user %}
+            {% if product.user == app.user %}
                 <p>
-                    <a href="{{ path('account_item_edit', {'id': item.id}) }}" class="btn btn-sm btn-success">Редактировать</a>
+                    <a href="{{ path('account_product_edit', {'id': product.id}) }}" class="btn btn-sm btn-success">Редактировать</a>
                 </p>
             {% endif %}
 
@@ -132,10 +132,10 @@
 
         <div class="col-md-4">
             <div class="alert alert-warning" role="alert">
-                <h4 class="alert-heading">{{ item.cooperative }}</h4>
+                <h4 class="alert-heading">{{ product.cooperative }}</h4>
                 <p><b>О кооперативе</b></p>
-                <p>{{ item.cooperative.description }}</p>
-                <p><i class="far fa-calendar-check"></i> Дата регистрации {{ item.cooperative.createdAt|format_date }}</p>
+                <p>{{ product.cooperative.description }}</p>
+                <p><i class="far fa-calendar-check"></i> Дата регистрации {{ product.cooperative.createdAt|format_date }}</p>
             </div>
         </div>
     </div>
@@ -175,13 +175,13 @@
 
           $('#order-quantity').bind('keyup mouseup', function () {
             //price = $('#order-price').val();
-            price = {{ item.price }};
+            price = {{ product.price }};
             $('#order-amount').text(this.value * price + ' ₽');
           });
 
           $('#order-price').bind('keyup mouseup', function () {
             //price = $('#order-quantity').val();
-            price = {{ item.price }};
+            price = {{ product.price }};
             $('#order-amount').text(this.value * price + ' ₽');
           });
         });

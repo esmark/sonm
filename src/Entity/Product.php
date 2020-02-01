@@ -13,8 +13,8 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 /**
  * Товары и услуги
  *
- * @ORM\Entity(repositoryClass="App\Repository\ItemRepository")
- * @ORM\Table(name="items",
+ * @ORM\Entity(repositoryClass="App\Repository\ProductRepository")
+ * @ORM\Table(name="products",
  *      indexes={
  *          @ORM\Index(columns={"created_at"}),
  *          @ORM\Index(columns={"is_enabled"}),
@@ -28,7 +28,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @ORM\HasLifecycleCallbacks()
  * @UniqueEntity(fields={"user", "title"}, message="Title must be unique")
  */
-class Item
+class Product
 {
     use ColumnTrait\Uuid;
     use ColumnTrait\CreatedAt;
@@ -149,14 +149,14 @@ class Item
     /**
      * @var Cooperative
      *
-     * @ORM\ManyToOne(targetEntity="Cooperative", inversedBy="items", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Cooperative", inversedBy="products", cascade={"persist"})
      */
     protected $cooperative;
 
     /**
-     * @var ItemVariant[]|Collection
+     * @var ProductVariant[]|Collection
      *
-     * @ORM\OneToMany(targetEntity="ItemVariant", mappedBy="item")
+     * @ORM\OneToMany(targetEntity="ProductVariant", mappedBy="product")
      */
     protected $variants;
 
@@ -437,7 +437,7 @@ class Item
     }
 
     /**
-     * @return ItemVariant[]|Collection
+     * @return ProductVariant[]|Collection
      */
     public function getVariants(): Collection
     {
@@ -445,7 +445,7 @@ class Item
     }
 
     /**
-     * @param ItemVariant[]|Collection $variants
+     * @param ProductVariant[]|Collection $variants
      *
      * @return $this
      */

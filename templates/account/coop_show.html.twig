@@ -10,7 +10,7 @@
         {% endif %}
 
         {% if is_allow_edit or coop.memberByUser(app.user).isAllowMarketplace %}
-            <a href="{{ path('account_item_new', {'coop': coop.id}) }}" class="btn btn-primary">Добавить товар/услугу</a>
+            <a href="{{ path('account_product_new', {'coop': coop.id}) }}" class="btn btn-primary">Добавить товар/услугу</a>
         {% endif %}
     </p>
 
@@ -21,7 +21,7 @@
             <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Кооператив</a>
             <a class="nav-item nav-link" id="nav-members-tab" data-toggle="tab" href="#nav-members" role="tab" aria-controls="nav-members" aria-selected="false">Участники ({{ coop.members|length }})</a>
             <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab" aria-controls="nav-contact" aria-selected="false">История изменений ({{ coop.history|length }})</a>
-            <a class="nav-item nav-link" id="nav-item-tab" data-toggle="tab" href="#nav-item" role="tab" aria-controls="nav-item" aria-selected="false">Товары и услуги ({{ coop.items|length }})</a>
+            <a class="nav-item nav-link" id="nav-item-tab" data-toggle="tab" href="#nav-item" role="tab" aria-controls="nav-item" aria-selected="false">Товары и услуги ({{ coop.products|length }})</a>
             <a class="nav-item nav-link" id="nav-pickup-tab" data-toggle="tab" href="#nav-pickup" role="tab" aria-controls="nav-pickup" aria-selected="false">Точки выдачи ({{ coop.pickUpLocations|length }})</a>
             <a class="nav-item nav-link" id="nav-program-tab" data-toggle="tab" href="#nav-program" role="tab" aria-controls="nav-program" aria-selected="false">Программы ({{ coop.programs|length }})</a>
         </div>
@@ -176,15 +176,15 @@
                 </tr>
                 </thead>
                 <tbody>
-                {% for item in coop.items %}
+                {% for product in coop.products %}
                     <tr>
-                        <td><a href="{{ path('account_item_edit', {'id': item.id}) }}">{{ item.title }}</a></td>
-                        <td>{{ item.shortDescription }}</td>
+                        <td><a href="{{ path('account_product_edit', {'id': product.id}) }}">{{ product.title }}</a></td>
+                        <td>{{ product.shortDescription }}</td>
                         <td>
                             @todo
-{#                            {{ item.price }}#}
+{#                            {{ product.price }}#}
                         </td>
-                        <td>{{ item.createdAt|date }}</td>
+                        <td>{{ product.createdAt|date }}</td>
                     </tr>
                 {% endfor %}
                 </tbody>

@@ -1,9 +1,9 @@
-{% if item.status == 1 %}
-    <span class="badge badge-success">{{ item.statusAsText }}</span>
-{% elseif item.status == 0 %}
-    <span class="badge badge-danger">{{ item.statusAsText }}</span>
-{% elseif item.status == 2 %}
-    <span class="badge badge-info">{{ item.statusAsText }}</span>
+{% if product.status == 1 %}
+    <span class="badge badge-success">{{ product.statusAsText }}</span>
+{% elseif product.status == 0 %}
+    <span class="badge badge-danger">{{ product.statusAsText }}</span>
+{% elseif product.status == 2 %}
+    <span class="badge badge-info">{{ product.statusAsText }}</span>
 {% else %}
-    <span class="badge badge-light">{{ item.statusAsText }}</span>
+    <span class="badge badge-light">{{ product.statusAsText }}</span>
 {% endif %}

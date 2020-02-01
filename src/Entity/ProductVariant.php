@@ -11,13 +11,13 @@ use Smart\CoreBundle\Doctrine\ColumnTrait;
 
 /**
  * @ORM\Entity()
- * @ORM\Table(name="items_variants",
+ * @ORM\Table(name="products_variants",
  *      uniqueConstraints={
- *          @ORM\UniqueConstraint(columns={"title", "item_id"}),
+ *          @ORM\UniqueConstraint(columns={"title", "product_id"}),
  *      }
  * )
  */
-class ItemVariant
+class ProductVariant
 {
     use ColumnTrait\Id;
     use ColumnTrait\CreatedAt;
@@ -51,7 +51,7 @@ class ItemVariant
     /**
      * @var Basket[]|Collection
      *
-     * @ORM\OneToMany(targetEntity="Basket", mappedBy="items_variants", cascade={"persist"}, fetch="EXTRA_LAZY")
+     * @ORM\OneToMany(targetEntity="Basket", mappedBy="productVariant", cascade={"persist"}, fetch="EXTRA_LAZY")
      * @ORM\OrderBy({"created_at" = "DESC"})
      */
     protected $baskets;
@@ -65,14 +65,13 @@ class ItemVariant
     protected $user;
 
     /**
-     * @var Item
-     *
-     * @ORM\ManyToOne(targetEntity="Item", inversedBy="variants")
+     * @var Product
+     * @ORM\ManyToOne(targetEntity="Product", inversedBy="variants")
      */
-    protected $item;
+    protected $product;
 
     /**
-     * ItemVariant constructor.
+     * ProductVariant constructor.
      */
     public function __construct()
     {

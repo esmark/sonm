@@ -30,9 +30,9 @@ class Order
     use ColumnTrait\CreatedAt;
     use StatusTrait;
 
-    public const STATUS_NEW       = 0;
-    public const STATUS_COMPLETED = 1;
-    public const STATUS_CANCELLED = 2;
+    const STATUS_NEW       = 0;
+    const STATUS_COMPLETED = 1;
+    const STATUS_CANCELLED = 2;
     static protected $status_values = [
         self::STATUS_NEW        => 'Новый',
         self::STATUS_CANCELLED  => 'Отменённый',
@@ -47,11 +47,12 @@ class Order
     protected $cooperative;
 
     /**
-     * @var Item[]|Collection
+     * @var OrderLine[]|Collection
      *
-     * ORM\OneToMany(targetEntity="OrderItem", mappedBy="order")
+     * @ORM\OneToMany(targetEntity="OrderLine", mappedBy="order", cascade={"persist"}, fetch="EXTRA_LAZY")
+     * ORM\OrderBy({"title" = "ASC"})
      */
-    protected $items;
+    protected $lines;
 
     /**
      * @var User
@@ -87,26 +88,6 @@ class Order
     public function setCooperative(Cooperative $cooperative): self
     {
         $this->cooperative = $cooperative;
-
-        return $this;
-    }
-
-    /**
-     * @return Item[]|Collection
-     */
-    public function getItems()
-    {
-        return $this->items;
-    }
-
-    /**
-     * @param Item[]|Collection $items
-     *
-     * @return $this
-     */
-    public function setItems($items): self
-    {
-        $this->items = $items;
 
         return $this;
     }

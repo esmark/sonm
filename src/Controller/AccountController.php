@@ -9,13 +9,13 @@ use App\Entity\Address;
 use App\Entity\Cooperative;
 use App\Entity\CooperativeHistory;
 use App\Entity\CooperativeMember;
-use App\Entity\Item;
+use App\Entity\Product;
 use App\Entity\User;
 use App\Form\Type\AddressFormType;
 use App\Form\Type\CooperativeCreateFormType;
 use App\Form\Type\CooperativeFormType;
 use App\Form\Type\CooperativeMemberFormType;
-use App\Form\Type\ItemFormType;
+use App\Form\Type\ProductFormType;
 use App\Form\Type\UserChangePasswordFormType;
 use App\Form\Type\UserFormType;
 use App\Form\Type\UserWorksheetPurposeFormType;
@@ -443,13 +443,13 @@ class AccountController extends AbstractController
             'member' => $member,
         ]);
     }
-    
+
     /**
      * @todo историю
      *
-     * @Route("/item/new/{coop}/", name="account_item_new")
+     * @Route("/item/new/{coop}/", name="account_product_new")
      */
-    public function itemNew(Cooperative $coop, Request $request, EntityManagerInterface $em): Response
+    public function productNew(Cooperative $coop, Request $request, EntityManagerInterface $em): Response
     {
         $isAllowAccess = false;
         foreach ($coop->getMembers() as $member) {
@@ -474,13 +474,13 @@ class AccountController extends AbstractController
             ]);
         }
 
-        $item = new Item();
-        $item
+        $product = new Product();
+        $product
             ->setCooperative($coop)
             ->setUser($this->getUser())
         ;
 
-        $form = $this->createForm(ItemFormType::class, $item);
+        $form = $this->createForm(ProductFormType::class, $product);
         $form->remove('update');
 
         if ($request->isMethod('POST')) {
@@ -494,7 +494,7 @@ class AccountController extends AbstractController
             }
 
             if ($form->get('create')->isClicked() and $form->isValid()) {
-                $em->persist($item);
+                $em->persist($product);
                 $em->flush();
 
                 $this->addFlash('success', 'Товар добавлен');
@@ -506,7 +506,7 @@ class AccountController extends AbstractController
             }
         }
 
-        return $this->render('account/item_new.html.twig', [
+        return $this->render('account/product_new.html.twig', [
             'form' => $form->createView(),
         ]);
     }
@@ -514,11 +514,11 @@ class AccountController extends AbstractController
     /**
      * @todo историю
      *
-     * @Route("/item/{id}/", name="account_item_edit")
+     * @Route("/item/{id}/", name="account_product_edit")
      */
-    public function itemEdit(Item $item, Request $request, EntityManagerInterface $em): Response
+    public function productEdit(Product $product, Request $request, EntityManagerInterface $em): Response
     {
-        $coop = $item->getCooperative();
+        $coop = $product->getCooperative();
 
         $isAllowAccess = false;
         foreach ($coop->getMembers() as $member) {
@@ -543,8 +543,8 @@ class AccountController extends AbstractController
             ]);
         }
 
-        $coop = $item->getCooperative();
-        $form = $this->createForm(ItemFormType::class, $item);
+        $coop = $product->getCooperative();
+        $form = $this->createForm(ProductFormType::class, $product);
         $form->remove('create');
 
         if ($request->isMethod('POST')) {
@@ -558,7 +558,7 @@ class AccountController extends AbstractController
             }
 
             if ($form->get('update')->isClicked() and $form->isValid()) {
-                $em->persist($item);
+                $em->persist($product);
                 $em->flush();
 
                 $this->addFlash('success', 'Товар обновлён');
@@ -570,7 +570,7 @@ class AccountController extends AbstractController
             }
         }
 
-        return $this->render('account/item_edit.html.twig', [
+        return $this->render('product_edit.html.twig', [
             'form' => $form->createView(),
         ]);
     }
@@ -735,7 +735,7 @@ class AccountController extends AbstractController
                 return random_int(10000, 99999);
             });
 
-            $user_id = $cache->get('connect_telegram_account_code'.$code, function (ItemInterface $item) {
+            $userId = $cache->get('connect_telegram_account_code'.$code, function (ItemInterface $item) {
                 $item->expiresAfter(60 * 2);
 
                 return $this->getUser()->getId()->serialize();

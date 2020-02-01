@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\Category;
-use App\Entity\Item;
+use App\Entity\Product;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,7 +22,7 @@ class MarketplaceController extends AbstractController
      */
     public function index(Request $request, EntityManagerInterface $em): Response
     {
-        $items = $em->getRepository(Item::class)
+        $products = $em->getRepository(Product::class)
             ->getFindQueryBuilder([
                 'category' => $request->query->get('category'),
                 'search' => $request->query->get('search'),
@@ -33,17 +33,17 @@ class MarketplaceController extends AbstractController
 
         return $this->render('marketplace/index.html.twig', [
             'categories' => $em->getRepository(Category::class)->findBy([], ['position' => 'ASC', 'title' => 'ASC']),
-            'items'      => $items,
+            'products'   => $products,
         ]);
     }
 
     /**
      * @Route("/{id}/", name="marketplace_item")
      */
-    public function item(Item $item): Response
+    public function item(Product $product): Response
     {
-        return $this->render('marketplace/item.html.twig', [
-            'item' => $item,
+        return $this->render('marketplace/product.html.twig', [
+            'product' => $product,
         ]);
     }
 }

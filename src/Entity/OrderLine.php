@@ -38,19 +38,19 @@ class OrderLine
     /**
      * @var Order
      *
-     * @ORM\ManyToOne(targetEntity="Order", inversedBy="items", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Order", inversedBy="lines", cascade={"persist"})
      */
     protected $order;
 
     /**
-     * @var Item
+     * @var ProductVariant
      *
-     * ORM\ManyToOne(targetEntity="Item")
+     * @ORM\ManyToOne(targetEntity="ProductVariant")
      */
-    protected $item;
+    protected $productVariant;
 
     /**
-     * Constructor.
+     * OrderLine constructor.
      */
     public function __construct()
     {
@@ -73,26 +73,6 @@ class OrderLine
     public function setOrder(Order $order): self
     {
         $this->order = $order;
-
-        return $this;
-    }
-
-    /**
-     * @return Item
-     */
-    public function getItem(): Item
-    {
-        return $this->item;
-    }
-
-    /**
-     * @param Item $item
-     *
-     * @return $this
-     */
-    public function setItem(Item $item): self
-    {
-        $this->item = $item;
 
         return $this;
     }
@@ -133,6 +113,26 @@ class OrderLine
     public function setPrice(int $price): self
     {
         $this->price = $price;
+
+        return $this;
+    }
+
+    /**
+     * @return ProductVariant
+     */
+    public function getProductVariant(): ProductVariant
+    {
+        return $this->productVariant;
+    }
+
+    /**
+     * @param ProductVariant $productVariant
+     *
+     * @return $this
+     */
+    public function setProductVariant(ProductVariant $productVariant): self
+    {
+        $this->productVariant = $productVariant;
 
         return $this;
     }
