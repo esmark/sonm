@@ -1,0 +1,44 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Form\Type;
+
+use App\Entity\ProductVariant;
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+
+class ProductVariantFormType extends AbstractType
+{
+    public function buildForm(FormBuilderInterface $builder, array $options): void
+    {
+        $builder
+            ->add('title', null, ['attr' => ['autofocus' => true]])
+            ->add('price')
+            ->add('quantity')
+            ->add('status', ChoiceType::class, [
+                'choices' => ProductVariant::getStatusFormChoices(),
+                'choice_translation_domain' => false,
+            ])
+
+//            ->add('create', SubmitType::class, ['attr' => ['class' => 'btn-success']])
+//            ->add('update', SubmitType::class, ['attr' => ['class' => 'btn-success']])
+//            ->add('cancel', SubmitType::class, ['attr' => ['class' => 'btn-light', 'formnovalidate' => 'formnovalidate']])
+        ;
+    }
+
+    public function configureOptions(OptionsResolver $resolver): void
+    {
+        $resolver->setDefaults([
+            'data_class' => ProductVariant::class,
+        ]);
+    }
+
+    public function getBlockPrefix(): string
+    {
+        return 'product_variant';
+    }
+}

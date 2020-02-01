@@ -141,7 +141,7 @@ class ProductVariant
     /**
      * @var Product
      *
-     * @ORM\ManyToOne(targetEntity="Product", inversedBy="variants")
+     * @ORM\ManyToOne(targetEntity="Product", inversedBy="variants", cascade={"persist"})
      */
     protected $product;
 

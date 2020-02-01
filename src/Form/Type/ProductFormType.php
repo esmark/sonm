@@ -6,10 +6,12 @@ namespace App\Form\Type;
 
 use App\Entity\Category;
 use App\Entity\Product;
+use App\Entity\TaxRate;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -20,6 +22,9 @@ class ProductFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        /** @var Product $product */
+        $product = $options['data'];
+
         $builder
             ->add('title', null, ['attr' => ['autofocus' => true]])
             ->add('category', EntityType::class, [
@@ -29,6 +34,16 @@ class ProductFormType extends AbstractType
                         ->orderBy('e.position', 'ASC')
                         ->addOrderBy('e.title', 'ASC');
                 },
+            ])
+            ->add('taxRate', EntityType::class, [
+                'class' => TaxRate::class,
+                'query_builder' => function (EntityRepository $er) use ($product) {
+                    return $er->createQueryBuilder('e')
+                        ->join('e.cooperatives', 'coop', 'WITH', 'coop.id = :coop')
+                        ->setParameter('coop', $product->getCooperative())
+                        ->orderBy('e.percent', 'ASC');
+                },
+                'required' => false,
             ])
             /*
             ->add('image_id', ImageFormType::class, [
@@ -49,19 +64,17 @@ class ProductFormType extends AbstractType
             */
             ->add('short_description', null, ['attr' => ['rows' => 2]])
             ->add('description', null, ['attr' => ['rows' => 10]])
-//            ->add('price')
             ->add('measure', ChoiceType::class, [
                 'choices' => array_flip(Product::getMeasureChoiceValues()),
                 'choice_translation_domain' => false,
             ])
-//            ->add('quantity')
             ->add('weight')
             ->add('width')
             ->add('height')
             ->add('depth')
-            ->add('status', ChoiceType::class, [
-                'choices' => array_flip(Product::getStatusChoiceValues()),
-                'choice_translation_domain' => false,
+            ->add('variants', CollectionType::class, [
+                'entry_type' => ProductVariantFormType::class,
+                'entry_options' => ['label' => false],
             ])
 
             ->add('create', SubmitType::class, ['attr' => ['class' => 'btn-success']])

@@ -21,7 +21,7 @@
         <tbody>
         {% for coop in coops %}
             <tr>
-                <td><a href="{{ path('coop_show', {'name': coop.name}) }}">{{ coop }}</a></td>
+                <td><a href="{{ path('coop_show', {'slug': coop.slug}) }}">{{ coop }}</a></td>
                 <td>{{ coop.members|length }}</td>
                 <td>{{ coop.products|length }}</td>
                 <td>{{ coop.programs|length }}</td>

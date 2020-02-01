@@ -30,12 +30,12 @@ class CoopController extends AbstractController
     }
 
     /**
-     * @Route("/{name}/", name="coop_show")
+     * @Route("/{slug}/", name="coop_show")
      */
-    public function show(string $name, Request $request, CooperativeRepository $cooperativeRepository, EntityManagerInterface $em): Response
+    public function show(string $slug, Request $request, CooperativeRepository $cooperativeRepository, EntityManagerInterface $em): Response
     {
         /** @var Cooperative $coop */
-        $coop = $cooperativeRepository->findOneBy(['name' => $name]);
+        $coop = $cooperativeRepository->findOneBy(['slug' => $slug]);
 
         if (empty($coop)) {
             throw $this->createNotFoundException('Нет такого кооператива');

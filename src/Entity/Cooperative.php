@@ -24,15 +24,18 @@ use Symfony\Component\Validator\Constraints as Assert;
  * )
  *
  * @UniqueEntity(
- *    fields="name",
- *    message="Name is already exists"
+ *    fields="slug",
+ *    message="Slug is already exists"
+ * )
+ *
+ * @UniqueEntity(
+ *    fields="title",
+ *    message="Title is already exists"
  * )
  */
 class Cooperative
 {
     use ColumnTrait\Id;
-    use ColumnTrait\NameUnique;
-    use ColumnTrait\TitleNotBlank;
     use ColumnTrait\Description;
     use ColumnTrait\Address;
     use ColumnTrait\CreatedAt;
@@ -90,6 +93,21 @@ class Cooperative
     protected $register_date;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(type="string", length=190, unique=true)
+     */
+    protected $slug;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string", length=190, nullable=false, unique=true)
+     * @Assert\NotBlank()
+     */
+    protected $title;
+
+    /**
      * @var CooperativeHistory[]|Collection
      *
      * @ORM\OneToMany(targetEntity="CooperativeHistory", mappedBy="cooperative", cascade={"persist"}, fetch="EXTRA_LAZY")
@@ -116,7 +134,7 @@ class Cooperative
     /**
      * @var PickUpLocation[]|Collection
      *
-     * @ORM\ManyToMany(targetEntity="PickUpLocation", inversedBy="cooperatives")
+     * @ORM\ManyToMany(targetEntity="PickUpLocation", inversedBy="cooperatives", fetch="EXTRA_LAZY")
      * @ORM\JoinTable(name="cooperatives_pick_up_locations_relations")
      */
     protected $pick_up_locations;
@@ -124,7 +142,7 @@ class Cooperative
     /**
      * @var Program[]|Collection
      *
-     * @ORM\ManyToMany(targetEntity="Program", inversedBy="cooperatives")
+     * @ORM\ManyToMany(targetEntity="Program", inversedBy="cooperatives", fetch="EXTRA_LAZY")
      * @ORM\JoinTable(name="cooperatives_programs_relations")
      */
     protected $programs;
@@ -132,10 +150,18 @@ class Cooperative
     /**
      * @var TaxRate[]|Collection
      *
-     * @ORM\ManyToMany(targetEntity="TaxRate", inversedBy="cooperatives")
+     * @ORM\ManyToMany(targetEntity="TaxRate", inversedBy="cooperatives", fetch="EXTRA_LAZY")
      * @ORM\JoinTable(name="cooperatives_tax_rates_relations")
      */
     protected $taxRates;
+
+    /**
+     * @var TaxRate|null
+     *
+     * @ORM\ManyToOne(targetEntity="TaxRate")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    protected $taxRateDefault;
 
     /**
      * Cooperative constructor.
@@ -150,6 +176,7 @@ class Cooperative
         $this->kpp          = 0;
         $this->ogrn         = 0;
         $this->status       = self::STATUS_PENDING;
+        $this->title        = '';
         $this->pick_up_locations = new ArrayCollection();
         $this->programs          = new ArrayCollection();
         $this->taxRates          = new ArrayCollection();
@@ -395,6 +422,66 @@ class Cooperative
     public function setTaxRates(Collection $taxRates): self
     {
         $this->taxRates = $taxRates;
+
+        return $this;
+    }
+
+    /**
+     * @return TaxRate|null
+     */
+    public function getTaxRateDefault(): ?TaxRate
+    {
+        return $this->taxRateDefault;
+    }
+
+    /**
+     * @param TaxRate|null $taxRateDefault
+     *
+     * @return $this
+     */
+    public function setTaxRateDefault(?TaxRate $taxRateDefault): self
+    {
+        $this->taxRateDefault = $taxRateDefault;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSlug(): string
+    {
+        return $this->slug;
+    }
+
+    /**
+     * @param string $slug
+     *
+     * @return $this
+     */
+    public function setSlug(string $slug): self
+    {
+        $this->slug = $slug;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTitle(): string
+    {
+        return $this->title;
+    }
+
+    /**
+     * @param string $title
+     *
+     * @return $this
+     */
+    public function setTitle(string $title): self
+    {
+        $this->title = $title;
 
         return $this;
     }

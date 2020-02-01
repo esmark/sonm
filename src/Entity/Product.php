@@ -144,18 +144,18 @@ class Product
     /**
      * Минимальная цена из доступных вариантов
      *
-     * @var int|null
+     * @var int
      *
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="integer")
      */
     protected $priceMin;
 
     /**
      * Максимальная цена из доступных вариантов
      *
-     * @var int|null
+     * @var int
      *
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="integer")
      */
     protected $priceMax;
 
@@ -175,14 +175,21 @@ class Product
     protected $cooperative;
 
     /**
+     * @var TaxRate|null
+     *
+     * @ORM\ManyToOne(targetEntity="TaxRate")
+     */
+    protected $taxRate;
+
+    /**
      * @var ProductVariant[]|Collection
      *
-     * @ORM\OneToMany(targetEntity="ProductVariant", mappedBy="product")
+     * @ORM\OneToMany(targetEntity="ProductVariant", mappedBy="product", cascade={"persist"})
      */
     protected $variants;
 
     /**
-     * Offer constructor.
+     * Product constructor.
      */
     public function __construct()
     {
@@ -190,6 +197,9 @@ class Product
         $this->is_enabled = true;
         $this->measure    = self::MEASURE_NONE;
         $this->status     = self::STATUS_AVAILABLE;
+        $this->variants   = new ArrayCollection();
+        $this->priceMin   = 0;
+        $this->priceMax   = 0;
     }
 
     /**
@@ -201,16 +211,34 @@ class Product
     }
 
     /**
-     * @todo
-     *
-     * ORM\PreFlush()
+     * @ORM\PreFlush()
      */
     public function preFlush()
     {
+        foreach ($this->getVariants() as $variant) {
+            if ($this->priceMin == 0) {
+                $this->priceMin = $variant->getPrice();
+            }
+
+            if ($this->priceMax == 0) {
+                $this->priceMax = $variant->getPrice();
+            }
+
+            if ($variant->getPrice() < $this->priceMin) {
+                $this->priceMin = $variant->getPrice();
+            }
+
+            if ($variant->getPrice() > $this->priceMax) {
+                $this->priceMax = $variant->getPrice();
+            }
+        }
+
+        /*
         if ($this->getMeasure() == self::MEASURE_NONE) {
             $this->setQuantity(null);
             $this->setQuantityReserved(null);
         }
+        */
     }
 
     /**
@@ -422,6 +450,21 @@ class Product
     }
 
     /**
+     * @param ProductVariant $variant
+     *
+     * @return $this
+     */
+    public function addVariant(ProductVariant $variant): self
+    {
+        if (!$this->variants->contains($variant)) {
+            $this->variants->add($variant);
+            $variant->setProduct($this);
+        }
+
+        return $this;
+    }
+
+    /**
      * @return ProductVariant[]|Collection
      */
     public function getVariants(): Collection
@@ -442,19 +485,31 @@ class Product
     }
 
     /**
-     * @return int|null
+     * @return string
      */
-    public function getPriceMin(): ?int
+    public function getPriceRange(): string
+    {
+        if ($this->priceMin == $this->priceMax) {
+            return (string) $this->priceMin;
+        }
+
+        return $this->priceMin . ' - ' . $this->priceMax;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPriceMin(): int
     {
         return $this->priceMin;
     }
 
     /**
-     * @param int|null $priceMin
+     * @param int $priceMin
      *
      * @return $this
      */
-    public function setPriceMin(?int $priceMin): self
+    public function setPriceMin(int $priceMin): self
     {
         $this->priceMin = $priceMin;
 
@@ -462,21 +517,41 @@ class Product
     }
 
     /**
-     * @return int|null
+     * @return int
      */
-    public function getPriceMax(): ?int
+    public function getPriceMax(): int
     {
         return $this->priceMax;
     }
 
     /**
-     * @param int|null $priceMax
+     * @param int $priceMax
      *
      * @return $this
      */
-    public function setPriceMax(?int $priceMax): self
+    public function setPriceMax(int $priceMax): self
     {
         $this->priceMax = $priceMax;
+
+        return $this;
+    }
+
+    /**
+     * @return TaxRate|null
+     */
+    public function getTaxRate(): ?TaxRate
+    {
+        return $this->taxRate;
+    }
+
+    /**
+     * @param TaxRate|null $taxRate
+     *
+     * @return $this
+     */
+    public function setTaxRate(?TaxRate $taxRate): self
+    {
+        $this->taxRate = $taxRate;
 
         return $this;
     }

@@ -21,7 +21,7 @@ class CooperativeFormType extends AbstractType
     {
         $builder
             ->add('title', null, ['attr' => ['autofocus' => true]])
-            ->add('name', null,  ['attr' => ['placeholder' => 'Technical name, short, latin, with out spaces']])
+            ->add('slug', null,  ['attr' => ['placeholder' => 'Technical name, short, latin, with out spaces']])
             ->add('description', null, ['attr' => ['rows' => 8]])
             ->add('ogrn')
             ->add('inn')
@@ -55,6 +55,16 @@ class CooperativeFormType extends AbstractType
                 'multiple' => true,
                 'expanded' => true,
                 'by_reference' => false,
+            ])
+            ->add('taxRateDefault', EntityType::class, [
+                'class'         => TaxRate::class,
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('e')->orderBy('e.percent', 'ASC');
+                },
+                'required' => false,
+//                'multiple' => true,
+//                'expanded' => true,
+//                'by_reference' => false,
             ])
 
             ->add('update', SubmitType::class, ['attr' => ['class' => 'btn-success']])

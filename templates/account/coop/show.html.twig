@@ -21,7 +21,7 @@
             <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Кооператив</a>
             <a class="nav-item nav-link" id="nav-members-tab" data-toggle="tab" href="#nav-members" role="tab" aria-controls="nav-members" aria-selected="false">Участники ({{ coop.members|length }})</a>
             <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab" aria-controls="nav-contact" aria-selected="false">История изменений ({{ coop.history|length }})</a>
-            <a class="nav-item nav-link" id="nav-item-tab" data-toggle="tab" href="#nav-item" role="tab" aria-controls="nav-item" aria-selected="false">Товары и услуги ({{ coop.products|length }})</a>
+            <a class="nav-item nav-link" id="nav-product-tab" data-toggle="tab" href="#nav-product" role="tab" aria-controls="nav-product" aria-selected="false">Товары и услуги ({{ coop.products|length }})</a>
             <a class="nav-item nav-link" id="nav-pickup-tab" data-toggle="tab" href="#nav-pickup" role="tab" aria-controls="nav-pickup" aria-selected="false">Точки выдачи ({{ coop.pickUpLocations|length }})</a>
             <a class="nav-item nav-link" id="nav-program-tab" data-toggle="tab" href="#nav-program" role="tab" aria-controls="nav-program" aria-selected="false">Программы ({{ coop.programs|length }})</a>
         </div>
@@ -44,8 +44,8 @@
                     </td>
                 </tr>
                 <tr>
-                    <th>Техническое имя</th>
-                    <td>{{ coop.name }}</td>
+                    <th>Техническое имя (часть адреса)</th>
+                    <td>{{ coop.slug }}</td>
                 </tr>
                 <tr>
                     <th>ОГРН</th>
@@ -70,6 +70,21 @@
                 <tr>
                     <th>Адрес</th>
                     <td>{{ coop.address }}</td>
+                </tr>
+                <tr>
+                    <th>Налоговые ставки для не пайщиков</th>
+                    <td>
+                        <ul>
+                        {% for tax in coop.taxRates %}
+                            <li>
+                                {{ tax }}
+                                {% if tax == coop.taxRateDefault %}
+                                    - по умолчанию для всех новых товаров
+                                {% endif %}
+                            </li>
+                        {% endfor %}
+                        </ul>
+                    </td>
                 </tr>
                 <tr>
                     <th>Дата регистрации</th>
@@ -164,14 +179,14 @@
             </table>
 
         </div>
-        <div class="tab-pane fade" id="nav-item" role="tabpanel" aria-labelledby="nav-item-tab">
+        <div class="tab-pane fade" id="nav-product" role="tabpanel" aria-labelledby="nav-product-tab">
 
             <table class="table table-bordered table-hover">
                 <thead>
                 <tr>
                     <th>Название</th>
                     <th>Краткое описание</th>
-                    <th>Цена</th>
+                    <th>Цены</th>
                     <th>Дата добавления</th>
                 </tr>
                 </thead>
@@ -181,8 +196,7 @@
                         <td><a href="{{ path('account_product_edit', {'id': product.id}) }}">{{ product.title }}</a></td>
                         <td>{{ product.shortDescription }}</td>
                         <td>
-                            @todo
-{#                            {{ product.price }}#}
+                            {{ product.priceRange }}
                         </td>
                         <td>{{ product.createdAt|date }}</td>
                     </tr>
