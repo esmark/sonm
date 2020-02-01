@@ -2,6 +2,36 @@
     "borsaco/telegram-bot-api-bundle": {
         "version": "1.0.3"
     },
+    "cache/adapter-bundle": {
+        "version": "1.1",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "1.1",
+            "ref": "d6a6e45b7f0f84bde524532d9118bab1f40fe33a"
+        },
+        "files": [
+            "./config/packages/cache_adapter.yaml"
+        ]
+    },
+    "cache/adapter-common": {
+        "version": "1.1.0"
+    },
+    "cache/array-adapter": {
+        "version": "1.0.1"
+    },
+    "cache/filesystem-adapter": {
+        "version": "1.0.0"
+    },
+    "cache/hierarchical-cache": {
+        "version": "1.0.0"
+    },
+    "cache/namespaced-cache": {
+        "version": "1.0.0"
+    },
+    "cache/tag-interop": {
+        "version": "1.0.0"
+    },
     "composer/ca-bundle": {
         "version": "1.2.6"
     },
@@ -135,6 +165,9 @@
     "league/event": {
         "version": "2.2.0"
     },
+    "league/flysystem": {
+        "version": "1.0.63"
+    },
     "maxmind-db/reader": {
         "version": "v1.6.0"
     },
@@ -155,6 +188,18 @@
     },
     "ocramius/proxy-manager": {
         "version": "2.2.3"
+    },
+    "oneup/flysystem-bundle": {
+        "version": "3.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "3.0",
+            "ref": "0eb87bba411c227da027fe5f7c1dc7954b02f242"
+        },
+        "files": [
+            "./config/packages/oneup_flysystem.yaml"
+        ]
     },
     "php": {
         "version": "7.3"
@@ -226,6 +271,9 @@
         "version": "dev-master"
     },
     "smart-core/db-dumper-bundle": {
+        "version": "dev-master"
+    },
+    "smart-core/felib-bundle": {
         "version": "dev-master"
     },
     "sonata-project/intl-bundle": {
