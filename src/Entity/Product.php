@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Doctrine\StatusTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -36,7 +37,8 @@ class Product
     use ColumnTrait\IsEnabled;
     use ColumnTrait\TitleNotBlank;
     use ColumnTrait\Description;
-    use ColumnTrait\UserNotNull;
+    use ColumnTrait\UserNotNull; // Кто добавил товар
+    use StatusTrait;
 
     // Еденицы измерения
     const MEASURE_NONE  = 0;
@@ -52,6 +54,7 @@ class Product
         self::MEASURE_LITRE => 'л',
     ];
 
+    // @todo продумать статусы товара и вариантов
     const STATUS_NOT_AVAILABLE  = 0;
     const STATUS_AVAILABLE      = 1;
     const STATUS_RESERVE        = 2;
@@ -139,6 +142,24 @@ class Product
     protected $image_id;
 
     /**
+     * Минимальная цена из доступных вариантов
+     *
+     * @var int|null
+     *
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $priceMin;
+
+    /**
+     * Максимальная цена из доступных вариантов
+     *
+     * @var int|null
+     *
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $priceMax;
+
+    /**
      * @var Category
      *
      * @ORM\ManyToOne(targetEntity="Category")
@@ -190,42 +211,6 @@ class Product
             $this->setQuantity(null);
             $this->setQuantityReserved(null);
         }
-    }
-
-    /**
-     * @return int
-     */
-    public function getStatus(): int
-    {
-        return $this->status;
-    }
-
-    /**
-     * @param int $status
-     *
-     * @return $this
-     */
-    public function setStatus(int $status): self
-    {
-        $this->status = $status;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getStatusAsText(): string
-    {
-        return self::$status_values[$this->status];
-    }
-
-    /**
-     * @return array
-     */
-    static public function getStatusChoiceValues(): array
-    {
-        return self::$status_values;
     }
 
     /**
@@ -452,6 +437,46 @@ class Product
     public function setVariants(Collection $variants): self
     {
         $this->variants = $variants;
+
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getPriceMin(): ?int
+    {
+        return $this->priceMin;
+    }
+
+    /**
+     * @param int|null $priceMin
+     *
+     * @return $this
+     */
+    public function setPriceMin(?int $priceMin): self
+    {
+        $this->priceMin = $priceMin;
+
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getPriceMax(): ?int
+    {
+        return $this->priceMax;
+    }
+
+    /**
+     * @param int|null $priceMax
+     *
+     * @return $this
+     */
+    public function setPriceMax(?int $priceMax): self
+    {
+        $this->priceMax = $priceMax;
 
         return $this;
     }
