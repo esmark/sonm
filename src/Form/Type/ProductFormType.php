@@ -74,7 +74,8 @@ class ProductFormType extends AbstractType
             ->add('depth',  null, ['attr' => ['placeholder' => 'in millimeters']])
             ->add('variants', CollectionType::class, [
                 'entry_type' => ProductVariantFormType::class,
-                'entry_options' => ['label' => false],
+                'entry_options' => ['label' => '------'],
+                'allow_add' => true,
             ])
 
             ->add('create', SubmitType::class, ['attr' => ['class' => 'btn-success']])
