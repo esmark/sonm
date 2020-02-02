@@ -30,10 +30,12 @@ class Order
     use ColumnTrait\CreatedAt;
     use StatusTrait;
 
-    const STATUS_NEW       = 0;
-    const STATUS_COMPLETED = 1;
-    const STATUS_CANCELLED = 2;
+    const STATUS_CART      = 0;
+    const STATUS_NEW       = 1;
+    const STATUS_COMPLETED = 2;
+    const STATUS_CANCELLED = 3;
     static protected $status_values = [
+        self::STATUS_CART       => 'На оформлении',
         self::STATUS_NEW        => 'Новый',
         self::STATUS_CANCELLED  => 'Отменённый',
         self::STATUS_COMPLETED  => 'Выполненный',
