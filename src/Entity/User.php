@@ -129,7 +129,7 @@ class User implements UserInterface
      * @var string|null
      *
      * @ORM\Column(type="string", length=30, nullable=true)
-     * @Assert\NotNull(message="This value is not valid.")
+     * Assert\NotNull(message="This value is not valid.")
      * @Assert\Length(max = 30)
      */
     protected $patronymic;
@@ -336,6 +336,7 @@ class User implements UserInterface
     {
         $this->created_at   = new \DateTime();
         $this->is_enabled   = true;
+        $this->has_relative = false;
         $this->email        = '';
         $this->baskets      = new ArrayCollection();
         $this->orders       = new ArrayCollection();
