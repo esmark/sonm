@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Form\Type;
 
 use App\Entity\Cooperative;
+use App\Entity\PaymentMethod;
 use App\Entity\PickUpLocation;
 use App\Entity\Program;
 use App\Entity\TaxRate;
@@ -40,6 +41,15 @@ class CooperativeFormType extends AbstractType
             ])
             ->add('programs', EntityType::class, [
                 'class'         => Program::class,
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('e')->where('e.is_enabled = true')->orderBy('e.title', 'ASC');
+                },
+                'multiple' => true,
+                'expanded' => true,
+                'by_reference' => false,
+            ])
+            ->add('paymentMethods', EntityType::class, [
+                'class'         => PaymentMethod::class,
                 'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('e')->where('e.is_enabled = true')->orderBy('e.title', 'ASC');
                 },

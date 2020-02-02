@@ -28,6 +28,13 @@ services:
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
 
+    app.payment.method.ym:
+        class: App\Payment\YandexMoneyPayment
+        tags: ['app.payment.method']
+
+    App\Payment\CashPayment:
+        tags: ['app.payment.method']
+
     app.menu.main:
         class: App\Menu\MainMenu
         arguments: ['@knp_menu.factory']

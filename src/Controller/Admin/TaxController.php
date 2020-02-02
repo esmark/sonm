@@ -22,7 +22,7 @@ class TaxController extends AbstractController
     /**
      * @Route("/", name="admin_tax")
      */
-    public function tax(EntityManagerInterface $em): Response
+    public function index(EntityManagerInterface $em): Response
     {
         return $this->render('admin/tax/index.html.twig', [
             'taxes' => $em->getRepository(TaxRate::class)->findBy([], ['percent' => 'ASC']),
