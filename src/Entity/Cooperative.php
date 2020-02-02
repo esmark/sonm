@@ -183,6 +183,7 @@ class Cooperative
         $this->inn          = 0;
         $this->kpp          = 0;
         $this->ogrn         = 0;
+        $this->slug         = '';
         $this->status       = self::STATUS_PENDING;
         $this->title        = '';
         $this->pick_up_locations = new ArrayCollection();
