@@ -23,7 +23,7 @@
             <tr>
                 <td><a href="{{ path('admin_coop_show', {'id': coop.id}) }}">{{ coop }}</a></td>
                 <td>{{ coop.members|length }}</td>
-                <td>{{ coop.items|length }}</td>
+                <td>{{ coop.products|length }}</td>
                 <td>{{ coop.statusAsText }}</td>
                 <td>{{ coop.createdAt|date }}</td>
             </tr>
