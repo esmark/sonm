@@ -116,6 +116,7 @@
           modal.find('#_order-variant-price').text(price)
           modal.find('#order-amount').text(price * current_quantity)
           modal.find('#_order-variant-id').val(variant)
+          modal.find('#order-quantity').val(current_quantity)
           if (quantity > 0) {
             modal.find('#_order-max_quantity').val(quantity)
             modal.find('#order-quantity').attr('max', quantity)
