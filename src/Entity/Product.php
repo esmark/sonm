@@ -22,12 +22,12 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  *          @ORM\Index(columns={"status"}),
  *      },
  *      uniqueConstraints={
- *          @ORM\UniqueConstraint(columns={"user_id", "title"}),
+ *          @ORM\UniqueConstraint(columns={"cooperative_id", "title"}),
  *      }
  * )
  *
  * @ORM\HasLifecycleCallbacks()
- * @UniqueEntity(fields={"user", "title"}, message="Title must be unique")
+ * @UniqueEntity(fields={"cooperative", "title"}, message="Title must be unique")
  */
 class Product
 {
