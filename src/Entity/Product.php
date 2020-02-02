@@ -185,6 +185,7 @@ class Product
      * @var ProductVariant[]|Collection
      *
      * @ORM\OneToMany(targetEntity="ProductVariant", mappedBy="product", cascade={"persist"})
+     * @ORM\OrderBy({"title" = "ASC"})
      */
     protected $variants;
 
@@ -434,7 +435,7 @@ class Product
      */
     public function getWeight(): ?float
     {
-        return $this->weight;
+        return $this->weight ? (float) $this->weight : null;
     }
 
     /**

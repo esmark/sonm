@@ -19,6 +19,7 @@ class ProductVariantFormType extends AbstractType
             ->add('title', null, ['attr' => ['autofocus' => true]])
             ->add('price')
             ->add('quantity')
+            ->add('sku')
             ->add('status', ChoiceType::class, [
                 'choices' => ProductVariant::getStatusFormChoices(),
                 'choice_translation_domain' => false,

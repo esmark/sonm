@@ -19,7 +19,6 @@
 {#                    <img src="{{ path('image', {'filter': 'items_list_thumbnail', 'id': item.imageId ?:0 }) }}">#}
                     <img src="{{ asset('assets/image-not-found-png-6-300x200.png') }}">
                 </a>
-                <br>
 
                 <div class="modal fade" id="image_modal_{{ product.id }}" tabindex="-1" role="dialog" aria-labelledby="order_modal_label" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 1200px !important; max-height: 800px !important;">
@@ -53,46 +52,34 @@
 
                 {% include 'marketplace/_status.html.twig' %}
 
-                {% if product.isStatusAccessToOrder and app.user is not null and app.user.isMember %}
-                    <button type="button" class="btn btn-sm btn-outline-success" data-toggle="modal" data-target="#exampleModal"><i class="far fa-handshake"></i> В корзину</button>
-                {% endif %}
 {#                <button type="button" class="btn btn-sm btn-outline-danger"><i class="far fa-heart"></i> В избравнное</button>#}
             </h3>
 
-            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal fade" id="add_to_basket_modal" tabindex="-1" role="dialog" aria-labelledby="add_to_basket_modal_lLabel" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Добавить в корзину</h5>
+                            <h5 class="modal-title" id="add_to_basket_modal_lLabel">Добавить в корзину</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
                         <div class="modal-body">
-                            <p><i class="fas fa-cart-plus"></i> {{ product }}</p>
+                            <p><i class="fas fa-cart-plus"></i>
+                                <span id="_order-title"></span> за <span id="_order-variant-price"></span> ₽
+                            </p>
 
-                            <form id="myform" action="{{ path('basket_add_item', {'id': product.id}) }}" method="post" >
-                                <input type="hidden" name="item_id" value="{{ product.id }}">
+                            <form id="myform" action="{{ path('basket_add') }}" method="post" >
+                                <input type="hidden" name="variant_id" id="_order-variant-id" value="">
+                                <input type="hidden" name="_max_quantity" id="_order-max_quantity" value="">
 
                                 <div class="form-group">
                                     <label for="recipient-name" class="col-form-label">Количество</label>
-                                    <input type="number" id="order-quantity" class="form-control" min="1" name="quantity" value="1" title="Максимум
-                                        @todo
-                                        {#{{ product.quantity }}#}
-                                        ">
+                                    <input type="number" id="order-quantity" class="form-control" min="1" name="quantity" value="1">
                                 </div>
-{#
-                                <div class="form-group">
-                                    <label for="message-text" class="col-form-label">Комментарий</label>
-                                    <textarea class="form-control" id="message-text" name="comment" rows="4"></textarea>
-                                </div>
-#}
+
                                 <div class="modal-footer">
-                                    <div style="float: left; margin-right: 14px;">Сумма <strong id="order-amount">
-                                            @todo
-{#                                            {{ product.price }}#}
-                                            ₽
-                                        </strong></div>
+                                    <div style="float: left; margin-right: 14px;">Сумма <strong id="order-amount"></strong></div>
                                     <button type="button" class="btn btn-light" data-dismiss="modal">Закрыть</button>
                                     <button type="submit" class="btn btn-success" id="form_submit">Добавить</button>
                                 </div>
@@ -104,9 +91,7 @@
 
 {#            <p>Статус: {% include 'product/_status.html.twig' %}</p>#}
 
-            <p style="float: right;">Добавлено: {{ product.createdAt|format_datetime }}</p>
-
-            <p>Количество: @todo </p>
+{#            <p>Количество: @todo </p>#}
 {#
             {% if product.quantity %}
                 <p>Количество: {{ product.quantity }}</p>
@@ -114,12 +99,48 @@
             #}
             <div class="clear"></div>
 
+{#            {% if product.variants|length > 1 %}#}
+            <table class="table table-hover">
+                <tr>
+                    <th>Вариант</th>
+                    <th>Цена</th>
+                    {% if product.measure != 0 %}
+                        <th>Достуное кол-во</th>
+                    {% endif %}
+                    <th></th>
+                </tr>
+            {% for variant in product.variants %}
+                <tr>
+                    <td>{{ variant }}</td>
+                    <td>{{ variant.price }}</td>
+                    {% if product.measure != 0 %}
+                        <td>{{ variant.quantity - variant.quantityReserved }}</td>
+                    {% endif %}
+                    <td>
+                        {% if product.isStatusAccessToOrder and app.user is not null and app.user.isMember %}
+                            <button type="button" class="btn btn-sm btn-outline-success" data-toggle="modal" data-target="#add_to_basket_modal"
+                                    data-quantity="{{ variant.quantity - variant.quantityReserved }}"
+                                    data-price="{{ variant.price }}"
+                                    data-title="{{ product }} ({{ variant }})"
+                                    data-variant="{{ variant.id }}"
+                                >
+                                <i class="far fa-handshake"></i>
+                                В корзину
+                            </button>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+            </table>
+
             {% if product.shortDescription or product.description %}
                 <p>{{ product.shortDescription }}</p>
                 {% if product.description %}
                     <p>{{ product.description|nl2br }}</p>
                 {% endif %}
             {% endif %}
+
+            <p>Добавлено: {{ product.createdAt|format_datetime }}</p>
 
             {# @todo разрешения на редактированеие другим участничкам #}
             {% if product.user == app.user %}
@@ -145,8 +166,26 @@
     {{ parent() }}
 
     <script>
-{#
-        $(document).ready( function() {
+      $(document).ready( function() {
+          $('#add_to_basket_modal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget) // Button that triggered the modal
+            var title = button.data('title')
+            var price = button.data('price')
+            var variant = button.data('variant')
+            var quantity = button.data('quantity')
+
+            var modal = $(this)
+            modal.find('#_order-title').text(title)
+            modal.find('#_order-variant-price').text(price)
+            modal.find('#order-amount').text(price)
+            modal.find('#_order-variant-id').val(variant)
+            if (quantity > 0) {
+              modal.find('#_order-max_quantity').val(quantity)
+              modal.find('#order-quantity').attr('max', quantity)
+              modal.find('#order-quantity').attr('title', 'Максимум ' + quantity)
+            }
+          })
+
           $('#myform').on('submit', function(event) {
             event.preventDefault();
             $('#form_submit').attr('disabled', true);
@@ -169,23 +208,21 @@
             }, 'json')
           });
 
-          $('#exampleModal').on('shown.bs.modal', function (e) {
+          $('#add_to_basket_modal').on('shown.bs.modal', function (e) {
             $('#order-quantity').focus();
           });
 
           $('#order-quantity').bind('keyup mouseup', function () {
-            //price = $('#order-price').val();
-            price = {{ product.price }};
-            $('#order-amount').text(this.value * price + ' ₽');
-          });
+            maxq = $('#_order-max_quantity').val();
 
-          $('#order-price').bind('keyup mouseup', function () {
-            //price = $('#order-quantity').val();
-            price = {{ product.price }};
+            if (this.value > maxq && maxq > 0) {
+              this.value = maxq;
+            }
+
+            price = $('#_order-variant-price').text();
             $('#order-amount').text(this.value * price + ' ₽');
           });
         });
-#}
     </script>
 
 {% endblock js %}

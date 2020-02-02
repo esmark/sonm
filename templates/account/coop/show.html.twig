@@ -16,11 +16,13 @@
 
     <h1>{{ coop }}</h1>
 
+    <div class="clear"></div>
+
     <nav>
         <div class="nav nav-tabs" id="nav-tab" role="tablist">
             <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Кооператив</a>
             <a class="nav-item nav-link" id="nav-members-tab" data-toggle="tab" href="#nav-members" role="tab" aria-controls="nav-members" aria-selected="false">Участники ({{ coop.members|length }})</a>
-            <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab" aria-controls="nav-contact" aria-selected="false">История изменений ({{ coop.history|length }})</a>
+{#            <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab" aria-controls="nav-contact" aria-selected="false">История изменений ({{ coop.history|length }})</a>#}
             <a class="nav-item nav-link" id="nav-product-tab" data-toggle="tab" href="#nav-product" role="tab" aria-controls="nav-product" aria-selected="false">Товары и услуги ({{ coop.products|length }})</a>
             <a class="nav-item nav-link" id="nav-pickup-tab" data-toggle="tab" href="#nav-pickup" role="tab" aria-controls="nav-pickup" aria-selected="false">Точки выдачи ({{ coop.pickUpLocations|length }})</a>
             <a class="nav-item nav-link" id="nav-program-tab" data-toggle="tab" href="#nav-program" role="tab" aria-controls="nav-program" aria-selected="false">Программы ({{ coop.programs|length }})</a>
@@ -151,6 +153,7 @@
             </table>
 
         </div>
+{#
         <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
 
             <table class="table table-bordered table-hover">
@@ -189,6 +192,7 @@
             </table>
 
         </div>
+#}
         <div class="tab-pane fade" id="nav-product" role="tabpanel" aria-labelledby="nav-product-tab">
 
             <table class="table table-bordered table-hover">

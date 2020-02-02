@@ -23,13 +23,28 @@
             <tbody>
             {% set coopBasketAmount = 0 %}
             {% for basket in app.user.baskets %}
-                {% if coop.id == basket.item.cooperative.id %}
-                    {% set coopBasketAmount = coopBasketAmount + basket.item.price * basket.quantity %}
+                {% set variant = basket.productVariant %}
+
+                {% if coop.id == basket.productVariant.cooperative.id %}
+                    {% set coopBasketAmount = coopBasketAmount + basket.productVariant.price * basket.quantity %}
                 <tr>
-                    <td><a href="{{ path('marketplace_item', {'id': basket.item.id}) }}">{{ basket.item }}</a></td>
-                    <td>{{ basket.quantity }} @todo изменение</td>
-                    <td>{{ basket.item.price }}</td>
-                    <td>{{ basket.item.price * basket.quantity }}</td>
+                    <td><a href="{{ path('marketplace_item', {'id': basket.productVariant.product.id}) }}">
+                            {{ basket.productVariant.product }} ({{ basket.productVariant }})
+                        </a>
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-sm btn-outline-success" data-toggle="modal" data-target="#add_to_basket_modal"
+                                data-current_quantity="{{ basket.quantity }}"
+                                data-quantity="{{ variant.quantity - variant.quantityReserved }}"
+                                data-price="{{ variant.price }}"
+                                data-title="{{ variant.product }} ({{ variant }})"
+                                data-variant="{{ variant.id }}"
+                        >
+                            {{ basket.quantity }}
+                        </button>
+                    </td>
+                    <td>{{ basket.productVariant.price }}</td>
+                    <td>{{ basket.productVariant.price * basket.quantity }}</td>
                     <td>{{ basket.createdAt|date }}</td>
                 </tr>
                 {% endif %}
@@ -45,4 +60,107 @@
 
     <p>Итого на сумму: <b>{{ app.user.basketAmount }}</b></p>
 
+
+
+    <div class="modal fade" id="add_to_basket_modal" tabindex="-1" role="dialog" aria-labelledby="add_to_basket_modal_lLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+{#                    <h5 class="modal-title" id="add_to_basket_modal_lLabel">Добавить в корзину</h5>#}
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p><i class="fas fa-cart-plus"></i>
+                        <span id="_order-title"></span> за <span id="_order-variant-price"></span> ₽
+                    </p>
+
+                    <form id="myform" action="{{ path('basket_add') }}" method="post" >
+                        <input type="hidden" name="variant_id" id="_order-variant-id" value="">
+                        <input type="hidden" name="_max_quantity" id="_order-max_quantity" value="">
+
+                        <div class="form-group">
+                            <label for="recipient-name" class="col-form-label">Количество</label>
+                            <input type="number" id="order-quantity" class="form-control" min="0" name="quantity" value="1">
+                        </div>
+
+                        <div class="modal-footer">
+                            <div style="float: left; margin-right: 14px;">Сумма <strong id="order-amount"></strong></div>
+                            <button type="button" class="btn btn-light" data-dismiss="modal">Закрыть</button>
+                            <button type="submit" class="btn btn-success" id="form_submit">Обновить</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
 {% endblock %}
+
+{% block js %}
+    {{ parent() }}
+
+    <script>
+      $(document).ready( function() {
+        $('#add_to_basket_modal').on('show.bs.modal', function (event) {
+          var button = $(event.relatedTarget) // Button that triggered the modal
+          var title = button.data('title')
+          var price = button.data('price')
+          var variant = button.data('variant')
+          var quantity = button.data('quantity')
+          var current_quantity = button.data('current_quantity')
+
+          var modal = $(this)
+          modal.find('#_order-title').text(title)
+          modal.find('#_order-variant-price').text(price)
+          modal.find('#order-amount').text(price * current_quantity)
+          modal.find('#_order-variant-id').val(variant)
+          modal.find('#_order-max_quantity').val(quantity)
+          if (quantity > 0) {
+            modal.find('#_order-max_quantity').val(current_quantity)
+            modal.find('#order-quantity').attr('max', quantity)
+            modal.find('#order-quantity').attr('title', 'Максимум ' + quantity)
+          }
+        })
+
+        $('#myform').on('submit', function(event) {
+          event.preventDefault();
+          $('#form_submit').attr('disabled', true);
+
+          $.post( $(this).attr('action'), $(this).serialize(), function(data) {
+            //console.log(data);
+            if(data.status == 'success') {
+              // Success code here
+              location.reload();
+            } else {
+              // Error code here
+              new PNotify({
+                title: '{{ 'Error'|trans }}!',
+                text: data.message,
+                type: 'error'
+              });
+
+              $('#form_submit').attr('disabled', false);
+            }
+          }, 'json')
+        });
+
+        $('#add_to_basket_modal').on('shown.bs.modal', function (e) {
+          $('#order-quantity').focus();
+        });
+
+        $('#order-quantity').bind('keyup mouseup', function () {
+          maxq = $('#_order-max_quantity').val();
+
+          if (this.value > maxq && maxq > 0) {
+            this.value = maxq;
+          }
+
+          price = $('#_order-variant-price').text();
+          $('#order-amount').text(this.value * price + ' ₽');
+        });
+      });
+    </script>
+
+{% endblock js %}

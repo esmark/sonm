@@ -28,7 +28,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  */
 class ProductVariant
 {
-    use ColumnTrait\Id;
+    use ColumnTrait\Uuid;
     use ColumnTrait\CreatedAt;
     use ColumnTrait\TitleNotBlank;
     use ColumnTrait\UserNotNull; // Кто добавил вариант
@@ -56,7 +56,7 @@ class ProductVariant
     /**
      * Актикул (единица учета запасов)
      *
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(type="string", length=20, nullable=true)
      */
@@ -156,6 +156,14 @@ class ProductVariant
     }
 
     /**
+     * @return string
+     */
+    public function __toString(): string
+    {
+        return $this->title;
+    }
+
+    /**
      * @return int
      */
     public function getPrice(): ?int
@@ -248,19 +256,19 @@ class ProductVariant
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getSku(): string
+    public function getSku(): ?string
     {
         return $this->sku;
     }
 
     /**
-     * @param string $sku
+     * @param string|null $sku
      *
      * @return $this
      */
-    public function setSku(string $sku): self
+    public function setSku(?string $sku): self
     {
         $this->sku = $sku;
 

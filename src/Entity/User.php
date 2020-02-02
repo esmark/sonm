@@ -923,7 +923,7 @@ class User implements UserInterface
         $amount = 0;
 
         foreach ($this->baskets as $basket) {
-            $amount += $basket->getItem()->getPrice() * $basket->getQuantity();
+            $amount += $basket->getProductVariant()->getPrice() * $basket->getQuantity();
         }
 
         return $amount;

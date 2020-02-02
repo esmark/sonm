@@ -7,8 +7,11 @@ namespace App\Controller;
 use App\Entity\Basket;
 use App\Entity\Cooperative;
 use App\Entity\Product;
+use App\Entity\ProductVariant;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
+use Ramsey\Uuid\Exception\InvalidUuidStringException;
+use Ramsey\Uuid\Uuid;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -18,13 +21,13 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Route("/basket")
+ *
+ * IsGranted("ROLE_USER")
  */
 class BasketController extends AbstractController
 {
     /**
      * @Route("/", name="basket")
-     *
-     * @IsGranted("ROLE_USER")
      */
     public function index(): Response
     {
@@ -33,7 +36,7 @@ class BasketController extends AbstractController
 
         /** @var Basket $basket */
         foreach ($this->getUser()->getBaskets() as $basket) {
-            $coops[$basket->getItem()->getCooperative()->getId()] = $basket->getItem()->getCooperative();
+            $coops[$basket->getProductVariant()->getCooperative()->getId()] = $basket->getProductVariant()->getCooperative();
         }
 
         return $this->render('basket/index.html.twig', [
@@ -42,11 +45,9 @@ class BasketController extends AbstractController
     }
 
     /**
-     * @todo variant
-     *
-     * @Route("/add/item/{id}", name="basket_add_item", methods={"POST"})
+     * @Route("/add/", name="basket_add", methods={"POST"})
      */
-    public function addItem(Product $product, Request $request, EntityManagerInterface $em): JsonResponse
+    public function addItem(Request $request, EntityManagerInterface $em): JsonResponse
     {
         /** @var User $user */
         $user = $this->getUser();
@@ -61,25 +62,60 @@ class BasketController extends AbstractController
         }
 
         $error_msg = null;
-        $quantity = (int) $request->request->get('quantity', 1);
+        $quantity  = (int) $request->request->get('quantity', 1);
+        $variantId = $request->request->get('variant_id');
 
-        if ($quantity < 1) {
-            $quantity = 1;
+        try {
+            $variant = $em->getRepository(ProductVariant::class)->findOneBy(['id' => Uuid::fromString($variantId)]);
+        } catch (InvalidUuidStringException $e) {
+            return new JsonResponse([
+                'status' => 'error',
+                'message' => 'Неверный вариант',
+            ]);
         }
 
-        $basket = $em->getRepository(Basket::class)->findOneBy(['user' => $this->getUser(), 'item' => $product]);
+        if (empty($variant)) {
+            $data = [
+                'status' => 'error',
+                'message' => 'Вариант не найден',
+            ];
+
+            return new JsonResponse($data);
+        }
+
+        if ($quantity < 0) {
+            $quantity = 0;
+        }
+
+        if ($quantity > $variant->getQuantity() - $variant->getQuantityReserved()
+            and $variant->getQuantity() - $variant->getQuantityReserved() > 0
+        ) {
+            $data = [
+                'status' => 'error',
+                'message' => 'Недопустимое кол-во',
+            ];
+
+            return new JsonResponse($data);
+        }
+
+        $basket = $em->getRepository(Basket::class)->findOneBy(['user' => $this->getUser(), 'productVariant' => $variant]);
 
         if (empty($basket)) {
             $basket = new Basket();
             $basket
                 ->setUser($this->getUser())
-                ->setItem($product)
+                ->setProductVariant($variant)
             ;
         }
 
         $basket->setQuantity($quantity);
 
-        $em->persist($basket);
+        if ($quantity == 0 or $request->request->has('remove')) {
+            $em->remove($basket);
+        } else {
+            $em->persist($basket);
+        }
+
         $em->flush();
 
         $data = [

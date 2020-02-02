@@ -25,6 +25,8 @@ Geoposition: Местоположение
 Height: Высота
 Homepage: Главная
 House: Дом
+in kilograms: в килограмах
+in millimeters: в милиметрах
 Invite: Приглашение участника
 Invited users: Приглашенные участники
 Is allow marketplace: Доступ к "Столу заказов"
@@ -78,6 +80,7 @@ Shipping cost: Стоимость доставки
 Shipping type: Тип доставки
 Short description: Краткое описание
 Skills: Профессиональные навыки
+Sku: Артикул
 Slug: Часть адреса
 Social links: Ссылки на соц.сети
 Stats: Статистика

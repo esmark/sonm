@@ -68,10 +68,10 @@ class ProductFormType extends AbstractType
                 'choices' => array_flip(Product::getMeasureChoiceValues()),
                 'choice_translation_domain' => false,
             ])
-            ->add('weight')
-            ->add('width')
-            ->add('height')
-            ->add('depth')
+            ->add('weight', null, ['attr' => ['placeholder' => 'in kilograms']])
+            ->add('width',  null, ['attr' => ['placeholder' => 'in millimeters']])
+            ->add('height', null, ['attr' => ['placeholder' => 'in millimeters']])
+            ->add('depth',  null, ['attr' => ['placeholder' => 'in millimeters']])
             ->add('variants', CollectionType::class, [
                 'entry_type' => ProductVariantFormType::class,
                 'entry_options' => ['label' => false],
