@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Smart\CoreBundle\Doctrine\ColumnTrait;
 
 /**
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="App\Repository\BasketRepository")
  * @ORM\Table(name="baskets",
  *      indexes={
  *          @ORM\Index(columns={"created_at"}),

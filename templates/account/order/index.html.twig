@@ -1,0 +1,40 @@
+{% extends 'account/_layout.html.twig' %}
+
+{% block title %}Мои заказы - {{ parent() }}{% endblock %}
+
+{% block account_content %}
+
+    <h2>Мои заказы</h2>
+
+    <p>Всего: {{ orders|length }}</p>
+
+    <table class="table table-bordered table-hover">
+        <thead>
+        <tr>
+            <th>Номер</th>
+            <th>Товары</th>
+            <th>Сумма</th>
+            <th>Статус</th>
+            <th>Статус платежа</th>
+            <th>Дата добавления</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for order in orders %}
+            <tr>
+{#                <td><a href="{{ path('account_address_edit', {'id': address.id}) }}">{{ address }}</a></td>#}
+                <td>{{ order.id }}</td>
+                <td>
+                    <ul>
+                    {% for line in order.lines %}
+                        <li>{{ line.productVariant.product }} ({{ line.productVariant.product }}) x {{ line.count }}</li>
+                    {% endfor %}
+                    </ul>
+                </td>
+                <td>{{ order.createdAt|date }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace App\Controller\Account;
 
-use App\Entity\Address;
+use App\Entity\Order;
 use App\Entity\User;
-use App\Form\Type\AddressFormType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,22 +13,22 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/account/address")
+ * @Route("/account/order")
  */
-class AddressController extends AbstractController
+class OrderController extends AbstractController
 {
     /**
-     * @Route("/", name="account_address")
+     * @Route("/", name="account_order")
      */
     public function index(EntityManagerInterface $em): Response
     {
-        return $this->render('account/address/index.html.twig', [
-            'addresses' => $em->getRepository(Address::class)->findBy(['user' => $this->getUser()]),
+        return $this->render('account/order/index.html.twig', [
+            'orders' => $em->getRepository(Order::class)->findBy(['user' => $this->getUser()]),
         ]);
     }
 
     /**
-     * @Route("/create/", name="account_address_create")
+     * @Route("/create/", name="account_order_create")
      */
     public function create(Request $request, EntityManagerInterface $em): Response
     {
@@ -67,43 +66,6 @@ class AddressController extends AbstractController
         }
 
         return $this->render('account/address/create.html.twig', [
-            'form' => $form->createView(),
-        ]);
-    }
-
-    /**
-     * @Route("/{id}/", name="account_address_edit")
-     */
-    public function edit(Address $address, Request $request, EntityManagerInterface $em): Response
-    {
-        /** @var User $user */
-        $user = $this->getUser();
-
-        if ($user->getId() !== $address->getUser()->getId()) {
-            return $this->redirectToRoute('account_address');
-        }
-
-        $form = $this->createForm(AddressFormType::class, $address);
-        $form->remove('create');
-
-        if ($request->isMethod('POST')) {
-            $form->handleRequest($request);
-
-            if ($form->get('cancel')->isClicked()) {
-                return $this->redirectToRoute('account_address');
-            }
-
-            if ($form->get('update')->isClicked() and $form->isValid()) {
-                $em->persist($form->getData());
-                $em->flush();
-
-                $this->addFlash('success', 'Адрес обновлён');
-
-                return $this->redirectToRoute('account_address');
-            }
-        }
-
-        return $this->render('account/address/edit.html.twig', [
             'form' => $form->createView(),
         ]);
     }

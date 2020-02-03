@@ -73,6 +73,7 @@ class MainMenu
             ],
         ]);
 
+        $menu->addChild('My orders',        ['route' => 'account_order']);
         $menu->addChild('My balance',       ['route' => 'account_balance']);
         $menu->addChild('My cooperatives',  ['route' => 'account_coop']);
         $menu->addChild('My addresses',     ['route' => 'account_address']);

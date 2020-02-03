@@ -6,15 +6,18 @@ namespace App\Controller;
 
 use App\Entity\Basket;
 use App\Entity\Cooperative;
-use App\Entity\Product;
+use App\Entity\Order;
+use App\Entity\OrderLine;
 use App\Entity\ProductVariant;
 use App\Entity\User;
+use App\Generator\RandomnessGenerator;
 use Doctrine\ORM\EntityManagerInterface;
 use Ramsey\Uuid\Exception\InvalidUuidStringException;
 use Ramsey\Uuid\Uuid;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -130,5 +133,47 @@ class BasketController extends AbstractController
         }
 
         return new JsonResponse($data);
+    }
+
+    /**
+     * @Route("/{id}", name="basket_create_order")
+     */
+    public function createOrder(Cooperative $cooperative, EntityManagerInterface $em, RandomnessGenerator $generator): RedirectResponse
+    {
+        $lines = $em->getRepository(Basket::class)->findByUserAndCoop($this->getUser(), $cooperative);
+
+        if (empty($lines)) {
+            throw $this->createNotFoundException();
+        }
+
+        $order = new Order();
+        $order
+            ->setUser($this->getUser())
+            ->setCooperative($cooperative)
+            ->setToken($generator->generateUriSafeString(16))
+        ;
+
+        $amount = 0;
+
+        foreach ($lines as $basket) {
+            $orderLine = new OrderLine();
+            $orderLine
+                ->setProductVariant($basket->getProductVariant())
+                ->setPrice($basket->getProductVariant()->getPrice())
+                ->setQuantity($basket->getQuantity())
+                ->setOrder($order)
+            ;
+
+            $amount += $orderLine->getPrice() * $orderLine->getQuantity();
+
+            $em->persist($orderLine);
+            $em->remove($basket);
+        }
+
+        $order->setAmount($amount);
+
+        $em->flush();
+
+        return $this->redirectToRoute('account_order');
     }
 }

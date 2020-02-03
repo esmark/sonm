@@ -17,7 +17,9 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @ORM\Entity()
  * @ORM\Table(name="orders",
  *      indexes={
+ *          @ORM\Index(columns={"amount"}),
  *          @ORM\Index(columns={"created_at"}),
+ *          @ORM\Index(columns={"payment_status"}),
  *          @ORM\Index(columns={"status"}),
  *      }
  * )
@@ -28,6 +30,8 @@ class Order
 {
     use ColumnTrait\Id;
     use ColumnTrait\CreatedAt;
+    use ColumnTrait\Ipv4;
+    use ColumnTrait\Comment;
     use StatusTrait;
 
     const STATUS_CART      = 0;
@@ -42,11 +46,54 @@ class Order
     ];
 
     /**
+     * Сумма заказа
+     *
+     * @var int
+     *
+     * @ORM\Column(type="integer", nullable=false)
+     */
+    protected $amount;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string", length=16, nullable=false, unique=true)
+     */
+    protected $token;
+
+    /**
+     * Статус оплаты
+     *
+     * @var string
+     *
+     * @ORM\Column(type="smallint", nullable=false)
+     */
+    protected $paymentStatus;
+
+    /**
+     * Статус доставки
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", length=32, nullable=false)
+     */
+    protected $shippingStatus;
+
+    /**
      * @var Cooperative
      *
      * @ORM\ManyToOne(targetEntity="Cooperative")
      */
     protected $cooperative;
+
+    /**
+     * Адрес доставки
+     *
+     * @var Address
+     *
+     * @ORM\ManyToOne(targetEntity="Address")
+     */
+    protected $shippingAddress;
 
     /**
      * @var OrderLine[]|Collection
@@ -55,6 +102,13 @@ class Order
      * ORM\OrderBy({"title" = "ASC"})
      */
     protected $lines;
+
+    /**
+     * @var Payment[]|Collection
+     *
+     * @ORM\OneToMany(targetEntity="Payment", mappedBy="order", cascade={"persist"}, fetch="EXTRA_LAZY")
+     */
+    protected $payments;
 
     /**
      * @var User
@@ -69,9 +123,11 @@ class Order
      */
     public function __construct()
     {
-        $this->created_at   = new \DateTime();
-        $this->status       = self::STATUS_NEW;
-        $this->orders       = new ArrayCollection();
+        $this->created_at    = new \DateTime();
+        $this->status        = self::STATUS_CART;
+        $this->lines         = new ArrayCollection();
+        $this->payments      = new ArrayCollection();
+        $this->paymentStatus = Payment::STATUS_CART;
     }
 
     /**
@@ -114,4 +170,143 @@ class Order
         return $this;
     }
 
+    /**
+     * @return OrderLine[]|Collection
+     */
+    public function getLines(): Collection
+    {
+        return $this->lines;
+    }
+
+    /**
+     * @param OrderLine[]|Collection $lines
+     *
+     * @return $this
+     */
+    public function setLines(Collection $lines): self
+    {
+        $this->lines = $lines;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getAmount(): int
+    {
+        return $this->amount;
+    }
+
+    /**
+     * @param int $amount
+     *
+     * @return $this
+     */
+    public function setAmount(int $amount): self
+    {
+        $this->amount = $amount;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getToken(): string
+    {
+        return $this->token;
+    }
+
+    /**
+     * @param string $token
+     *
+     * @return $this
+     */
+    public function setToken(string $token): self
+    {
+        $this->token = $token;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPaymentStatus(): string
+    {
+        return $this->paymentStatus;
+    }
+
+    /**
+     * @param string $paymentStatus
+     *
+     * @return $this
+     */
+    public function setPaymentStatus(string $paymentStatus): self
+    {
+        $this->paymentStatus = $paymentStatus;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getShippingStatus(): string
+    {
+        return $this->shippingStatus;
+    }
+
+    /**
+     * @param string $shippingStatus
+     *
+     * @return $this
+     */
+    public function setShippingStatus(string $shippingStatus): self
+    {
+        $this->shippingStatus = $shippingStatus;
+
+        return $this;
+    }
+
+    /**
+     * @return Address
+     */
+    public function getShippingAddress(): Address
+    {
+        return $this->shippingAddress;
+    }
+
+    /**
+     * @param Address $shippingAddress
+     *
+     * @return $this
+     */
+    public function setShippingAddress(Address $shippingAddress): self
+    {
+        $this->shippingAddress = $shippingAddress;
+
+        return $this;
+    }
+
+    /**
+     * @return Payment[]|Collection
+     */
+    public function getPayments(): Collection
+    {
+        return $this->payments;
+    }
+
+    /**
+     * @param Payment[]|Collection $payments
+     *
+     * @return $this
+     */
+    public function setPayments(Collection $payments): self
+    {
+        $this->payments = $payments;
+
+        return $this;
+    }
 }
