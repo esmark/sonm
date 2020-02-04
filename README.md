@@ -118,6 +118,8 @@ bin/console user:role:promote <username> <role>
 
 ```
 docker-compose run php <command>
-#например:
+# например:
 docker-compose run php bin/console user:list
+# или более короткая запись:
+make cli c=user:list
 ```

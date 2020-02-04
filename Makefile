@@ -1,11 +1,11 @@
-up: docker-up composer-install
+up: docker-up composer-install db-migrations
 upb: docker-build docker-up
 down: docker-down
 build: docker-build
 restart: docker-down docker-up
 restart-build: docker-down docker-build docker-up
 init: docker-down-clear  docker-pull docker-build docker-up composer-install db-schema-drop app-init
-app-init: wait-db migrations
+app-init: wait-db db-migrations
 
 docker-up:
 	docker-compose up -d
@@ -26,18 +26,18 @@ clear:
 	docker run --rm -v ${PWD}:/app --workdir=/app alpine rm -f .ready
 
 cli:
-	docker-compose run php bin/console ${ARGS}
+	docker-compose run php bin/console ${c}
 
 composer-install:
 	docker-compose run php composer install
 
 db-schema-drop:
-	docker-compose run php bin/console doctrine:schema:drop --force --full-database
+	docker-compose run --rm php php bin/console doctrine:schema:drop --force --full-database
 
 wait-db:
 	until docker-compose exec -T db pg_isready --timeout=0 --dbname=sonm ; do sleep 1 ; done
 
-migrations:
+db-migrations:
 	docker-compose run --rm php php bin/console doctrine:migrations:migrate --no-interaction
 
 fixtures:
