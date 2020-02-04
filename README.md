@@ -41,7 +41,7 @@ composer i
 bin/console doctrine:migrations:migrate --no-interaction
 ```
 
-В случае, если будут проблеммы с доступак к файлам, то нужно обнулить кеш
+В случае, если будут проблеммы с доступами к файлам, то нужно обнулить кеш
 ```    
 bin/clear_cache
 ```
