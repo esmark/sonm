@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller\Admin;
 
-use App\Entity\Category;
 use App\Entity\TaxRate;
-use App\Form\Type\CategoryFormType;
 use App\Form\Type\TaxRateFormType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

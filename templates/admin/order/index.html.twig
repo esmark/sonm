@@ -1,10 +1,10 @@
-{% extends 'account/_layout.html.twig' %}
+{% extends 'base.html.twig' %}
 
-{% block title %}Мои заказы - {{ parent() }}{% endblock %}
+{% block title %}Заказы - Админка{% endblock %}
 
-{% block account_content %}
+{% block content %}
 
-    <h2>Мои заказы</h2>
+    <h2>Заказы</h2>
 
     <p>Всего: {{ orders|length }}</p>
 
@@ -12,9 +12,10 @@
         <thead>
         <tr>
             <th>Номер</th>
+            <th>Кооператив</th>
+            <th>Пользователь</th>
             <th>Товары</th>
             <th>Сумма</th>
-            <th>Кооператив</th>
             <th>Статус</th>
             <th>Статус платежа</th>
             <th>Статус доставки</th>
@@ -24,7 +25,9 @@
         <tbody>
         {% for order in orders %}
             <tr>
-                <td><a href="{{ path('account_order_edit', {'id': order.id}) }}">{{ order.id }}</a></td>
+                <td><a href="{{ path('admin_order_show', {'id': order.id}) }}">{{ order.id }}</a></td>
+                <td><a href="{{ path('admin_coop_show', {'id': order.cooperative.id }) }}">{{ order.cooperative }}</a></td>
+                <td>{{ order.user }}</td>
                 <td>
                     <ul>
                     {% for line in order.lines %}
@@ -33,7 +36,6 @@
                     </ul>
                 </td>
                 <td>{{ order.amount }}</td>
-                <td><a href="{{ path('coop_show', {'slug': order.cooperative.slug }) }}">{{ order.cooperative }}</a></td>
                 <td>{{ order.statusAsText }}</td>
                 <td>{{ order.paymentStatus }}</td>
                 <td>{{ order.shippingStatus }}</td>

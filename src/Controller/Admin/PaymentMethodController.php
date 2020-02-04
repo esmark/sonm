@@ -4,12 +4,8 @@ declare(strict_types=1);
 
 namespace App\Controller\Admin;
 
-use App\Entity\Category;
 use App\Entity\PaymentMethod;
-use App\Entity\TaxRate;
-use App\Form\Type\CategoryFormType;
 use App\Form\Type\PaymentMethodFormType;
-use App\Form\Type\TaxRateFormType;
 use App\Payment\PaymentInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Container\ContainerInterface;

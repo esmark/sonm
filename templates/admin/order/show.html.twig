@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Заказ № {{ order.id }} - Админка{% endblock %}
+
+{% block content %}
+    <h1>Заказ № {{ order.id }}</h1>
+
+    <p>Статус: <b>{{ order.statusAsText }}</b></p>
+
+    <p>Дата: {{ order.createdAt|date }}</p>
+
+    <p>Кооператив: {{ order.cooperative }}</p>
+
+    <h3>Товары</h3>
+
+    <ul>
+        {% for line in order.lines %}
+            <li>{{ line.productVariant.product }} ({{ line.productVariant }}) {{ line.price }} p x {{ line.quantity }} = {{ line.price * line.quantity }} p</li>
+        {% endfor %}
+    </ul>
+
+    <p>Итого на сумму: <b>{{ order.amount }}</b> p</p>
+
+    <h3>Адрес доставки</h3>
+
+    {% if order.shippingAddress is empty %}
+        <p>не указан</p>
+    {% else %}
+        {{ order.shippingAddress }}
+    {% endif %}
+
+    <br>
+
+    <h3>Способ доставки</h3>
+
+    <p>@todo </p>
+
+    <br>
+
+    <h3>Оплата</h3>
+
+    <ul>
+        {% for payment in order.payments %}
+            <li>{{ payment.amount }}p - {{ payment.statusAsText }} от {{ payment.createdAt|date }}</li>
+        {% endfor %}
+    </ul>
+
+{% endblock  %}

@@ -52,7 +52,7 @@ class Payment
      *
      * @ORM\ManyToOne(targetEntity="PaymentMethod")
      */
-    protected $paymentMethod;
+    protected $method;
 
     /**
      * @var Order
@@ -79,21 +79,38 @@ class Payment
     }
 
     /**
-     * @return PaymentMethod
+     * @return string
      */
-    public function getPaymentMethod(): PaymentMethod
+    public function getStatusBadgeColor(): string
     {
-        return $this->paymentMethod;
+        switch ($this->status) {
+            case 1:
+                return 'info';
+            case 2:
+                return 'success';
+            case 3:
+                return 'danger';
+        }
+
+        return 'loght';
     }
 
     /**
-     * @param PaymentMethod $paymentMethod
+     * @return PaymentMethod
+     */
+    public function getMethod(): PaymentMethod
+    {
+        return $this->method;
+    }
+
+    /**
+     * @param PaymentMethod $method
      *
      * @return $this
      */
-    public function setPaymentMethod(PaymentMethod $paymentMethod): self
+    public function setMethod(PaymentMethod $method): self
     {
-        $this->paymentMethod = $paymentMethod;
+        $this->method = $method;
 
         return $this;
     }

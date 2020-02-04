@@ -26,7 +26,7 @@ class OrderController extends AbstractController
     public function index(EntityManagerInterface $em): Response
     {
         return $this->render('account/order/index.html.twig', [
-            'orders' => $em->getRepository(Order::class)->findBy(['user' => $this->getUser()]),
+            'orders' => $em->getRepository(Order::class)->findBy(['user' => $this->getUser()], ['created_at' => 'DESC']),
         ]);
     }
 
@@ -62,7 +62,7 @@ class OrderController extends AbstractController
             $payment
                 ->setAmount($order->getAmount())
                 ->setOrder($order)
-                ->setPaymentMethod($pm)
+                ->setMethod($pm)
                 ->setUser($user)
             ;
 
@@ -73,6 +73,12 @@ class OrderController extends AbstractController
                 ->setCheckoutCompletedAt(new \DateTime())
                 ->setShippingAddress($address)
             ;
+
+            // @todo временная заглашка! все НЕ наличные методы - сразу считаются оплаченными.
+            if ($pm->getClass() != 'App\Payment\CashPayment') {
+                $order->setPaymentStatus(Order::PAYMENT_PAID);
+                $payment->setStatus(Payment::STATUS_PAID);
+            }
 
             $em->persist($payment);
             $em->flush();

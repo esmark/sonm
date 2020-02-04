@@ -10,6 +10,8 @@
 
     <p>Дата: {{ order.createdAt|date }}</p>
 
+    <p>Кооператив: {{ order.cooperative }}</p>
+
     <h3>Товары</h3>
 
     <ul>
@@ -41,7 +43,15 @@
 
         <ul>
             {% for payment in order.payments %}
-                <li>{{ payment.amount }}p - {{ payment.statusAsText }} от {{ payment.createdAt|date }}</li>
+                <li>
+                    {{ payment.amount }} p -
+
+                    <span class="badge badge-{{ payment.statusBadgeColor }}">{{ payment.statusAsText }}</span>
+
+                    <span class="badge badge-secondary">{{ payment.method }}</span>
+                    от
+                    <i>{{ payment.createdAt|date }}</i>
+                </li>
             {% endfor %}
         </ul>
     {% else %}
