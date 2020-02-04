@@ -1,0 +1,47 @@
+{% extends 'account/_layout.html.twig' %}
+
+{% block title %}Заказы - {{ parent() }}{% endblock %}
+
+{% block account_content %}
+
+    <h1>Заказы - <a href="{{ path('account_coop_show', {'id': coop.id}) }}">{{ coop }}</a></h1>
+
+    <div class="clear"></div>
+
+    <p>Всего: {{ orders|length }}</p>
+
+    <table class="table table-bordered table-hover">
+        <thead>
+        <tr>
+            <th>Номер</th>
+            <th>Товары</th>
+            <th>Сумма</th>
+            <th>Статус</th>
+            <th>Статус платежа</th>
+            <th>Статус доставки</th>
+            <th>Дата</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for order in orders %}
+            <tr>
+{#                <td><a href="{{ path('account_order_edit', {'id': order.id}) }}">{{ order.id }}</a></td>#}
+                <td>{{ order.id }}</td>
+                <td>
+                    <ul>
+                    {% for line in order.lines %}
+                        <li>{{ line.productVariant.product }} ({{ line.productVariant }}) {{ line.price }} p x {{ line.quantity }} = {{ line.price * line.quantity }} p</li>
+                    {% endfor %}
+                    </ul>
+                </td>
+                <td>{{ order.amount }}</td>
+                <td>{{ order.statusAsText }}</td>
+                <td>{{ order.paymentStatus }}</td>
+                <td>{{ order.shippingStatus }}</td>
+                <td>{{ order.createdAt|date }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

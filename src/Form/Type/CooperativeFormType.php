@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Form\Type;
 
 use App\Entity\Cooperative;
-use App\Entity\PaymentMethod;
 use App\Entity\PickUpLocation;
 use App\Entity\Program;
 use App\Entity\TaxRate;
@@ -63,9 +62,6 @@ class CooperativeFormType extends AbstractType
                     return $er->createQueryBuilder('e')->orderBy('e.percent', 'ASC');
                 },
                 'required' => false,
-//                'multiple' => true,
-//                'expanded' => true,
-//                'by_reference' => false,
             ])
 
             ->add('update', SubmitType::class, ['attr' => ['class' => 'btn-success']])

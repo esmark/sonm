@@ -4,17 +4,13 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Entity\Category;
 use App\Entity\Cooperative;
 use App\Entity\CooperativeHistory;
 use App\Entity\PickUpLocation;
 use App\Entity\Program;
-use App\Entity\TaxRate;
 use App\Entity\User;
-use App\Form\Type\CategoryFormType;
 use App\Form\Type\PickUpLocationFormType;
 use App\Form\Type\ProgramFormType;
-use App\Form\Type\TaxRateFormType;
 use App\Repository\CooperativeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -38,7 +34,7 @@ class AdminController extends AbstractController
     /**
      * @Route("/user/", name="admin_user")
      */
-    public function userIndex(Request $request, EntityManagerInterface $em): Response
+    public function userIndex(EntityManagerInterface $em): Response
     {
         return $this->render('admin/user_index.html.twig', [
             'users' => $em->getRepository(User::class)->findBy([], ['created_at' => 'DESC']),

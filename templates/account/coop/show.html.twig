@@ -6,6 +6,10 @@
 
     <p style="float: right; margin-top: 8px;">
         {% if is_allow_edit %}
+            <a href="{{ path('account_coop_orders', {'id': coop.id}) }}" class="btn btn-warning">Заказы</a>
+        {% endif %}
+
+        {% if is_allow_edit %}
             <a href="{{ path('account_coop_edit', {'id': coop.id}) }}" class="btn btn-success">Изменить</a>
         {% endif %}
 

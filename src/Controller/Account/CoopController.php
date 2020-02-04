@@ -7,6 +7,7 @@ namespace App\Controller\Account;
 use App\Entity\Cooperative;
 use App\Entity\CooperativeHistory;
 use App\Entity\CooperativeMember;
+use App\Entity\Order;
 use App\Form\Type\CooperativeCreateFormType;
 use App\Form\Type\CooperativeFormType;
 use App\Form\Type\CooperativeMemberFormType;
@@ -316,6 +317,17 @@ class CoopController extends AbstractController
         return $this->render('account/coop/member.html.twig', [
             'form'   => $form->createView(),
             'member' => $member,
+        ]);
+    }
+
+    /**
+     * @Route("/{id}/order/", name="account_coop_orders")
+     */
+    public function orders(Cooperative $coop, EntityManagerInterface $em): Response
+    {
+        return $this->render('account/coop/orders.html.twig', [
+            'coop'   => $coop,
+            'orders' => $em->getRepository(Order::class)->findBy(['cooperative' => $coop->getId()], ['created_at' => 'DESC']),
         ]);
     }
 }

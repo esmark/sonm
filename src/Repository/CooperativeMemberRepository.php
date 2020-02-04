@@ -10,21 +10,11 @@ use Doctrine\Persistence\ManagerRegistry;
 
 class CooperativeMemberRepository extends ServiceEntityRepository
 {
-    /**
-     * CooperativeMemberRepository constructor.
-     *
-     * @param ManagerRegistry $registry
-     */
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, CooperativeMember::class);
     }
 
-    /**
-     * @param $user
-     *
-     * @return CooperativeMember|null
-     */
     public function findForPending($id): ?CooperativeMember
     {
         $qb = $this->createQueryBuilder('e')

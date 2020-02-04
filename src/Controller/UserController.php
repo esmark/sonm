@@ -31,7 +31,7 @@ class UserController extends AbstractController
     /**
      * @Route("/{id}/", name="user_show")
      */
-    public function userShow(User $user, EntityManagerInterface $em): Response
+    public function userShow(User $user): Response
     {
         return $this->render('user/show.html.twig', [
             'user' => $user,

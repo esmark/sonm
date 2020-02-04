@@ -19,11 +19,6 @@ class ProductRepository extends ServiceEntityRepository
         parent::__construct($registry, Product::class);
     }
 
-    /**
-     * @param array $filters
-     *
-     * @return QueryBuilder
-     */
     public function getFindQueryBuilder(array $filters = []): QueryBuilder
     {
         $qb = $this->createQueryBuilder('e');
