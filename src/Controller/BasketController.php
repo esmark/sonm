@@ -174,6 +174,6 @@ class BasketController extends AbstractController
 
         $em->flush();
 
-        return $this->redirectToRoute('account_order');
+        return $this->redirectToRoute('account_order_edit', ['id' => $order->getId()]);
     }
 }

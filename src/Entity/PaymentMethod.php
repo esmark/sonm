@@ -54,13 +54,6 @@ class PaymentMethod
     protected $class;
 
     /**
-     * @var Cooperative[]|Collection
-     *
-     * @ORM\ManyToMany(targetEntity="Cooperative", mappedBy="paymentMethods")
-     */
-    protected $cooperatives;
-
-    /**
      * PaymentMethod constructor.
      */
     public function __construct()
@@ -134,26 +127,6 @@ class PaymentMethod
     public function setTitle(string $title): self
     {
         $this->title = $title;
-
-        return $this;
-    }
-
-    /**
-     * @return Cooperative[]|Collection
-     */
-    public function getCooperatives()
-    {
-        return $this->cooperatives;
-    }
-
-    /**
-     * @param Cooperative[]|Collection $cooperatives
-     *
-     * @return $this
-     */
-    public function setCooperatives($cooperatives): self
-    {
-        $this->cooperatives = $cooperatives;
 
         return $this;
     }

@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace App\Controller\Account;
 
+use App\Entity\Address;
 use App\Entity\Order;
+use App\Entity\Payment;
+use App\Entity\PaymentMethod;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -28,45 +31,61 @@ class OrderController extends AbstractController
     }
 
     /**
-     * @Route("/create/", name="account_order_create")
+     * @Route("/{id}/", name="account_order_edit")
      */
-    public function create(Request $request, EntityManagerInterface $em): Response
+    public function edit(Order $order, Request $request, EntityManagerInterface $em): Response
     {
         /** @var User $user */
         $user = $this->getUser();
 
-        $address = new Address();
-        $address
-            ->setUser($user)
-            ->setLastname($user->getLastname())
-            ->setFirstname($user->getFirstname())
-            ->setPatronymic($user->getPatronymic())
-            ->setPhone($user->getPhone())
-        ;
-
-        $form = $this->createForm(AddressFormType::class, $address);
-        $form->remove('update');
-
-        if ($request->isMethod('POST')) {
-            $form->handleRequest($request);
-
-            if ($form->get('cancel')->isClicked()) {
-                return $this->redirectToRoute('account_address');
-            }
-
-            if ($form->get('create')->isClicked() and $form->isValid()) {
-                $em->persist($form->getData());
-
-                $em->flush();
-
-                $this->addFlash('success', 'Адрес добавлен');
-
-                return $this->redirectToRoute('account_address');
-            }
+        if ($user->getId() !== $order->getUser()->getId()) {
+            return $this->redirectToRoute('account_order');
         }
 
-        return $this->render('account/address/create.html.twig', [
-            'form' => $form->createView(),
+        if ($request->isMethod('POST')) {
+            if ($order->getStatus() != Order::STATUS_CART) {
+                $this->addFlash('error', 'Заказ уже оформлен');
+
+                return $this->redirectToRoute('account_order_edit', ['id' => $order->getId()]);
+            }
+
+            $address = $em->find(Address::class, (int) $request->request->get('address', 0));
+            $pm = $em->find(PaymentMethod::class, (int) $request->request->get('pm', 0));
+
+            if (empty($pm)) {
+                $this->addFlash('error', 'Не верно указан метод оплаты');
+
+                return $this->redirectToRoute('account_order_edit', ['id' => $order->getId()]);
+            }
+
+            $payment = new Payment();
+            $payment
+                ->setAmount($order->getAmount())
+                ->setOrder($order)
+                ->setPaymentMethod($pm)
+                ->setUser($user)
+            ;
+
+            $order
+                ->setStatus(Order::STATUS_NEW)
+                ->setShippingStatus(Order::SHIPPING_READY)
+                ->setPaymentStatus(Order::PAYMENT_AWAITING_PAYMENT)
+                ->setCheckoutCompletedAt(new \DateTime())
+                ->setShippingAddress($address)
+            ;
+
+            $em->persist($payment);
+            $em->flush();
+
+            $this->addFlash('success', 'Заказ оформлен');
+
+            return $this->redirectToRoute('account_order');
+        }
+
+        return $this->render('account/order/edit.html.twig', [
+            'order' => $order,
+            'addresses' => $em->getRepository(Address::class)->findBy(['user' => $user]),
+            'payment_methods' => $em->getRepository(PaymentMethod::class)->findBy(['is_enabled' => true]),
         ]);
     }
 }

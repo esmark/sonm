@@ -1,0 +1,86 @@
+{% extends 'account/_layout.html.twig' %}
+
+{% block title %}Заказ - {{ parent() }}{% endblock %}
+
+{% block account_content %}
+
+    <h2>Заказ # {{ order.id }}</h2>
+
+    <p>Статус: <b>{{ order.statusAsText }}</b></p>
+
+    <p>Дата: {{ order.createdAt|date }}</p>
+
+    <h3>Товары</h3>
+
+    <ul>
+        {% for line in order.lines %}
+            <li>{{ line.productVariant.product }} ({{ line.productVariant }}) {{ line.price }} p x {{ line.quantity }} = {{ line.price * line.quantity }} p</li>
+        {% endfor %}
+    </ul>
+
+    <p>Итого на сумму: <b>{{ order.amount }}</b> p</p>
+
+    {% if order.status != 0 %}
+        <h3>Адрес доставки</h3>
+
+        {% if order.shippingAddress is empty %}
+            <p>не указан</p>
+        {% else %}
+            {{ order.shippingAddress }}
+        {% endif %}
+
+        <br>
+
+        <h3>Способ доставки</h3>
+
+        <p>@todo </p>
+
+        <br>
+
+        <h3>Оплата</h3>
+
+        <ul>
+            {% for payment in order.payments %}
+                <li>{{ payment.amount }}p - {{ payment.statusAsText }} от {{ payment.createdAt|date }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <form method="post">
+
+            <h3>Адрес доставки</h3>
+
+            {% if addresses is empty %}
+                <p><a href="{{ path('account_address_create') }}">Добавьте адрес, а затем вернитесь к оформлению заказа</a></p>
+            {% else %}
+                <select name="address">
+                    {% for address in addresses %}
+                        <option value="{{ address.id }}">{{ address }}</option>
+                    {% endfor %}
+                </select>
+                <br>
+            {% endif %}
+
+            <br>
+
+            <h3>Способ доставки</h3>
+
+            <p>@todo </p>
+
+            <br>
+
+            <h3>Выберите метод оплаты</h3>
+
+            <select name="pm">
+                {% for pm in payment_methods %}
+                    <option value="{{ pm.id }}">{{ pm }}</option>
+                {% endfor %}
+            </select>
+
+            <br>
+            <br>
+
+            <button class="btn btn-success">Оплатить <b>{{ order.amount }}</b> p</button>
+        </form>
+    {% endif %}
+
+{% endblock %}

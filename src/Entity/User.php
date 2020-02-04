@@ -307,6 +307,14 @@ class User implements UserInterface
     protected $orders;
 
     /**
+     * @var Payment[]|Collection
+     *
+     * @ORM\OneToMany(targetEntity="Payment", mappedBy="user", cascade={"persist"}, fetch="EXTRA_LAZY")
+     * @ORM\OrderBy({"created_at" = "DESC"})
+     */
+    protected $payments;
+
+    /**
      * @var CooperativeMember[]|Collection
      *
      * @ORM\OneToMany(targetEntity="CooperativeMember", mappedBy="user", cascade={"persist"}, fetch="EXTRA_LAZY")
@@ -342,6 +350,7 @@ class User implements UserInterface
         $this->orders       = new ArrayCollection();
         $this->groups       = new ArrayCollection();
         $this->oauths       = new ArrayCollection();
+        $this->payments     = new ArrayCollection();
         $this->password     = '';
         $this->roles        = [];
         $this->username     = '';
@@ -1278,6 +1287,26 @@ class User implements UserInterface
     public function setStatus(?string $status): self
     {
         $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * @return Payment[]|Collection
+     */
+    public function getPayments()
+    {
+        return $this->payments;
+    }
+
+    /**
+     * @param Payment[]|Collection $payments
+     *
+     * @return $this
+     */
+    public function setPayments($payments): self
+    {
+        $this->payments = $payments;
 
         return $this;
     }

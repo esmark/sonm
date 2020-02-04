@@ -48,15 +48,6 @@ class CooperativeFormType extends AbstractType
                 'expanded' => true,
                 'by_reference' => false,
             ])
-            ->add('paymentMethods', EntityType::class, [
-                'class'         => PaymentMethod::class,
-                'query_builder' => function (EntityRepository $er) {
-                    return $er->createQueryBuilder('e')->where('e.is_enabled = true')->orderBy('e.title', 'ASC');
-                },
-                'multiple' => true,
-                'expanded' => true,
-                'by_reference' => false,
-            ])
             ->add('taxRates', EntityType::class, [
                 'class'         => TaxRate::class,
                 'query_builder' => function (EntityRepository $er) {

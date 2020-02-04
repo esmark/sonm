@@ -56,7 +56,7 @@ class ShipmentMethod
     /**
      * @var Cooperative[]|Collection
      *
-     * @ORM\ManyToMany(targetEntity="Cooperative", mappedBy="paymentMethods")
+     * @ORM\ManyToMany(targetEntity="Cooperative")
      */
     protected $cooperatives;
 

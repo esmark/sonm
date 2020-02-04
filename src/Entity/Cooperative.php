@@ -148,14 +148,6 @@ class Cooperative
     protected $programs;
 
     /**
-     * @var PaymentMethod[]|Collection
-     *
-     * @ORM\ManyToMany(targetEntity="PaymentMethod", inversedBy="cooperatives", fetch="EXTRA_LAZY")
-     * @ORM\JoinTable(name="cooperatives_payment_methods_relations")
-     */
-    protected $paymentMethods;
-
-    /**
      * @var TaxRate[]|Collection
      *
      * @ORM\ManyToMany(targetEntity="TaxRate", inversedBy="cooperatives", fetch="EXTRA_LAZY")
@@ -491,26 +483,6 @@ class Cooperative
     public function setTitle(string $title): self
     {
         $this->title = $title;
-
-        return $this;
-    }
-
-    /**
-     * @return PaymentMethod[]|Collection
-     */
-    public function getPaymentMethods(): Collection
-    {
-        return $this->paymentMethods;
-    }
-
-    /**
-     * @param PaymentMethod[]|Collection $paymentMethods
-     *
-     * @return $this
-     */
-    public function setPaymentMethods(Collection $paymentMethods): self
-    {
-        $this->paymentMethods = $paymentMethods;
 
         return $this;
     }

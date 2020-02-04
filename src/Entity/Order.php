@@ -45,6 +45,30 @@ class Order
         self::STATUS_COMPLETED  => 'Выполненный',
     ];
 
+    const CHECKOUT_CART              = 'cart';              // Начало оформления заказа
+    const CHECKOUT_COMPLETED         = 'completed';         // Оформлен
+    const CHECKOUT_ADDRESSED         = 'addressed';         // Выбор адреса доставки
+    const CHECKOUT_SHIPPING_SELECTED = 'shipping_selected'; // Метод доставки выбран
+    const CHECKOUT_SHIPPING_SKIPPED  = 'shipping_skipped';  // Метод доставки пропущен
+    const CHECKOUT_PAYMENT_SELECTED  = 'payment_selected';  // Метод платежа выбран
+    const CHECKOUT_PAYMENT_SKIPPED   = 'payment_skipped';   // Метод платежа пропущен
+
+    const SHIPPING_CART              = 'cart';              // Начало оформления заказа
+    const SHIPPING_READY             = 'ready';             // Готово к отправке
+    const SHIPPING_CANCELLED         = 'cancelled';         // Доставка отменена
+    const SHIPPING_PARTIALLY_SHIPPED = 'partially_shipped'; // Частично отгруженный @todo ?
+    const SHIPPING_SHIPPED           = 'shipped';           // Отгруженный
+
+    const PAYMENT_CART                  = 'cart';                 // Начало оформления заказа
+    const PAYMENT_AWAITING_PAYMENT      = 'awaiting_payment';     // Ожидание оплаты
+    const PAYMENT_PARTIALLY_AUTHORIZED  = 'partially_authorized'; // Частичнй @todo ?
+    const PAYMENT_AUTHORIZED            = 'authorized';           // @todo ?
+    const PAYMENT_PARTIALLY_PAID        = 'partially_paid';       // Частичнй оплачен @todo ?
+    const PAYMENT_CANCELLED             = 'cancelled';            // Отменён
+    const PAYMENT_PAID                  = 'paid';                 // Оплачен
+    const PAYMENT_PARTIALLY_REFUNDED    = 'partially_refunded';   // Частичнй возврат @todo ?
+    const PAYMENT_REFUNDED              = 'refunded';             // Возврат
+
     /**
      * Сумма заказа
      *
@@ -53,6 +77,22 @@ class Order
      * @ORM\Column(type="integer", nullable=false)
      */
     protected $amount;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string", length=16, nullable=false)
+     */
+    protected $checkoutStatus;
+
+    /**
+     * Дата завершения оформления заказа
+     *
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    protected $checkoutCompletedAt;
 
     /**
      * @var string
@@ -66,7 +106,7 @@ class Order
      *
      * @var string
      *
-     * @ORM\Column(type="smallint", nullable=false)
+     * @ORM\Column(type="string", length=24, nullable=false)
      */
     protected $paymentStatus;
 
@@ -75,7 +115,7 @@ class Order
      *
      * @var string
      *
-     * @ORM\Column(type="string", length=32, nullable=false)
+     * @ORM\Column(type="string", length=24, nullable=false)
      */
     protected $shippingStatus;
 
@@ -89,7 +129,7 @@ class Order
     /**
      * Адрес доставки
      *
-     * @var Address
+     * @var Address|null
      *
      * @ORM\ManyToOne(targetEntity="Address")
      */
@@ -123,11 +163,13 @@ class Order
      */
     public function __construct()
     {
-        $this->created_at    = new \DateTime();
-        $this->status        = self::STATUS_CART;
-        $this->lines         = new ArrayCollection();
-        $this->payments      = new ArrayCollection();
-        $this->paymentStatus = Payment::STATUS_CART;
+        $this->checkoutStatus = self::CHECKOUT_CART;
+        $this->created_at     = new \DateTime();
+        $this->status         = self::STATUS_CART;
+        $this->lines          = new ArrayCollection();
+        $this->payments       = new ArrayCollection();
+        $this->paymentStatus  = self::PAYMENT_CART;
+        $this->shippingStatus = self::SHIPPING_CART;
     }
 
     /**
@@ -271,19 +313,19 @@ class Order
     }
 
     /**
-     * @return Address
+     * @return Address|null
      */
-    public function getShippingAddress(): Address
+    public function getShippingAddress(): ?Address
     {
         return $this->shippingAddress;
     }
 
     /**
-     * @param Address $shippingAddress
+     * @param Address|null $shippingAddress
      *
      * @return $this
      */
-    public function setShippingAddress(Address $shippingAddress): self
+    public function setShippingAddress(?Address $shippingAddress): self
     {
         $this->shippingAddress = $shippingAddress;
 
@@ -306,6 +348,46 @@ class Order
     public function setPayments(Collection $payments): self
     {
         $this->payments = $payments;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCheckoutStatus(): string
+    {
+        return $this->checkoutStatus;
+    }
+
+    /**
+     * @param string $checkoutStatus
+     *
+     * @return $this
+     */
+    public function setCheckoutStatus(string $checkoutStatus): self
+    {
+        $this->checkoutStatus = $checkoutStatus;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getCheckoutCompletedAt(): \DateTime
+    {
+        return $this->checkoutCompletedAt;
+    }
+
+    /**
+     * @param \DateTime $checkoutCompletedAt
+     *
+     * @return $this
+     */
+    public function setCheckoutCompletedAt(\DateTime $checkoutCompletedAt): self
+    {
+        $this->checkoutCompletedAt = $checkoutCompletedAt;
 
         return $this;
     }
