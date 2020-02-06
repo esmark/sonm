@@ -57,7 +57,7 @@ git clone https://github.com/esmark/sonm.git
 cd sonm
 ```
 
-Инициализация приолжения:
+Инициализация приложения (займёт примерно 10 минут):
 
 ```
 make init
