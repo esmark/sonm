@@ -137,7 +137,7 @@
                 <tbody>
                 {% for product in coop.products %}
                     <tr>
-                        <td><a href="#{{ path('account_product_edit', {'id': product.id}) }}">{{ product.title }}</a></td>
+                        <td><a href="{{ path('marketplace_item', {'id': product.id}) }}">{{ product.title }}</a></td>
                         <td>{{ product.shortDescription }}</td>
                         <td>
                             {{ product.priceRange }}
