@@ -68,6 +68,18 @@ RUN docker-php-ext-configure gd \
 
 # RUN pecl install xdebug && docker-php-ext-enable xdebug
 
+RUN pecl install dbase && docker-php-ext-enable dbase
+
+# RUN apt-get install -y libssh2-1-dev libssh2-1
+# RUN pecl install ssh2 && docker-php-ext-enable ssh2
+#RUN wget -O pecl-networking-ssh2-php7.zip https://github.com/Sean-Der/pecl-networking-ssh2/archive/php7.zip \
+#    && unzip pecl-networking-ssh2-php7.zip \
+#    && cd pecl-networking-ssh2-php7 \
+#    && phpize \
+#    && ./configure \
+#    && make && make install
+#    && cd ../ && rm -rf pecl-networking-ssh2-php7
+
 # COPY ./php/opcache.ini /usr/local/etc/php/conf.d/opcache.ini
 # COPY ./php/xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
 
