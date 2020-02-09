@@ -32,6 +32,8 @@ class AdminController extends AbstractController
     }
 
     /**
+     * @todo pagination
+     *
      * @Route("/user/", name="admin_user")
      */
     public function userIndex(EntityManagerInterface $em): Response
@@ -42,6 +44,8 @@ class AdminController extends AbstractController
     }
 
     /**
+     * @todo pagination
+     *
      * @Route("/coop/", name="admin_coop")
      */
     public function coopIndex(CooperativeRepository $cooperativeRepository): Response
@@ -104,6 +108,9 @@ class AdminController extends AbstractController
     }
 
     /**
+     * @todo pagination
+     * @todo вынести в нс админ
+     *
      * @Route("/pick_up_location/", name="admin_pick_up_location")
      */
     public function pickUpLocation(EntityManagerInterface $em): Response
@@ -175,6 +182,8 @@ class AdminController extends AbstractController
     }
 
     /**
+     * @todo pagination
+     *
      * @Route("/program/", name="admin_program")
      */
     public function program(EntityManagerInterface $em): Response

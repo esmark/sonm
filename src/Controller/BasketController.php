@@ -25,7 +25,7 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @Route("/basket")
  *
- * IsGranted("ROLE_USER")
+ * @IsGranted("ROLE_USER")
  */
 class BasketController extends AbstractController
 {
@@ -39,7 +39,8 @@ class BasketController extends AbstractController
 
         /** @var Basket $basket */
         foreach ($this->getUser()->getBaskets() as $basket) {
-            $coops[$basket->getProductVariant()->getCooperative()->getId()] = $basket->getProductVariant()->getCooperative();
+            $coop = $basket->getProductVariant()->getCooperative();
+            $coops[$coop->getId()] = $coop;
         }
 
         return $this->render('basket/index.html.twig', [
@@ -101,12 +102,12 @@ class BasketController extends AbstractController
             return new JsonResponse($data);
         }
 
-        $basket = $em->getRepository(Basket::class)->findOneBy(['user' => $this->getUser(), 'productVariant' => $variant]);
+        $basket = $em->getRepository(Basket::class)->findOneBy(['user' => $user, 'productVariant' => $variant]);
 
         if (empty($basket)) {
             $basket = new Basket();
             $basket
-                ->setUser($this->getUser())
+                ->setUser($user)
                 ->setProductVariant($variant)
             ;
         }

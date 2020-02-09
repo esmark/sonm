@@ -17,12 +17,17 @@ use Symfony\Component\Routing\Annotation\Route;
 class PaymentController extends AbstractController
 {
     /**
+     * @todo pagination
+     *
      * @Route("/", name="account_payment")
      */
     public function index(EntityManagerInterface $em): Response
     {
         return $this->render('account/payment/index.html.twig', [
-            'payments' => $em->getRepository(Payment::class)->findBy(['user' => $this->getUser()->getId()], ['created_at' => 'DESC']),
+            'payments' => $em->getRepository(Payment::class)->findBy(
+                ['user' => $this->getUser()],
+                ['created_at' => 'DESC']
+            ),
         ]);
     }
 }

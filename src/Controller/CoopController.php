@@ -20,6 +20,8 @@ use Symfony\Component\Routing\Annotation\Route;
 class CoopController extends AbstractController
 {
     /**
+     * @todo pagination
+     *
      * @Route("/", name="coop")
      */
     public function index(CooperativeRepository $cooperativeRepository): Response
@@ -41,7 +43,7 @@ class CoopController extends AbstractController
             throw $this->createNotFoundException('Нет такого кооператива');
         }
 
-        if ($request->query->has('entry_request')) {
+        if ($request->query->has('entry_request')) { // @todo вынести в отдельный метод
             if ($coop->getMemberByUser($this->getUser())) {
                 $this->addFlash('error', 'Уже участник');
             } else {

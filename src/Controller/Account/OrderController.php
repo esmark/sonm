@@ -21,12 +21,17 @@ use Symfony\Component\Routing\Annotation\Route;
 class OrderController extends AbstractController
 {
     /**
+     * @todo pagination
+     *
      * @Route("/", name="account_order")
      */
     public function index(EntityManagerInterface $em): Response
     {
         return $this->render('account/order/index.html.twig', [
-            'orders' => $em->getRepository(Order::class)->findBy(['user' => $this->getUser()], ['created_at' => 'DESC']),
+            'orders' => $em->getRepository(Order::class)->findBy(
+                ['user' => $this->getUser()],
+                ['created_at' => 'DESC']
+            ),
         ]);
     }
 

@@ -17,6 +17,8 @@ use Symfony\Component\Routing\Annotation\Route;
 class OrderController extends AbstractController
 {
     /**
+     * @todo pagination
+     *
      * @Route("/", name="admin_order")
      */
     public function index(EntityManagerInterface $em): Response

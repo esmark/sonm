@@ -19,6 +19,8 @@ use Symfony\Component\Routing\Annotation\Route;
 class PaymentController extends AbstractController
 {
     /**
+     * @todo pagination
+     *
      * @Route("/", name="admin_payment")
      */
     public function index(EntityManagerInterface $em): Response

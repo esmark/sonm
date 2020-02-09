@@ -18,6 +18,8 @@ use Symfony\Component\Routing\Annotation\Route;
 class MarketplaceController extends AbstractController
 {
     /**
+     * @todo pagination
+     *
      * @Route("/", name="marketplace")
      */
     public function index(Request $request, EntityManagerInterface $em): Response
