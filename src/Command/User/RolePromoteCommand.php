@@ -2,10 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Command;
+namespace App\Command\User;
 
 use App\Entity\User;
-use App\Utils\UserValidator;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -13,38 +12,33 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
-class UserChangePasswordCommand extends Command
+class RolePromoteCommand extends Command
 {
-    protected static $defaultName = 'user:change-password';
+    protected static $defaultName = 'user:role:promote';
 
     /** @var SymfonyStyle */
     protected $io;
     protected $em;
-    protected $passwordEncoder;
-    protected $validator;
 
     /**
-     * UserEnableCommand constructor.
+     * UserRolePromoteCommand constructor.
      *
      * @param EntityManagerInterface $em
      */
-    public function __construct(EntityManagerInterface $em, UserPasswordEncoderInterface $encoder, UserValidator $validator)
+    public function __construct(EntityManagerInterface $em)
     {
         parent::__construct();
 
         $this->em = $em;
-        $this->passwordEncoder = $encoder;
-        $this->validator = $validator;
     }
 
     protected function configure()
     {
         $this
-            ->setDescription('Change password for a user')
+            ->setDescription('Promotes a user by adding a role')
             ->addArgument('username', InputArgument::REQUIRED, 'The username')
-            ->addArgument('password', InputArgument::OPTIONAL, 'The plain password of the user')
+            ->addArgument('role', InputArgument::OPTIONAL, 'The role')
         ;
     }
 
@@ -71,13 +65,12 @@ class UserChangePasswordCommand extends Command
             $input->setArgument('username', $username);
         }
 
-        // Ask for the password if it's not defined
-        $password = $input->getArgument('password');
-        if (null !== $password) {
-            $this->io->text(' > <info>Password</info>: '.str_repeat('*', mb_strlen($password)));
+        $role = $input->getArgument('role');
+        if (null !== $role) {
+            $this->io->text(' > <info>Role</info>: '.$role);
         } else {
-            $password = $this->io->askHidden('Password (your type will be hidden)', [$this->validator, 'validatePassword']);
-            $input->setArgument('password', $password);
+            $role = $this->io->ask('Role');
+            $input->setArgument('role', $role);
         }
     }
 
@@ -85,14 +78,13 @@ class UserChangePasswordCommand extends Command
      * @param InputInterface  $input
      * @param OutputInterface $output
      *
-     * @return int
+     * @return int|void
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $username = $input->getArgument('username');
-        $plainPassword = $input->getArgument('password');
+        $role = $input->getArgument('role');
 
-        /** @var User $user */
         $user = $this->em->getRepository(User::class)->findOneByUsername($username);
 
         if (empty($user)) {
@@ -101,15 +93,17 @@ class UserChangePasswordCommand extends Command
             return 0;
         }
 
-        $this->validator->validatePassword($plainPassword);
+        if ($user->hasRole($role)) {
+            $this->io->warning(sprintf('User "%s" did already have "%s" role.', $username, $role));
 
-        // See https://symfony.com/doc/current/book/security.html#security-encoding-password
-        $encodedPassword = $this->passwordEncoder->encodePassword($user, $plainPassword);
-        $user->setPassword($encodedPassword);
+            return 0;
+        }
+
+        $user->addRole($role);
 
         $this->em->flush();
 
-        $this->io->success(sprintf('Password for user "%s" was successfully updated.', $username));
+        $this->io->success(sprintf('User "%s" has been promoted as a super administrator. This change will not apply until the user logs out and back in again.', $username));
 
         return 0;
     }

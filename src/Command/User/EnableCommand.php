@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Command;
+namespace App\Command\User;
 
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
@@ -13,9 +13,9 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-class UserDisableCommand extends Command
+class EnableCommand extends Command
 {
-    protected static $defaultName = 'user:disable';
+    protected static $defaultName = 'user:enable';
 
     /** @var SymfonyStyle */
     protected $io;
@@ -36,7 +36,7 @@ class UserDisableCommand extends Command
     protected function configure()
     {
         $this
-            ->setDescription('Deactivate a user')
+            ->setDescription('Activate a user')
             ->addArgument('username', InputArgument::REQUIRED, 'The username')
         ;
     }
@@ -84,17 +84,17 @@ class UserDisableCommand extends Command
             return 0;
         }
 
-        if (!$user->isEnabled()) {
-            $this->io->warning(sprintf('User "%s" is already disabled.', $username));
+        if ($user->isEnabled()) {
+            $this->io->warning(sprintf('User "%s" is already enabled.', $username));
 
             return 0;
         }
 
-        $user->setIsEnabled(false);
+        $user->setIsEnabled(true);
 
         $this->em->flush();
 
-        $this->io->success(sprintf('User "%s" has been disabled.', $username));
+        $this->io->success(sprintf('User "%s" has been enabled.', $username));
 
         return 0;
     }

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Command;
+namespace App\Command\User;
 
 use App\Entity\User;
 use App\Repository\UserRepository;
@@ -18,7 +18,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Stopwatch\Stopwatch;
 
-class UserAddCommand extends Command
+class AddCommand extends Command
 {
     protected static $defaultName = 'user:add';
 

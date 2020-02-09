@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Command;
+namespace App\Command\User;
 
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
@@ -13,7 +13,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-class UserListCommand extends Command
+class ListCommand extends Command
 {
     protected static $defaultName = 'user:list';
 
