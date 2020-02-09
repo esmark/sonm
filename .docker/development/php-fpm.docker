@@ -70,6 +70,9 @@ RUN docker-php-ext-configure gd \
 
 RUN pecl install dbase && docker-php-ext-enable dbase
 
+RUN apt-get install -y libcurl4-gnutls-dev
+RUN pecl install oauth && docker-php-ext-enable oauth
+
 # RUN apt-get install -y libssh2-1-dev libssh2-1
 # RUN pecl install ssh2 && docker-php-ext-enable ssh2
 #RUN wget -O pecl-networking-ssh2-php7.zip https://github.com/Sean-Der/pecl-networking-ssh2/archive/php7.zip \
