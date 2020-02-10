@@ -28,11 +28,6 @@ class ListCommand extends Command
         ;
     }
 
-    /**
-     * WitnessListCommand constructor.
-     *
-     * @param EntityManagerInterface $em
-     */
     public function __construct(EntityManagerInterface $em)
     {
         parent::__construct();
