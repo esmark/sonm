@@ -19,9 +19,11 @@ use App\Form\Type\WorksheetFormType;
 use App\Repository\UserRepository;
 use App\Utils\UserValidator;
 use Doctrine\ORM\EntityManagerInterface;
+use GeoIp2\Exception\AddressNotFoundException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\Cache\CacheItem;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Contracts\Cache\ItemInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -194,8 +196,18 @@ class AccountController extends AbstractController
     /**
      * @Route("/profile/", name="account_profile")
      */
-    public function profile(Request $request, EntityManagerInterface $em): Response
+    public function profile(Request $request, EntityManagerInterface $em, ContainerInterface $container): Response
     {
+        $geoIpService = $container->get('cravler_max_mind_geo_ip.service.geo_ip_service');
+
+        $city = '-';
+        try {
+            $record = $geoIpService->getRecord($request->getClientIp(), 'city', ['locales' => ['ru']]);
+            $city = $record->city->name;
+        } catch (AddressNotFoundException $e) {
+            // dummy
+        }
+
         $form = $this->createForm(UserFormType::class, $this->getUser());
 
         if ($request->isMethod('POST')) {
@@ -212,6 +224,7 @@ class AccountController extends AbstractController
         }
 
         return $this->render('account/profile.html.twig', [
+            'city' => $city,
             'form' => $form->createView(),
         ]);
     }
