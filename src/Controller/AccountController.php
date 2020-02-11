@@ -206,6 +206,8 @@ class AccountController extends AbstractController
             $city = $record->city->name;
         } catch (AddressNotFoundException $e) {
             // dummy
+        } catch (\InvalidArgumentException $e) {
+            // dummy
         }
 
         $form = $this->createForm(UserFormType::class, $this->getUser());
