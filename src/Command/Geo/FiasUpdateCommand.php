@@ -20,9 +20,9 @@ use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Stopwatch\Stopwatch;
 
-class UpdateCommand extends Command
+class FiasUpdateCommand extends Command
 {
-    protected static $defaultName = 'app:geo:update';
+    protected static $defaultName = 'app:geo:fias-update';
 
     /** @var SymfonyStyle */
     private $io;
@@ -78,6 +78,7 @@ class UpdateCommand extends Command
         $stopwatch = new Stopwatch();
         $stopwatch->start(md5(__FILE__));
         $this->startTime = microtime(true);
+        $count = 0;
         $em = $this->em;
         $fiasDir = $this->kernel->getProjectDir() . '/var/fias';
 
@@ -112,7 +113,6 @@ class UpdateCommand extends Command
                 $streets = [];
                 $buildings = [];
 
-                $count = 0;
                 $dbFlushCount = 0;
                 for ($i = 1; $i <= dbase_numrecords($db); $i++) {
                     $rec = dbase_get_record_with_names($db, $i);
