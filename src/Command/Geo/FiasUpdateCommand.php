@@ -43,6 +43,10 @@ class FiasUpdateCommand extends Command
     {
         parent::__construct();
 
+        if(!function_exists('dbase_open')) {
+            require_once $kernel->getProjectDir().'/src/Utils/DBase.php';
+        }
+
         $this->em     = $em;
         $this->kernel = $kernel;
     }
@@ -104,6 +108,7 @@ class FiasUpdateCommand extends Command
 
                 $this->io->writeln('Импорт: ' . $file->getFilename() . ' (' . $size . 'Mb)');
 
+                //$db = \App\Utils\dbase_open($file->getPathname(), DBASE_RDONLY);
                 $db = dbase_open($file->getPathname(), DBASE_RDONLY);
 
                 $regions = [];
@@ -208,7 +213,7 @@ class FiasUpdateCommand extends Command
                                 ->setAoid($rec['AOID'])
                                 ->setAoguid($rec['AOGUID'])
                                 ->setAreacode($rec['AREACODE'])
-                                ->setCentstatus($rec['CENTSTATUS'])
+                                ->setCentstatus((int) $rec['CENTSTATUS'])
                                 ->setCitycode($rec['CITYCODE'])
                                 ->setPlaincode($rec['PLAINCODE'])
                                 ->setIfnsfl($rec['IFNSFL'])
@@ -250,7 +255,7 @@ class FiasUpdateCommand extends Command
                                 ->setAoid($rec['AOID'])
                                 ->setAoguid($rec['AOGUID'])
                                 ->setAreacode($rec['AREACODE'])
-                                ->setCentstatus($rec['CENTSTATUS'])
+                                ->setCentstatus((int) $rec['CENTSTATUS'])
                                 ->setCitycode($rec['CITYCODE'])
                                 ->setPlaincode($rec['PLAINCODE'])
                                 ->setPlacecode($rec['PLACECODE'])
@@ -350,7 +355,7 @@ class FiasUpdateCommand extends Command
 //                dump('OK !');
             }
         } else {
-            $this->io->error('Папка отсутсвует: '.$fiasDir);
+            $this->io->error("В папке {$fiasDir} отсутсвуют файлы ADDROB*.DBF");
         }
 
 //        dump(mb_convert_encoding($settlements, "UTF-8", 'CP-866'));

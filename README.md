@@ -1,9 +1,7 @@
-СОНМ
-====
+# СОНМ
 
+## Установка
 
-Установка
----------
 
 Создать БД PostgreSQL
 
@@ -45,6 +43,23 @@ bin/console doctrine:migrations:migrate --no-interaction
 ```    
 bin/clear_cache
 ```
+
+## Гео-базы
+
+### ФИАС
+
+Создать в папку `/var/fias` и скопировать туда файлы нужных регионов `ADDROB*.DBF`, которые можно получить из архива `fias_dbf.rar` который можно скачать с сайта https://fias.nalog.ru/Updates
+
+Для импортирования данных ФИАС в БД, выполнить команду:
+
+```
+bin/console app:geo:fias-update -vvv
+```
+
+### MaxMind GeoLite2
+
+Для распознования по IP адресу, зарегистрироваться на https://dev.maxmind.com/geoip/geoip2/geolite2/ 
+и скачать файл `GeoLite2-City.mmdb`, который нужно будет расположить по данному пути: `/var/MaxMind/GeoLite2-City.mmdb`  
 
 Запуск в Docker
 ---------------
