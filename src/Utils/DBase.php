@@ -352,7 +352,7 @@ class DBase {
     }
 }
 
-//if(!function_exists('dbase_open')) {
+if(!function_exists('dbase_open')) {
     function dbase_open($filename, $mode) { return DBase::open($filename, $mode); }
     function dbase_create($filename, $fields, $type = DBASE_TYPE_DBASE) { return DBase::create($filename, $fields, $type); }
     function dbase_close($dbase_identifier) { return $dbase_identifier->close(); }
@@ -365,4 +365,4 @@ class DBase {
     function dbase_get_record($dbase_identifier, $record_number) { return $dbase_identifier->get_record($record_number); }
     function dbase_get_record_with_names($dbase_identifier, $record_number) { return $dbase_identifier->get_record_with_names($record_number); }
     function dbase_pack($dbase_identifier) { return $dbase_identifier->pack(); }
-//}
+}
