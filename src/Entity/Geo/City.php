@@ -16,11 +16,12 @@ use Smart\CoreBundle\Doctrine\ColumnTrait;
  * @ORM\Table(name="geo_cities",
  *      indexes={
  *          @ORM\Index(columns={"created_at"}),
- *          @ORM\Index(columns={"offname"}),
  *          @ORM\Index(columns={"areacode"}),
+ *          @ORM\Index(columns={"centstatus"}),
+ *          @ORM\Index(columns={"name_canonical"}),
+ *          @ORM\Index(columns={"offname"}),
  *          @ORM\Index(columns={"population"}),
  *          @ORM\Index(columns={"regioncode"}),
- *          @ORM\Index(columns={"centstatus"}),
  *          @ORM\Index(columns={"iso_code"}),
  *      }
  * )
@@ -40,6 +41,7 @@ class City
     use Columns\OffnameTrait;
     use Columns\OkatoTrait;
     use Columns\OktmoTrait;
+    use Columns\NameCanonicalTrait;
     use Columns\ShortnameTrait;
     use Columns\RegioncodeTrait;
     use Columns\PlaincodeTrait;
@@ -52,6 +54,14 @@ class City
     use Columns\IfnsulTrait;
     use Columns\TerrifnsflTrait;
     use Columns\TerrifnsulTrait;
+
+    /**
+     * @var Abbreviation
+     *
+     * @ORM\ManyToOne(targetEntity="Abbreviation", cascade={"persist"}, fetch="EXTRA_LAZY")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    protected $abbreviation;
 
     /**
      * @var Province
@@ -79,7 +89,8 @@ class City
      */
     public function __construct()
     {
-        $this->created_at = new \DateTime();
+        $this->created_at  = new \DateTime();
+        $this->settlements = new ArrayCollection();
     }
 
     /**
@@ -88,6 +99,26 @@ class City
     public function __toString(): string
     {
         return $this->getOffname() . ' ' . $this->getShortname() . '.';
+    }
+
+    /**
+     * @return Abbreviation
+     */
+    public function getAbbreviation(): Abbreviation
+    {
+        return $this->abbreviation;
+    }
+
+    /**
+     * @param Abbreviation $abbreviation
+     *
+     * @return $this
+     */
+    public function setAbbreviation(Abbreviation $abbreviation): self
+    {
+        $this->abbreviation = $abbreviation;
+
+        return $this;
     }
 
     /**
@@ -128,5 +159,13 @@ class City
         $this->region = $region;
 
         return $this;
+    }
+
+    /**
+     * @return Settlement[]|Collection
+     */
+    public function getSettlements(): Collection
+    {
+        return $this->settlements;
     }
 }

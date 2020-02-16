@@ -17,7 +17,8 @@ use Smart\CoreBundle\Doctrine\ColumnTrait;
  *          @ORM\Index(columns={"iso_code"}),
  *      },
  *      uniqueConstraints={
- *          @ORM\UniqueConstraint(columns={"regioncode"}),
+ *          @ORM\UniqueConstraint(columns={"fullname_canonical"}),
+ *          @ORM\UniqueConstraint(columns={"okato"}),
  *          @ORM\UniqueConstraint(columns={"okato"}),
  *      }
  * )
@@ -36,9 +37,27 @@ class Region
     use Columns\IfnsulTrait;
     use Columns\OffnameTrait;
     use Columns\OkatoTrait;
+    use Columns\FullnameTrait;
     use Columns\ShortnameTrait;
     use Columns\PlaincodeTrait;
     use Columns\IsoCodeTrait;
+
+    /**
+     * Полное наименование типа объекта (в нижнем регистре - для поиска)
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", length=120, nullable=false)
+     */
+    protected $fullname_canonical;
+
+    /**
+     * @var Abbreviation
+     *
+     * @ORM\ManyToOne(targetEntity="Abbreviation", cascade={"persist"}, fetch="EXTRA_LAZY")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    protected $abbreviation;
 
     /**
      * @var Province[]|Collection
@@ -73,6 +92,26 @@ class Region
     }
 
     /**
+     * @return Abbreviation
+     */
+    public function getAbbreviation(): Abbreviation
+    {
+        return $this->abbreviation;
+    }
+
+    /**
+     * @param Abbreviation $abbreviation
+     *
+     * @return $this
+     */
+    public function setAbbreviation(Abbreviation $abbreviation): self
+    {
+        $this->abbreviation = $abbreviation;
+
+        return $this;
+    }
+
+    /**
      * @return City[]|Collection
      */
     public function getCities()
@@ -88,6 +127,26 @@ class Region
     public function setCities($cities): self
     {
         $this->cities = $cities;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFullnameCanonical(): string
+    {
+        return $this->fullname_canonical;
+    }
+
+    /**
+     * @param string $fullname_canonical
+     *
+     * @return $this
+     */
+    public function setFullnameCanonical(string $fullname_canonical): self
+    {
+        $this->fullname_canonical = trim($fullname_canonical);
 
         return $this;
     }

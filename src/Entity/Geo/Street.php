@@ -38,6 +38,7 @@ class Street
     use Columns\OffnameTrait;
     use Columns\OkatoTrait;
     use Columns\OktmoTrait;
+    use Columns\NameCanonicalTrait;
     use Columns\ShortnameTrait;
     use Columns\RegioncodeTrait;
     use Columns\PlaincodeTrait;
@@ -48,6 +49,14 @@ class Street
     use Columns\IfnsulTrait;
     use Columns\TerrifnsflTrait;
     use Columns\TerrifnsulTrait;
+
+    /**
+     * @var Abbreviation
+     *
+     * @ORM\ManyToOne(targetEntity="Abbreviation", cascade={"persist"}, fetch="EXTRA_LAZY")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    protected $abbreviation;
 
     /**
      * @var City|null
@@ -91,6 +100,26 @@ class Street
     public function __toString(): string
     {
         return $this->getOffname() . ' ' . $this->getShortname() . '.';
+    }
+
+    /**
+     * @return Abbreviation
+     */
+    public function getAbbreviation(): Abbreviation
+    {
+        return $this->abbreviation;
+    }
+
+    /**
+     * @param Abbreviation $abbreviation
+     *
+     * @return $this
+     */
+    public function setAbbreviation(Abbreviation $abbreviation): self
+    {
+        $this->abbreviation = $abbreviation;
+
+        return $this;
     }
 
     /**

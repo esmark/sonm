@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Command\Geo;
 
+use App\Entity\Geo\Abbreviation;
 use App\Entity\Geo\City;
 use App\Entity\Geo\Province;
 use App\Entity\Geo\Region;
@@ -94,6 +95,37 @@ class FiasUpdateCommand extends Command
             return 0;
         }
 
+        if (file_exists($fiasDir.'/SOCRBASE.DBF')) {
+            $this->io->writeln('Импорт: SOCRBASE.DBF');
+
+            $db = dbase_open($fiasDir.'/SOCRBASE.DBF', DBASE_RDONLY);
+
+            for ($i = 1; $i <= dbase_numrecords($db); $i++) {
+                $rec = dbase_get_record_with_names($db, $i);
+
+                $abbreviation = $em->getRepository(Abbreviation::class)->findOneBy(['code' => $rec['KOD_T_ST']]);
+
+                if (empty($abbreviation)) {
+                    $abbreviation = new Abbreviation();
+                    $abbreviation
+                        ->setCode((int) $rec['KOD_T_ST'])
+                        ->setFullname(mb_convert_encoding($rec['SOCRNAME'], 'UTF-8', 'CP-866'))
+                        ->setShortname(mb_convert_encoding($rec['SCNAME'], 'UTF-8', 'CP-866'))
+                        ->setLevel((int) $rec['LEVEL'])
+                    ;
+
+                    $em->persist($abbreviation);
+                    $em->flush();
+                }
+            }
+
+            dbase_close($db);
+        } else {
+            $this->io->error('Файл SOCRBASE.DBF отсутсвует');
+
+            return 0;
+        }
+
         $finder = new Finder();
         $files = $finder
             ->ignoreDotFiles(true)
@@ -143,8 +175,16 @@ class FiasUpdateCommand extends Command
                         $region = $em->getRepository(Region::class)->findOneBy(['aoid' => $rec['AOID']]);
 
                         if (empty($region)) {
+                            $abbreviation = $em->getRepository(Abbreviation::class)->findOneBy([
+                                'level' => 1,
+                                'shortname' => mb_convert_encoding(trim($rec['SHORTNAME']), 'UTF-8', 'CP-866')
+                            ]);
+
+                            $fullname = mb_convert_encoding(trim($rec['OFFNAME']), 'UTF-8', 'CP-866') . ' ' . $abbreviation->getFullname();
+
                             $region = new Region();
                             $region
+                                ->setAbbreviation($abbreviation)
                                 ->setRegioncode($rec['REGIONCODE'])
                                 ->setPlaincode($rec['PLAINCODE'])
                                 ->setAoid($rec['AOID'])
@@ -154,6 +194,8 @@ class FiasUpdateCommand extends Command
                                 ->setOkato($rec['OKATO'])
                                 ->setOffname(mb_convert_encoding($rec['OFFNAME'], 'UTF-8', 'CP-866'))
                                 ->setFormalname(mb_convert_encoding($rec['FORMALNAME'], 'UTF-8', 'CP-866'))
+                                ->setFullname($fullname)
+                                ->setFullnameCanonical(mb_strtolower($fullname))
                                 ->setShortname(mb_convert_encoding($rec['SHORTNAME'], 'UTF-8', 'CP-866'))
                             ;
 
@@ -170,10 +212,15 @@ class FiasUpdateCommand extends Command
                         $province = $em->getRepository(Province::class)->findOneBy(['aoid' => $rec['AOID']]);
 
                         if (empty($province)) {
+                            $abbreviation = $em->getRepository(Abbreviation::class)->findOneBy([
+                                'level' => 3,
+                                'shortname' => mb_convert_encoding(trim($rec['SHORTNAME']), 'UTF-8', 'CP-866')
+                            ]);
                             $region = $em->getRepository(Region::class)->findOneBy(['regioncode' => $rec['REGIONCODE']]);
 
                             $province = new Province();
                             $province
+                                ->setAbbreviation($abbreviation)
                                 ->setRegion($region)
                                 ->setRegioncode($rec['REGIONCODE'])
                                 ->setAoid($rec['AOID'])
@@ -185,6 +232,7 @@ class FiasUpdateCommand extends Command
                                 ->setOkato($rec['OKATO'])
                                 ->setTerrifnsfl($rec['TERRIFNSFL'])
                                 ->setTerrifnsul($rec['TERRIFNSUL'])
+                                ->setNameCanonical(mb_strtolower(mb_convert_encoding(trim($rec['OFFNAME']), 'UTF-8', 'CP-866')))
                                 ->setOffname(mb_convert_encoding($rec['OFFNAME'], 'UTF-8', 'CP-866'))
                                 ->setFormalname(mb_convert_encoding($rec['FORMALNAME'], 'UTF-8', 'CP-866'))
                                 ->setShortname(mb_convert_encoding($rec['SHORTNAME'], 'UTF-8', 'CP-866'))
@@ -203,11 +251,16 @@ class FiasUpdateCommand extends Command
                         $city = $em->getRepository(City::class)->findOneBy(['aoid' => $rec['AOID']]);
 
                         if (empty($city)) {
+                            $abbreviation = $em->getRepository(Abbreviation::class)->findOneBy([
+                                'level' => 4,
+                                'shortname' => mb_convert_encoding(trim($rec['SHORTNAME']), 'UTF-8', 'CP-866')
+                            ]);
                             $province = $em->getRepository(Province::class)->findOneBy(['areacode' => $rec['AREACODE']]);
                             $region = $em->getRepository(Region::class)->findOneBy(['regioncode' => $rec['REGIONCODE']]);
 
                             $city = new City();
                             $city
+                                ->setAbbreviation($abbreviation)
                                 ->setRegion($region)
                                 ->setRegioncode($rec['REGIONCODE'])
                                 ->setAoid($rec['AOID'])
@@ -223,6 +276,7 @@ class FiasUpdateCommand extends Command
                                 ->setPostalcode($rec['POSTALCODE'])
                                 ->setTerrifnsfl($rec['TERRIFNSFL'])
                                 ->setTerrifnsul($rec['TERRIFNSUL'])
+                                ->setNameCanonical(mb_strtolower(mb_convert_encoding(trim($rec['OFFNAME']), 'UTF-8', 'CP-866')))
                                 ->setOffname(mb_convert_encoding($rec['OFFNAME'], 'UTF-8', 'CP-866'))
                                 ->setFormalname(mb_convert_encoding($rec['FORMALNAME'], 'UTF-8', 'CP-866'))
                                 ->setShortname(mb_convert_encoding($rec['SHORTNAME'], 'UTF-8', 'CP-866'))
@@ -245,12 +299,17 @@ class FiasUpdateCommand extends Command
                         $settlement = $em->getRepository(Settlement::class)->findOneBy(['aoid' => $rec['AOID']]);
 
                         if (empty($settlement)) {
-                            $province = $em->getRepository(Province::class)->findOneBy(['areacode' => $rec['AREACODE']]);
-                            $region   = $em->getRepository(Region::class)->findOneBy(['regioncode' => $rec['REGIONCODE']]);
-                            $city     = $em->getRepository(City::class)->findOneBy(['citycode' => $rec['CITYCODE']]);
+                            $abbreviation = $em->getRepository(Abbreviation::class)->findOneBy([
+                                'level' => 6,
+                                'shortname' => mb_convert_encoding(trim($rec['SHORTNAME']), 'UTF-8', 'CP-866')
+                            ]);
+                            $province     = $em->getRepository(Province::class)->findOneBy(['areacode' => $rec['AREACODE']]);
+                            $region       = $em->getRepository(Region::class)->findOneBy(['regioncode' => $rec['REGIONCODE']]);
+                            $city         = $em->getRepository(City::class)->findOneBy(['citycode' => $rec['CITYCODE']]);
 
                             $settlement = new Settlement();
                             $settlement
+                                ->setAbbreviation($abbreviation)
                                 ->setRegion($region)
                                 ->setRegioncode($rec['REGIONCODE'])
                                 ->setAoid($rec['AOID'])
@@ -267,6 +326,7 @@ class FiasUpdateCommand extends Command
                                 ->setPostalcode($rec['POSTALCODE'])
                                 ->setTerrifnsfl($rec['TERRIFNSFL'])
                                 ->setTerrifnsul($rec['TERRIFNSUL'])
+                                ->setNameCanonical(mb_strtolower(mb_convert_encoding(trim($rec['OFFNAME']), 'UTF-8', 'CP-866')))
                                 ->setOffname(mb_convert_encoding($rec['OFFNAME'], 'UTF-8', 'CP-866'))
                                 ->setFormalname(mb_convert_encoding($rec['FORMALNAME'], 'UTF-8', 'CP-866'))
                                 ->setShortname(mb_convert_encoding($rec['SHORTNAME'], 'UTF-8', 'CP-866'))
@@ -293,13 +353,18 @@ class FiasUpdateCommand extends Command
                         $street = $em->getRepository(Street::class)->findOneBy(['aoid' => $rec['AOID']]);
 
                         if (empty($street)) {
-                            $province = $em->getRepository(Province::class)->findOneBy(['areacode' => $rec['AREACODE']]);
-                            $region   = $em->getRepository(Region::class)->findOneBy(['regioncode' => $rec['REGIONCODE']]);
-                            $city     = $em->getRepository(City::class)->findOneBy(['citycode' => $rec['CITYCODE']]);
+                            $abbreviation = $em->getRepository(Abbreviation::class)->findOneBy([
+                                'level' => 7,
+                                'shortname' => mb_convert_encoding(trim($rec['SHORTNAME']), 'UTF-8', 'CP-866')
+                            ]);
+                            $province   = $em->getRepository(Province::class)->findOneBy(['areacode' => $rec['AREACODE']]);
+                            $region     = $em->getRepository(Region::class)->findOneBy(['regioncode' => $rec['REGIONCODE']]);
+                            $city       = $em->getRepository(City::class)->findOneBy(['citycode' => $rec['CITYCODE']]);
                             $settlement = $em->getRepository(Settlement::class)->findOneBy(['placecode' => $rec['PLACECODE']]);
 
                             $street = new Street();
                             $street
+                                ->setAbbreviation($abbreviation)
                                 ->setRegion($region)
                                 ->setRegioncode($rec['REGIONCODE'])
                                 ->setAoid($rec['AOID'])
@@ -314,6 +379,7 @@ class FiasUpdateCommand extends Command
                                 ->setOktmo($rec['OKTMO'])
                                 ->setTerrifnsfl($rec['TERRIFNSFL'])
                                 ->setTerrifnsul($rec['TERRIFNSUL'])
+                                ->setNameCanonical(mb_strtolower(mb_convert_encoding(trim($rec['OFFNAME']), 'UTF-8', 'CP-866')))
                                 ->setOffname(mb_convert_encoding($rec['OFFNAME'], 'UTF-8', 'CP-866'))
                                 ->setFormalname(mb_convert_encoding($rec['FORMALNAME'], 'UTF-8', 'CP-866'))
                                 ->setShortname(mb_convert_encoding($rec['SHORTNAME'], 'UTF-8', 'CP-866'))
@@ -344,6 +410,8 @@ class FiasUpdateCommand extends Command
                         continue;
                     }
                 }
+
+                dbase_close($db);
 
                 dump($count);
                 dump('provinces = '.$areas);

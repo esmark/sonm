@@ -36,6 +36,7 @@ class Province
     use Columns\EngnameTrait;
     use Columns\OffnameTrait;
     use Columns\OkatoTrait;
+    use Columns\NameCanonicalTrait;
     use Columns\ShortnameTrait;
     use Columns\RegioncodeTrait;
     use Columns\IfnsflTrait;
@@ -43,6 +44,14 @@ class Province
     use Columns\TerrifnsflTrait;
     use Columns\TerrifnsulTrait;
     use Columns\PlaincodeTrait;
+
+    /**
+     * @var Abbreviation
+     *
+     * @ORM\ManyToOne(targetEntity="Abbreviation", cascade={"persist"}, fetch="EXTRA_LAZY")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    protected $abbreviation;
 
     /**
      * @var Region
@@ -73,6 +82,26 @@ class Province
     public function __toString(): string
     {
         return $this->getOffname() . ' ' . $this->getShortname() . '.';
+    }
+
+    /**
+     * @return Abbreviation
+     */
+    public function getAbbreviation(): Abbreviation
+    {
+        return $this->abbreviation;
+    }
+
+    /**
+     * @param Abbreviation $abbreviation
+     *
+     * @return $this
+     */
+    public function setAbbreviation(Abbreviation $abbreviation): self
+    {
+        $this->abbreviation = $abbreviation;
+
+        return $this;
     }
 
     /**
