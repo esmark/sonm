@@ -41,6 +41,7 @@ class Settlement
     use Columns\RegioncodeTrait;
     use Columns\PlaincodeTrait;
     use Columns\PlacecodeTrait;
+    use Columns\PostalcodeTrait;
     use Columns\TimezoneTrait;
     use Columns\LatLonTrait;
     use Columns\IfnsflTrait;

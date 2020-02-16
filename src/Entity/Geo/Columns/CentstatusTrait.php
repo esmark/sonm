@@ -11,7 +11,7 @@ trait CentstatusTrait
      *
      * @var int
      *
-     * @ORM\Column(type="smallint", nullable=false)
+     * @ORM\Column(type="smallint", nullable=false, options={"default":0})
      */
     protected $centstatus;
 

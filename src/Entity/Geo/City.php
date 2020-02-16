@@ -42,6 +42,7 @@ class City
     use Columns\ShortnameTrait;
     use Columns\RegioncodeTrait;
     use Columns\PlaincodeTrait;
+    use Columns\PostalcodeTrait;
     use Columns\TimezoneTrait;
     use Columns\IsoCodeTrait;
     use Columns\LatLonTrait;

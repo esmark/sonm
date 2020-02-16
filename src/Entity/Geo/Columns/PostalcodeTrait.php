@@ -11,7 +11,7 @@ trait PostalcodeTrait
      *
      * @var string
      *
-     * @ORM\Column(type="string", length=6, nullable=false, unique=true)
+     * @ORM\Column(type="string", length=6, nullable=true)
      */
     protected $postalcode;
 
