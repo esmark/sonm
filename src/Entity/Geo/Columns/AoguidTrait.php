@@ -30,7 +30,7 @@ trait AoguidTrait
      */
     public function setAoguid(string $aoguid): self
     {
-        $this->aoguid = $aoguid;
+        $this->aoguid = trim($aoguid);
 
         return $this;
     }

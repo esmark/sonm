@@ -30,7 +30,7 @@ trait AreacodeTrait
      */
     public function setAreacode(string $areacode): self
     {
-        $this->areacode = $areacode;
+        $this->areacode = trim($areacode);
 
         return $this;
     }

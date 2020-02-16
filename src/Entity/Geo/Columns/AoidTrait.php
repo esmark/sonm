@@ -30,7 +30,7 @@ trait AoidTrait
      */
     public function setAoid(string $aoid): self
     {
-        $this->aoid = $aoid;
+        $this->aoid = trim($aoid);
 
         return $this;
     }

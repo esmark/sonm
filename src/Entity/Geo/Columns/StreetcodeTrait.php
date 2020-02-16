@@ -30,7 +30,7 @@ trait StreetcodeTrait
      */
     public function setStreetcode(?string $streetcode): self
     {
-        $this->streetcode = $streetcode;
+        $this->streetcode = trim($streetcode);
 
         return $this;
     }

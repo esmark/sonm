@@ -30,7 +30,7 @@ trait PostalcodeTrait
      */
     public function setPostalcode(?string $postalcode): self
     {
-        $this->postalcode = $postalcode;
+        $this->postalcode = trim($postalcode);
 
         return $this;
     }

@@ -30,7 +30,7 @@ trait CodeTrait
      */
     public function setCode(string $code): self
     {
-        $this->code = $code;
+        $this->code = trim($code);
 
         return $this;
     }

@@ -30,7 +30,7 @@ trait CitycodeTrait
      */
     public function setCitycode(string $citycode): self
     {
-        $this->citycode = $citycode;
+        $this->citycode = trim($citycode);
 
         return $this;
     }

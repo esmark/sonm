@@ -28,7 +28,7 @@ trait OkatoTrait
      */
     public function setOkato(string $okato): self
     {
-        $this->okato = $okato;
+        $this->okato = trim($okato);
 
         return $this;
     }

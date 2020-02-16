@@ -30,7 +30,7 @@ trait PlacecodeTrait
      */
     public function setPlacecode(string $placecode): self
     {
-        $this->placecode = $placecode;
+        $this->placecode = trim($placecode);
 
         return $this;
     }

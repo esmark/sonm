@@ -30,7 +30,7 @@ trait EngnameTrait
      */
     public function setEngname(string $engname): self
     {
-        $this->engname = $engname;
+        $this->engname = trim($engname);
 
         return $this;
     }

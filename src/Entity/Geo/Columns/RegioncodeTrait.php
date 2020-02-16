@@ -30,7 +30,7 @@ trait RegioncodeTrait
      */
     public function setRegioncode(string $regioncode): self
     {
-        $this->regioncode = $regioncode;
+        $this->regioncode = trim($regioncode);
 
         return $this;
     }

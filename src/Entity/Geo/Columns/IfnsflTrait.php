@@ -30,7 +30,7 @@ trait IfnsflTrait
      */
     public function setIfnsfl(string $ifnsfl): self
     {
-        $this->ifnsfl = $ifnsfl;
+        $this->ifnsfl = trim($ifnsfl);
 
         return $this;
     }

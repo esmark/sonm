@@ -28,7 +28,7 @@ trait IsoCodeTrait
      */
     public function setIsoCode(?string $isoCode): self
     {
-        $this->isoCode = $isoCode;
+        $this->isoCode = trim($isoCode);
 
         return $this;
     }

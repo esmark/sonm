@@ -30,7 +30,7 @@ trait TerrifnsulTrait
      */
     public function setTerrifnsul(string $terrifnsul): self
     {
-        $this->terrifnsul = $terrifnsul;
+        $this->terrifnsul = trim($terrifnsul);
 
         return $this;
     }

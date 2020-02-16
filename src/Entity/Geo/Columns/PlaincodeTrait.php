@@ -30,7 +30,7 @@ trait PlaincodeTrait
      */
     public function setPlaincode(string $plaincode): self
     {
-        $this->plaincode = $plaincode;
+        $this->plaincode = trim($plaincode);
 
         return $this;
     }

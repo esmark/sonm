@@ -28,7 +28,7 @@ trait TimezoneTrait
      */
     public function setTimezone(?string $timezone): self
     {
-        $this->timezone = $timezone;
+        $this->timezone = trim($timezone);
 
         return $this;
     }

@@ -30,7 +30,7 @@ trait IfnsulTrait
      */
     public function setIfnsul(string $ifnsul): self
     {
-        $this->ifnsul = $ifnsul;
+        $this->ifnsul = trim($ifnsul);
 
         return $this;
     }

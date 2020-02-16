@@ -28,7 +28,7 @@ trait OktmoTrait
      */
     public function setOktmo(string $oktmo): self
     {
-        $this->oktmo = $oktmo;
+        $this->oktmo = trim($oktmo);
 
         return $this;
     }
