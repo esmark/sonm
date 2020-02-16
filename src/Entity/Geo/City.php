@@ -18,6 +18,7 @@ use Smart\CoreBundle\Doctrine\ColumnTrait;
  *          @ORM\Index(columns={"created_at"}),
  *          @ORM\Index(columns={"offname"}),
  *          @ORM\Index(columns={"areacode"}),
+ *          @ORM\Index(columns={"population"}),
  *          @ORM\Index(columns={"regioncode"}),
  *          @ORM\Index(columns={"centstatus"}),
  *          @ORM\Index(columns={"iso_code"}),
@@ -42,6 +43,7 @@ class City
     use Columns\ShortnameTrait;
     use Columns\RegioncodeTrait;
     use Columns\PlaincodeTrait;
+    use Columns\PopulationTrait;
     use Columns\PostalcodeTrait;
     use Columns\TimezoneTrait;
     use Columns\IsoCodeTrait;

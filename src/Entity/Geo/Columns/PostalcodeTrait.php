@@ -9,26 +9,26 @@ trait PostalcodeTrait
     /**
      * Почтовый индекс
      *
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(type="string", length=6, nullable=true)
      */
     protected $postalcode;
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getPostalcode(): string
+    public function getPostalcode(): ?string
     {
         return $this->postalcode;
     }
 
     /**
-     * @param string $postalcode
+     * @param string|null $postalcode
      *
      * @return $this
      */
-    public function setPostalcode(string $postalcode): self
+    public function setPostalcode(?string $postalcode): self
     {
         $this->postalcode = $postalcode;
 
