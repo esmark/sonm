@@ -20,7 +20,11 @@ trait PopulationTrait
      */
     public function getPopulation(): ?int
     {
-        return $this->population;
+        if (empty($this->population)) {
+            return null;
+        }
+
+        return (int) $this->population;
     }
 
     /**
