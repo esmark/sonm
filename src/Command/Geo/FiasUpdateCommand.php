@@ -169,74 +169,41 @@ class FiasUpdateCommand extends Command
 
                     $count++;
 
+                    // Регионы
                     if ($rec['AOLEVEL'] == 1) {
                         $regions++;
 
                         $region = $em->getRepository(Region::class)->findOneBy(['aoid' => $rec['AOID']]);
 
                         if (empty($region)) {
-                            $abbreviation = $em->getRepository(Abbreviation::class)->findOneBy([
-                                'level' => 1,
-                                'shortname' => mb_convert_encoding(trim($rec['SHORTNAME']), 'UTF-8', 'CP-866')
-                            ]);
-
-                            $fullname = mb_convert_encoding(trim($rec['OFFNAME']), 'UTF-8', 'CP-866') . ' ' . $abbreviation->getFullname();
-
-                            $region = new Region();
-                            $region
-                                ->setAbbreviation($abbreviation)
-                                ->setRegioncode($rec['REGIONCODE'])
-                                ->setPlaincode($rec['PLAINCODE'])
-                                ->setAoid($rec['AOID'])
-                                ->setAoguid($rec['AOGUID'])
-                                ->setIfnsfl($rec['IFNSFL'])
-                                ->setIfnsul($rec['IFNSUL'])
-                                ->setOkato($rec['OKATO'])
-                                ->setOffname(mb_convert_encoding($rec['OFFNAME'], 'UTF-8', 'CP-866'))
-                                ->setFormalname(mb_convert_encoding($rec['FORMALNAME'], 'UTF-8', 'CP-866'))
-                                ->setFullname($fullname)
-                                ->setFullnameCanonical(mb_strtolower($fullname))
-                                ->setShortname(mb_convert_encoding($rec['SHORTNAME'], 'UTF-8', 'CP-866'))
-                            ;
+                            $region = $this->factoryRegion($rec);
 
                             $em->persist($region);
                             $em->flush();
+
+                            // Если в БД фиас регион является городом, то добавить эту запись ещё и в таблицу City.
+                            if ($region->getShortname() == 'г') {
+                                $city = $em->getRepository(City::class)->findOneBy(['aoid' => $rec['AOID']]);
+
+                                if (empty($city)) {
+                                    $city = $this->factoryCity($rec);
+
+                                    $em->persist($city);
+                                }
+                            }
                         }
 
                         continue;
                     }
 
+                    // Районы
                     if ($rec['AOLEVEL'] == 3) {
                         $areas++;
 
                         $province = $em->getRepository(Province::class)->findOneBy(['aoid' => $rec['AOID']]);
 
                         if (empty($province)) {
-                            $abbreviation = $em->getRepository(Abbreviation::class)->findOneBy([
-                                'level' => 3,
-                                'shortname' => mb_convert_encoding(trim($rec['SHORTNAME']), 'UTF-8', 'CP-866')
-                            ]);
-                            $region = $em->getRepository(Region::class)->findOneBy(['regioncode' => $rec['REGIONCODE']]);
-
-                            $province = new Province();
-                            $province
-                                ->setAbbreviation($abbreviation)
-                                ->setRegion($region)
-                                ->setRegioncode($rec['REGIONCODE'])
-                                ->setAoid($rec['AOID'])
-                                ->setAoguid($rec['AOGUID'])
-                                ->setAreacode($rec['AREACODE'])
-                                ->setPlaincode($rec['PLAINCODE'])
-                                ->setIfnsfl($rec['IFNSFL'])
-                                ->setIfnsul($rec['IFNSUL'])
-                                ->setOkato($rec['OKATO'])
-                                ->setTerrifnsfl($rec['TERRIFNSFL'])
-                                ->setTerrifnsul($rec['TERRIFNSUL'])
-                                ->setNameCanonical(mb_strtolower(mb_convert_encoding(trim($rec['OFFNAME']), 'UTF-8', 'CP-866')))
-                                ->setOffname(mb_convert_encoding($rec['OFFNAME'], 'UTF-8', 'CP-866'))
-                                ->setFormalname(mb_convert_encoding($rec['FORMALNAME'], 'UTF-8', 'CP-866'))
-                                ->setShortname(mb_convert_encoding($rec['SHORTNAME'], 'UTF-8', 'CP-866'))
-                            ;
+                            $province = $this->factoryProvince($rec);
 
                             $em->persist($province);
                             //$em->flush();
@@ -245,46 +212,14 @@ class FiasUpdateCommand extends Command
                         continue;
                     }
 
+                    // Города
                     if ($rec['AOLEVEL'] == 4) {
                         $cities++;
 
                         $city = $em->getRepository(City::class)->findOneBy(['aoid' => $rec['AOID']]);
 
                         if (empty($city)) {
-                            $abbreviation = $em->getRepository(Abbreviation::class)->findOneBy([
-                                'level' => 4,
-                                'shortname' => mb_convert_encoding(trim($rec['SHORTNAME']), 'UTF-8', 'CP-866')
-                            ]);
-                            $province = $em->getRepository(Province::class)->findOneBy(['areacode' => $rec['AREACODE']]);
-                            $region = $em->getRepository(Region::class)->findOneBy(['regioncode' => $rec['REGIONCODE']]);
-
-                            $city = new City();
-                            $city
-                                ->setAbbreviation($abbreviation)
-                                ->setRegion($region)
-                                ->setRegioncode($rec['REGIONCODE'])
-                                ->setAoid($rec['AOID'])
-                                ->setAoguid($rec['AOGUID'])
-                                ->setAreacode($rec['AREACODE'])
-                                ->setCentstatus((int) $rec['CENTSTATUS'])
-                                ->setCitycode($rec['CITYCODE'])
-                                ->setPlaincode($rec['PLAINCODE'])
-                                ->setIfnsfl($rec['IFNSFL'])
-                                ->setIfnsul($rec['IFNSUL'])
-                                ->setOkato($rec['OKATO'])
-                                ->setOktmo($rec['OKTMO'])
-                                ->setPostalcode($rec['POSTALCODE'])
-                                ->setTerrifnsfl($rec['TERRIFNSFL'])
-                                ->setTerrifnsul($rec['TERRIFNSUL'])
-                                ->setNameCanonical(mb_strtolower(mb_convert_encoding(trim($rec['OFFNAME']), 'UTF-8', 'CP-866')))
-                                ->setOffname(mb_convert_encoding($rec['OFFNAME'], 'UTF-8', 'CP-866'))
-                                ->setFormalname(mb_convert_encoding($rec['FORMALNAME'], 'UTF-8', 'CP-866'))
-                                ->setShortname(mb_convert_encoding($rec['SHORTNAME'], 'UTF-8', 'CP-866'))
-                            ;
-
-                            if ($province) {
-                                $city->setProvince($province);
-                            }
+                            $city = $this->factoryCity($rec);
 
                             $em->persist($city);
                             $em->flush();
@@ -293,52 +228,14 @@ class FiasUpdateCommand extends Command
                         continue;
                     }
 
+                    // Населённые пункты
                     if ($rec['AOLEVEL'] == 6) {
                         $settlements++;
 
                         $settlement = $em->getRepository(Settlement::class)->findOneBy(['aoid' => $rec['AOID']]);
 
                         if (empty($settlement)) {
-                            $abbreviation = $em->getRepository(Abbreviation::class)->findOneBy([
-                                'level' => 6,
-                                'shortname' => mb_convert_encoding(trim($rec['SHORTNAME']), 'UTF-8', 'CP-866')
-                            ]);
-                            $province     = $em->getRepository(Province::class)->findOneBy(['areacode' => $rec['AREACODE']]);
-                            $region       = $em->getRepository(Region::class)->findOneBy(['regioncode' => $rec['REGIONCODE']]);
-                            $city         = $em->getRepository(City::class)->findOneBy(['citycode' => $rec['CITYCODE']]);
-
-                            $settlement = new Settlement();
-                            $settlement
-                                ->setAbbreviation($abbreviation)
-                                ->setRegion($region)
-                                ->setRegioncode($rec['REGIONCODE'])
-                                ->setAoid($rec['AOID'])
-                                ->setAoguid($rec['AOGUID'])
-                                ->setAreacode($rec['AREACODE'])
-                                ->setCentstatus((int) $rec['CENTSTATUS'])
-                                ->setCitycode($rec['CITYCODE'])
-                                ->setPlaincode($rec['PLAINCODE'])
-                                ->setPlacecode($rec['PLACECODE'])
-                                ->setIfnsfl($rec['IFNSFL'])
-                                ->setIfnsul($rec['IFNSUL'])
-                                ->setOkato($rec['OKATO'])
-                                ->setOktmo($rec['OKTMO'])
-                                ->setPostalcode($rec['POSTALCODE'])
-                                ->setTerrifnsfl($rec['TERRIFNSFL'])
-                                ->setTerrifnsul($rec['TERRIFNSUL'])
-                                ->setNameCanonical(mb_strtolower(mb_convert_encoding(trim($rec['OFFNAME']), 'UTF-8', 'CP-866')))
-                                ->setOffname(mb_convert_encoding($rec['OFFNAME'], 'UTF-8', 'CP-866'))
-                                ->setFormalname(mb_convert_encoding($rec['FORMALNAME'], 'UTF-8', 'CP-866'))
-                                ->setShortname(mb_convert_encoding($rec['SHORTNAME'], 'UTF-8', 'CP-866'))
-                            ;
-
-                            if ($province) {
-                                $settlement->setProvince($province);
-                            }
-
-                            if ($city) {
-                                $settlement->setCity($city);
-                            }
+                            $settlement = $this->factorySettlement($rec);
 
                             $em->persist($settlement);
                             //$em->flush();
@@ -347,55 +244,14 @@ class FiasUpdateCommand extends Command
                         continue;
                     }
 
+                    // Улицы
                     if ($rec['AOLEVEL'] == 7777777) {
                         $streets++;
 
                         $street = $em->getRepository(Street::class)->findOneBy(['aoid' => $rec['AOID']]);
 
                         if (empty($street)) {
-                            $abbreviation = $em->getRepository(Abbreviation::class)->findOneBy([
-                                'level' => 7,
-                                'shortname' => mb_convert_encoding(trim($rec['SHORTNAME']), 'UTF-8', 'CP-866')
-                            ]);
-                            $province   = $em->getRepository(Province::class)->findOneBy(['areacode' => $rec['AREACODE']]);
-                            $region     = $em->getRepository(Region::class)->findOneBy(['regioncode' => $rec['REGIONCODE']]);
-                            $city       = $em->getRepository(City::class)->findOneBy(['citycode' => $rec['CITYCODE']]);
-                            $settlement = $em->getRepository(Settlement::class)->findOneBy(['placecode' => $rec['PLACECODE']]);
-
-                            $street = new Street();
-                            $street
-                                ->setAbbreviation($abbreviation)
-                                ->setRegion($region)
-                                ->setRegioncode($rec['REGIONCODE'])
-                                ->setAoid($rec['AOID'])
-                                ->setAoguid($rec['AOGUID'])
-                                ->setAreacode($rec['AREACODE'])
-                                ->setCitycode($rec['CITYCODE'])
-                                ->setPlaincode($rec['PLAINCODE'])
-                                ->setPlacecode($rec['PLACECODE'])
-                                ->setIfnsfl($rec['IFNSFL'])
-                                ->setIfnsul($rec['IFNSUL'])
-                                ->setOkato($rec['OKATO'])
-                                ->setOktmo($rec['OKTMO'])
-                                ->setTerrifnsfl($rec['TERRIFNSFL'])
-                                ->setTerrifnsul($rec['TERRIFNSUL'])
-                                ->setNameCanonical(mb_strtolower(mb_convert_encoding(trim($rec['OFFNAME']), 'UTF-8', 'CP-866')))
-                                ->setOffname(mb_convert_encoding($rec['OFFNAME'], 'UTF-8', 'CP-866'))
-                                ->setFormalname(mb_convert_encoding($rec['FORMALNAME'], 'UTF-8', 'CP-866'))
-                                ->setShortname(mb_convert_encoding($rec['SHORTNAME'], 'UTF-8', 'CP-866'))
-                            ;
-
-                            if ($province) {
-                                $street->setProvince($province);
-                            }
-
-                            if ($city) {
-                                $street->setCity($city);
-                            }
-
-                            if ($settlement) {
-                                $street->setSettlement($settlement);
-                            }
+                            $street = $this->factoryStreet($rec);
 
                             $em->persist($street);
                             //$em->flush();
@@ -428,8 +284,6 @@ class FiasUpdateCommand extends Command
             $this->io->error("В папке {$fiasDir} отсутсвуют файлы ADDROB*.DBF");
         }
 
-//        dump(mb_convert_encoding($settlements, "UTF-8", 'CP-866'));
-
         $event = $stopwatch->stop(md5(__FILE__));
 
         if ($output->isDebug()) {
@@ -444,5 +298,235 @@ class FiasUpdateCommand extends Command
         }
 
         return 0;
+    }
+
+    /**
+     * @param array $rec
+     *
+     * @return City
+     */
+    protected function factoryCity(array $rec): City
+    {
+        $em = $this->em;
+
+        $abbreviation = $em->getRepository(Abbreviation::class)->findOneBy([
+            'level' => 4,
+            'shortname' => mb_convert_encoding(trim($rec['SHORTNAME']), 'UTF-8', 'CP-866')
+        ]);
+        $province = $em->getRepository(Province::class)->findOneBy(['areacode' => $rec['AREACODE']]);
+        $region = $em->getRepository(Region::class)->findOneBy(['regioncode' => $rec['REGIONCODE']]);
+
+        $city = new City();
+        $city
+            ->setAbbreviation($abbreviation)
+            ->setRegion($region)
+            ->setRegioncode($rec['REGIONCODE'])
+            ->setAoid($rec['AOID'])
+            ->setAoguid($rec['AOGUID'])
+            ->setAreacode($rec['AREACODE'])
+            ->setCentstatus((int) $rec['CENTSTATUS'])
+            ->setCitycode($rec['CITYCODE'])
+            ->setPlaincode($rec['PLAINCODE'])
+            ->setIfnsfl($rec['IFNSFL'])
+            ->setIfnsul($rec['IFNSUL'])
+            ->setOkato($rec['OKATO'])
+            ->setOktmo($rec['OKTMO'])
+            ->setPostalcode($rec['POSTALCODE'])
+            ->setTerrifnsfl($rec['TERRIFNSFL'])
+            ->setTerrifnsul($rec['TERRIFNSUL'])
+            ->setNameCanonical(mb_strtolower(mb_convert_encoding(trim($rec['OFFNAME']), 'UTF-8', 'CP-866')))
+            ->setOffname(mb_convert_encoding($rec['OFFNAME'], 'UTF-8', 'CP-866'))
+            ->setFormalname(mb_convert_encoding($rec['FORMALNAME'], 'UTF-8', 'CP-866'))
+            ->setShortname(mb_convert_encoding($rec['SHORTNAME'], 'UTF-8', 'CP-866'))
+        ;
+
+        if ($province) {
+            $city->setProvince($province);
+        }
+
+        return $city;
+    }
+
+    /**
+     * @param array $rec
+     *
+     * @return Region
+     */
+    protected function factoryRegion(array $rec): Region
+    {
+        $em = $this->em;
+
+        $abbreviation = $em->getRepository(Abbreviation::class)->findOneBy([
+            'level' => 1,
+            'shortname' => mb_convert_encoding(trim($rec['SHORTNAME']), 'UTF-8', 'CP-866')
+        ]);
+
+        $fullname = mb_convert_encoding(trim($rec['OFFNAME']), 'UTF-8', 'CP-866') . ' ' . $abbreviation->getFullname();
+
+        $region = new Region();
+        $region
+            ->setAbbreviation($abbreviation)
+            ->setRegioncode($rec['REGIONCODE'])
+            ->setPlaincode($rec['PLAINCODE'])
+            ->setAoid($rec['AOID'])
+            ->setAoguid($rec['AOGUID'])
+            ->setIfnsfl($rec['IFNSFL'])
+            ->setIfnsul($rec['IFNSUL'])
+            ->setOkato($rec['OKATO'])
+            ->setOffname(mb_convert_encoding($rec['OFFNAME'], 'UTF-8', 'CP-866'))
+            ->setFormalname(mb_convert_encoding($rec['FORMALNAME'], 'UTF-8', 'CP-866'))
+            ->setFullname($fullname)
+            ->setFullnameCanonical(mb_strtolower($fullname))
+            ->setShortname(mb_convert_encoding($rec['SHORTNAME'], 'UTF-8', 'CP-866'))
+        ;
+
+        return $region;
+    }
+
+    /**
+     * @param array $rec
+     *
+     * @return Province
+     */
+    protected function factoryProvince(array $rec): Province
+    {
+        $em = $this->em;
+
+        $abbreviation = $em->getRepository(Abbreviation::class)->findOneBy([
+            'level' => 3,
+            'shortname' => mb_convert_encoding(trim($rec['SHORTNAME']), 'UTF-8', 'CP-866')
+        ]);
+        $region = $em->getRepository(Region::class)->findOneBy(['regioncode' => $rec['REGIONCODE']]);
+
+        $province = new Province();
+        $province
+            ->setAbbreviation($abbreviation)
+            ->setRegion($region)
+            ->setRegioncode($rec['REGIONCODE'])
+            ->setAoid($rec['AOID'])
+            ->setAoguid($rec['AOGUID'])
+            ->setAreacode($rec['AREACODE'])
+            ->setPlaincode($rec['PLAINCODE'])
+            ->setIfnsfl($rec['IFNSFL'])
+            ->setIfnsul($rec['IFNSUL'])
+            ->setOkato($rec['OKATO'])
+            ->setTerrifnsfl($rec['TERRIFNSFL'])
+            ->setTerrifnsul($rec['TERRIFNSUL'])
+            ->setNameCanonical(mb_strtolower(mb_convert_encoding(trim($rec['OFFNAME']), 'UTF-8', 'CP-866')))
+            ->setOffname(mb_convert_encoding($rec['OFFNAME'], 'UTF-8', 'CP-866'))
+            ->setFormalname(mb_convert_encoding($rec['FORMALNAME'], 'UTF-8', 'CP-866'))
+            ->setShortname(mb_convert_encoding($rec['SHORTNAME'], 'UTF-8', 'CP-866'))
+        ;
+
+        return $province;
+    }
+
+    /**
+     * @param array $rec
+     *
+     * @return Settlement
+     */
+    protected function factorySettlement(array $rec): Settlement
+    {
+        $em = $this->em;
+
+        $abbreviation = $em->getRepository(Abbreviation::class)->findOneBy([
+            'level' => 6,
+            'shortname' => mb_convert_encoding(trim($rec['SHORTNAME']), 'UTF-8', 'CP-866')
+        ]);
+        $province     = $em->getRepository(Province::class)->findOneBy(['areacode' => $rec['AREACODE']]);
+        $region       = $em->getRepository(Region::class)->findOneBy(['regioncode' => $rec['REGIONCODE']]);
+        $city         = $em->getRepository(City::class)->findOneBy(['citycode' => $rec['CITYCODE']]);
+
+        $settlement = new Settlement();
+        $settlement
+            ->setAbbreviation($abbreviation)
+            ->setRegion($region)
+            ->setRegioncode($rec['REGIONCODE'])
+            ->setAoid($rec['AOID'])
+            ->setAoguid($rec['AOGUID'])
+            ->setAreacode($rec['AREACODE'])
+            ->setCentstatus((int) $rec['CENTSTATUS'])
+            ->setCitycode($rec['CITYCODE'])
+            ->setPlaincode($rec['PLAINCODE'])
+            ->setPlacecode($rec['PLACECODE'])
+            ->setIfnsfl($rec['IFNSFL'])
+            ->setIfnsul($rec['IFNSUL'])
+            ->setOkato($rec['OKATO'])
+            ->setOktmo($rec['OKTMO'])
+            ->setPostalcode($rec['POSTALCODE'])
+            ->setTerrifnsfl($rec['TERRIFNSFL'])
+            ->setTerrifnsul($rec['TERRIFNSUL'])
+            ->setNameCanonical(mb_strtolower(mb_convert_encoding(trim($rec['OFFNAME']), 'UTF-8', 'CP-866')))
+            ->setOffname(mb_convert_encoding($rec['OFFNAME'], 'UTF-8', 'CP-866'))
+            ->setFormalname(mb_convert_encoding($rec['FORMALNAME'], 'UTF-8', 'CP-866'))
+            ->setShortname(mb_convert_encoding($rec['SHORTNAME'], 'UTF-8', 'CP-866'))
+        ;
+
+        if ($province) {
+            $settlement->setProvince($province);
+        }
+
+        if ($city) {
+            $settlement->setCity($city);
+        }
+
+        return $settlement;
+    }
+
+    /**
+     * @param array $rec
+     *
+     * @return Street
+     */
+    protected function factoryStreet(array $rec): Street
+    {
+        $em = $this->em;
+
+        $abbreviation = $em->getRepository(Abbreviation::class)->findOneBy([
+            'level' => 7,
+            'shortname' => mb_convert_encoding(trim($rec['SHORTNAME']), 'UTF-8', 'CP-866')
+        ]);
+        $province   = $em->getRepository(Province::class)->findOneBy(['areacode' => $rec['AREACODE']]);
+        $region     = $em->getRepository(Region::class)->findOneBy(['regioncode' => $rec['REGIONCODE']]);
+        $city       = $em->getRepository(City::class)->findOneBy(['citycode' => $rec['CITYCODE']]);
+        $settlement = $em->getRepository(Settlement::class)->findOneBy(['placecode' => $rec['PLACECODE']]);
+
+        $street = new Street();
+        $street
+            ->setAbbreviation($abbreviation)
+            ->setRegion($region)
+            ->setRegioncode($rec['REGIONCODE'])
+            ->setAoid($rec['AOID'])
+            ->setAoguid($rec['AOGUID'])
+            ->setAreacode($rec['AREACODE'])
+            ->setCitycode($rec['CITYCODE'])
+            ->setPlaincode($rec['PLAINCODE'])
+            ->setPlacecode($rec['PLACECODE'])
+            ->setIfnsfl($rec['IFNSFL'])
+            ->setIfnsul($rec['IFNSUL'])
+            ->setOkato($rec['OKATO'])
+            ->setOktmo($rec['OKTMO'])
+            ->setTerrifnsfl($rec['TERRIFNSFL'])
+            ->setTerrifnsul($rec['TERRIFNSUL'])
+            ->setNameCanonical(mb_strtolower(mb_convert_encoding(trim($rec['OFFNAME']), 'UTF-8', 'CP-866')))
+            ->setOffname(mb_convert_encoding($rec['OFFNAME'], 'UTF-8', 'CP-866'))
+            ->setFormalname(mb_convert_encoding($rec['FORMALNAME'], 'UTF-8', 'CP-866'))
+            ->setShortname(mb_convert_encoding($rec['SHORTNAME'], 'UTF-8', 'CP-866'))
+        ;
+
+        if ($province) {
+            $street->setProvince($province);
+        }
+
+        if ($city) {
+            $street->setCity($city);
+        }
+
+        if ($settlement) {
+            $street->setSettlement($settlement);
+        }
+
+        return $street;
     }
 }
