@@ -3,22 +3,18 @@
 {% block account_content %}
     <h2>Мой профиль</h2>
     {% if form is defined %}
-        <p>
-            <b>Логин:</b> {{ app.user.username }}
+        <p><b>Логин:</b> {{ app.user.username }}</p>
+
+        <p><b>Email:</b> {{ app.user.email }}</p>
+
+        <p><b>Город:</b>
+            {% if app.user.city %}
+                {{ app.user.city }} ({{ app.user.city.region.fullname }})
+            {% else %}
+                <a href="{{ path('account_geoposition') }}"> -- Не указан --</a>
+            {% endif %}
         </p>
-
-        <p>
-            <b>Email:</b> {{ app.user.email }}
-        </p>
-
-
-        <h3>@todo:</h3>
-        <ul>
-            <li>Город или село (место фактического проживания) - выбор из геобазы</li>
-            <li><b>Автоопределение города:</b> {{ city }}</li>
-        </ul>
 
         {{ form(form) }}
-
     {% endif %}
 {% endblock account_content %}

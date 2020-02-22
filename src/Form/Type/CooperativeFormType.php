@@ -49,6 +49,7 @@ class CooperativeFormType extends AbstractType
             ->add('slug', null,  ['attr' => ['placeholder' => 'Technical name, short, latin, with out spaces']])
             ->add('description', null, ['attr' => ['rows' => 8]])
             ->add('city', ChoiceType::class, [
+                'choice_translation_domain' => false,
                 'choices'  => $cityChoices,
                 'data'     => $cityData,
                 'required' => false,

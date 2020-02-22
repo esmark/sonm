@@ -8,12 +8,14 @@ use App\DTO\Worksheet;
 use App\Entity\Cooperative;
 use App\Entity\CooperativeHistory;
 use App\Entity\CooperativeMember;
+use App\Entity\Geo\City;
 use App\Entity\Product;
 use App\Entity\ProductVariant;
 use App\Entity\User;
 use App\Form\Type\ProductFormType;
 use App\Form\Type\UserChangePasswordFormType;
 use App\Form\Type\UserFormType;
+use App\Form\Type\UserLocationFormType;
 use App\Form\Type\UserWorksheetPurposeFormType;
 use App\Form\Type\WorksheetFormType;
 use App\Repository\UserRepository;
@@ -317,21 +319,35 @@ class AccountController extends AbstractController
         /** @var User $user */
         $user = $this->getUser();
 
+        $form = $this->createForm(UserLocationFormType::class, $user);
+
+        $prevCity = $user->getCity();
+
         if ($request->isMethod('POST')) {
-            $user
-                ->setLatitude((float) $request->request->get('latitude'))
-                ->setLongitude((float) $request->request->get('longitude'))
-            ;
+            $form->handleRequest($request);
 
-            $em->persist($user);
-            $em->flush();
+            // @todo пока в ручную подставляется город, по хорошему надо сделать кастомный EntityType, который будет дружить с аяксом.
+            $user->setCity($em->find(City::class, (int) $request->request->get('user_location')['city']));
 
-            $this->addFlash('success', 'Координаты сохранены.');
+            if ($user->getCity() and $prevCity != $user->getCity()) {
+                $user
+                    ->setLatitude($user->getCity()->getLatitude())
+                    ->setLongitude($user->getCity()->getLongitude())
+                ;
+            }
 
-            return $this->redirectToRoute('account_geoposition');
+            if ($form->get('save')->isClicked() and $form->isValid()) {
+                $em->persist($user);
+                $em->flush();
+
+                $this->addFlash('success', 'Местоположение обновлено.');
+
+                return $this->redirectToRoute('account_geoposition');
+            }
         }
 
         return $this->render('account/geoposition.html.twig', [
+            'form' => $form->createView(),
             'latitude'  => $user->getLatitude(),
             'longitude' => $user->getLongitude(),
         ]);

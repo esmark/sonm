@@ -24,22 +24,23 @@
 {% block account_content %}
     <h2>Моё местоположение</h2>
 
-    <form method="post" id="geocoding_form" class="form-horizontal">
-        <div class="form-group form-row">
-            <div class="col">
-                <button type="button" id="find-me" class="btn btn-sm btn-outline-info">Определить автоматически</button>
-            </div>
-            <div class="col">
-                <input type="text" id="form_latitude" value="{{ latitude }}" name="latitude" class="form-control">
-            </div>
-            <div class="col">
-                <input type="text" id="form_longitude" value="{{ longitude }}" name="longitude" class="form-control">
-            </div>
-            <div class="col">
-                <button type="submit" class="btn btn-success">Сохранить</button>
-            </div>
+    {{ form_start(form) }}
+    {{ form_row(form.city) }}
+    <div class="form-group form-row">
+        <div class="col">
+            <button type="button" id="find-me" class="btn btn-sm btn-outline-info">Определить координаты автоматически</button>
         </div>
-    </form>
+        <div class="col">
+            {{ form_widget(form.latitude) }}
+        </div>
+        <div class="col">
+            {{ form_widget(form.longitude) }}
+        </div>
+        <div class="col">
+            {{ form_widget(form.save) }}
+        </div>
+    </div>
+    {{ form_end(form) }}
 
     <p class="no-browser-support">Sorry, the Geolocation API isn't supported in Your browser.</p>
 
@@ -49,8 +50,15 @@
 
 {% block js %}
     {{ parent() }}
+
+    {% include '_snippet/select2_city.twig' with {'selector': 'user_location_city'} %}
+
     <script>
-      var mymap = L.map('mapdiv', { attributionControl:false }).setView([{{ latitude ? latitude : 55.03023587}}, {{ longitude ? longitude : 82.92034149 }}], 14);
+      {% if latitude is empty or longitude is empty %}
+        var mymap = L.map('mapdiv', { attributionControl:false }).setView([54.409188764555, 53.159180581570], 5);
+      {% else %}
+        var mymap = L.map('mapdiv', { attributionControl:false }).setView([{{ latitude }}, {{ longitude }}], 13);
+      {% endif %}
 
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         // __dummy
@@ -68,8 +76,8 @@
         lat = Number(position['lat']).toFixed(12);
         lng = Number(position['lng']).toFixed(12);
 
-        $('#form_latitude').attr('value', lat);
-        $('#form_longitude').attr('value', lng);
+        $('#user_location_latitude').attr('value', lat);
+        $('#user_location_longitude').attr('value', lng);
 
         //console.log(mymap.getCenter());
       });
@@ -81,8 +89,8 @@
         lat = Number(position['lat']).toFixed(12);
         lng = Number(position['lng']).toFixed(12);
 
-        $('#form_latitude').attr('value', lat);
-        $('#form_longitude').attr('value', lng);
+        $('#user_location_latitude').attr('value', lat);
+        $('#user_location_longitude').attr('value', lng);
 
         //console.log(mymap.getCenter());
       });
@@ -119,8 +127,8 @@
 
             // alert(lat + ' ' + lon);
 
-            $('#form_latitude').attr('value', lat.toFixed(12));
-            $('#form_longitude').attr('value', lon.toFixed(12));
+            $('#user_location_latitude').attr('value', lat.toFixed(12));
+            $('#user_location_longitude').attr('value', lon.toFixed(12));
 
             mymap.setView([lat.toFixed(12), lon.toFixed(12)], 15);
 

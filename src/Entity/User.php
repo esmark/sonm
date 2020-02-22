@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\DTO\Worksheet;
+use App\Entity\Geo\City;
 use App\Model\UserModel;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -222,6 +223,13 @@ class User extends UserModel
      * @ORM\Column(type="text", nullable=true)
      */
     protected $purpose_take;
+
+    /**
+     * @var City|null
+     *
+     * @ORM\ManyToOne(targetEntity="App\Entity\Geo\City", cascade={"persist"}, fetch="EXTRA_LAZY")
+     */
+    protected $city;
 
     /**
      * Товары в корзинке
@@ -926,6 +934,26 @@ class User extends UserModel
     public function setPayments($payments): self
     {
         $this->payments = $payments;
+
+        return $this;
+    }
+
+    /**
+     * @return City|null
+     */
+    public function getCity(): ?City
+    {
+        return $this->city;
+    }
+
+    /**
+     * @param City|null $city
+     *
+     * @return $this
+     */
+    public function setCity(?City $city): self
+    {
+        $this->city = $city;
 
         return $this;
     }

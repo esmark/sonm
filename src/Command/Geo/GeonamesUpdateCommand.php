@@ -31,6 +31,13 @@ use Symfony\Component\Stopwatch\Stopwatch;
  * каменка -> Khal-Kiloy
  * ростов -> Rostov-na-Donu
  * нальчик -> Nalchik Airport
+ *
+ * === Небольшие отклонения по координатам
+ * Уфа
+ *
+ * === Большие отклонения по координатам
+ * Тюмень
+ *
  */
 class GeonamesUpdateCommand extends Command
 {

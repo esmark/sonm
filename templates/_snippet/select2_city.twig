@@ -1,0 +1,14 @@
+<script>
+  $(document).ready(function() {
+    $('#{{ selector }}').select2({
+      ajax: {
+        url: '{{ path('api_geo_cities') }}',
+        dataType: 'json',
+        delay: 300
+      },
+      placeholder: 'Выберите город...',
+      allowClear: true,
+      minimumInputLength: 1
+    });
+  });
+</script>

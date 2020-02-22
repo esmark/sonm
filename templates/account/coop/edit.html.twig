@@ -9,18 +9,6 @@
 {% block js %}
     {{ parent() }}
 
-    <script>
-      $(document).ready(function() {
-        $('#cooperative_city').select2({
-          ajax: {
-            url: '{{ path('api_geo_cities') }}',
-            dataType: 'json',
-            delay: 700
-          },
-          placeholder: 'Выберите город',
-          allowClear: true,
-          minimumInputLength: 1
-        });
-      });
-    </script>
+    {% include '_snippet/select2_city.twig' with {'selector': 'cooperative_city'} %}
+
 {% endblock %}
