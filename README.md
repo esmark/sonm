@@ -77,7 +77,14 @@ bin/console app:geo:population-update
 
 Для Microsoft IIS конфиг `web.config` уже находится в папке `public` 
 
-Для `apache` @todo 
+Для `apache` @todo
+
+В режиме разработки можно запускать проект утилитой symfony:
+
+```
+symfony serve
+``` 
+ 
 
 Запуск в Docker
 ---------------
