@@ -9,7 +9,7 @@ trait TimezoneTrait
     /**
      * @var string|null
      *
-     * @ORM\Column(type="string", length=4, nullable=true)
+     * @ORM\Column(type="string", length=40, nullable=true)
      */
     protected $timezone;
 
