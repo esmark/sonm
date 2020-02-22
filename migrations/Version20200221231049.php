@@ -22,6 +22,7 @@ final class Version20200221231049 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'postgresql', 'Migration can only be executed safely on \'postgresql\'.');
 
+        $this->addSql('UPDATE geo_cities SET population = 0 WHERE population IS NULL');
         $this->addSql('ALTER TABLE geo_cities ALTER population SET DEFAULT 0');
         $this->addSql('ALTER TABLE geo_cities ALTER population SET NOT NULL');
     }

@@ -143,12 +143,10 @@ class FiasUpdateCommand extends Command
                 //$db = \App\Utils\dbase_open($file->getPathname(), DBASE_RDONLY);
                 $db = dbase_open($file->getPathname(), DBASE_RDONLY);
 
-                $regions = [];
-                $areas       = 0;
-                $cities      = 0;
+                $provinces   = 0; // районы
+                $cities      = 0; // города
                 $settlements = 0; // населённые пункты
-                $streets = [];
-                $buildings = [];
+                $streets     = 0; // улицы
 
                 $dbFlushCount = 0;
                 for ($i = 1; $i <= dbase_numrecords($db); $i++) {
@@ -171,8 +169,6 @@ class FiasUpdateCommand extends Command
 
                     // Регионы
                     if ($rec['AOLEVEL'] == 1) {
-                        $regions++;
-
                         $region = $em->getRepository(Region::class)->findOneBy(['aoid' => $rec['AOID']]);
 
                         if (empty($region)) {
@@ -193,12 +189,14 @@ class FiasUpdateCommand extends Command
                             }
                         }
 
+                        $this->io->text("   Регион: " . $region->getFullname());
+
                         continue;
                     }
 
                     // Районы
                     if ($rec['AOLEVEL'] == 3) {
-                        $areas++;
+                        $provinces++;
 
                         $province = $em->getRepository(Province::class)->findOneBy(['aoid' => $rec['AOID']]);
 
@@ -229,7 +227,7 @@ class FiasUpdateCommand extends Command
                     }
 
                     // Населённые пункты
-                    if ($rec['AOLEVEL'] == 6) {
+                    if ($rec['AOLEVEL'] == 6666666) {
                         $settlements++;
 
                         $settlement = $em->getRepository(Settlement::class)->findOneBy(['aoid' => $rec['AOID']]);
@@ -269,16 +267,13 @@ class FiasUpdateCommand extends Command
 
                 dbase_close($db);
 
-                dump($count);
-                dump('provinces = '.$areas);
-                dump('cities = '.$cities);
-                dump('settlements = '.$settlements);
-//                dump('streets = '.count($streets));
-//                dump('buildings = '.count($buildings));
+                $this->io->text("   Всего записей обработано: $count");
+                $this->io->text("   Районов: $provinces");
+                $this->io->text("   Городов: $cities");
+                $this->io->text("   Населённых пунктов: $settlements");
+                $this->io->text("   Улиц: $streets");
 
-//                dump('flushing...');
                 $em->flush();
-//                dump('OK !');
             }
         } else {
             $this->io->error("В папке {$fiasDir} отсутсвуют файлы ADDROB*.DBF");
@@ -286,16 +281,11 @@ class FiasUpdateCommand extends Command
 
         $event = $stopwatch->stop(md5(__FILE__));
 
-        if ($output->isDebug()) {
-            $this->io->comment(
-                sprintf(
-                    'Items processed: %d / Elapsed time: %.4f s / Consumed memory: %.2f MB',
-                    $count,
-                    microtime(true) - $this->startTime,
-                    $event->getMemory() / (1024 ** 2)
-                )
-            );
-        }
+        $this->io->comment(sprintf('Items processed: %d / Elapsed time: %.4f s / Consumed memory: %.2f MB',
+            $count,
+            microtime(true) - $this->startTime,
+            $event->getMemory() / (1024 ** 2)
+        ));
 
         return 0;
     }
