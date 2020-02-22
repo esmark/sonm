@@ -73,7 +73,7 @@ bin/console app:geo:population-update
 Настройка веб-сервера
 ---------------------
 
-Пример конфига для nginx находится тут `doc/nginx-sonm.conf`
+Пример конфига для nginx находится тут [nginx-sonm.conf](doc/nginx-sonm.conf)
 
 Для Microsoft IIS конфиг `web.config` уже находится в папке `public` 
 
@@ -85,61 +85,10 @@ bin/console app:geo:population-update
 symfony serve
 ``` 
  
-
 Запуск в Docker
 ---------------
 
-Пока только в режиме разработки!
-
-Получение кода:
-```
-git clone https://github.com/esmark/sonm.git
-cd sonm
-```
-
-Инициализация приложения (займёт примерно 10 минут):
-
-```
-make init
-```
-
-Запуск докера:
-```
-make up
-```
-
-По умолчанию веб порт задан 8089, открывать проект по адресу:
-
-```
-http://localhost:8089/
-``` 
-
-Остановка докера:
-```
-make down
-```
-
-Если нужно изменить порт, тогда запускать проект так:
-```
-make down
-WEB_PORT=80 make up
-```
-в этом случае, проект будет доступен на 80 порту:
-```
-http://localhost/
-``` 
-
-Или можно запустить установку с нуля одной строчкой:
-
-Для Windows:
-```
-git clone https://github.com/esmark/sonm.git;cd sonm;make init;make up;start http://localhost:8089/
-```
-
-Для Linux:
-```
-git clone https://github.com/esmark/sonm.git;cd sonm;make init;make up;xdg-open http://localhost:8089/
-```
+Документация тут [docker.md](doc/docker.md) 
 
 Дополнительные команды
 ----------------------
@@ -149,7 +98,7 @@ git clone https://github.com/esmark/sonm.git;cd sonm;make init;make up;xdg-open 
 bin/console user:list
 ```
 
-Назначить роль пользователю: (ROLE_SUPER_ADMIN)
+Назначить роль пользователю, например: ROLE_SUPER_ADMIN
 ```
 bin/console user:role:promote <username> <role>
 ```
