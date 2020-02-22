@@ -12,7 +12,7 @@ use Smart\CoreBundle\Doctrine\ColumnTrait;
 /**
  * Города
  *
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="App\Repository\CityRepository")
  * @ORM\Table(name="geo_cities",
  *      indexes={
  *          @ORM\Index(columns={"created_at"}),
@@ -90,6 +90,7 @@ class City
     public function __construct()
     {
         $this->created_at  = new \DateTime();
+        $this->population  = 0;
         $this->settlements = new ArrayCollection();
     }
 
@@ -98,7 +99,7 @@ class City
      */
     public function __toString(): string
     {
-        return $this->getOffname() . ' ' . $this->getShortname() . '.';
+        return $this->getShortname() . '. ' . $this->getOffname();
     }
 
     /**

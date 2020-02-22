@@ -9,30 +9,26 @@ trait PopulationTrait
     /**
      * Численность населения
      *
-     * @var int|null
+     * @var int
      *
-     * @ORM\Column(type="bigint", nullable=true)
+     * @ORM\Column(type="bigint", options={"default":0})
      */
     protected $population;
 
     /**
-     * @return int|null
+     * @return int
      */
-    public function getPopulation(): ?int
+    public function getPopulation(): int
     {
-        if (empty($this->population)) {
-            return null;
-        }
-
         return (int) $this->population;
     }
 
     /**
-     * @param int|null $population
+     * @param int $population
      *
      * @return $this
      */
-    public function setPopulation(?int $population): self
+    public function setPopulation(int $population): self
     {
         $this->population = $population;
 

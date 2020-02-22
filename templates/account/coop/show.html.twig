@@ -54,6 +54,27 @@
                     <td>{{ coop.slug }}</td>
                 </tr>
                 <tr>
+                    <th>Директор</th>
+                    <td>{{ coop.director }}</td>
+                </tr>
+                <tr>
+                    <th>Описание</th>
+                    <td>{{ coop.description }}</td>
+                </tr>
+                <tr>
+                    <th>Город</th>
+                    <td>{% if coop.city %}
+                            {{ coop.city }} ({{ coop.city.region.fullname }})
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <th>Адрес</th>
+                    <td>{{ coop.address }}</td>
+                </tr>
+                <tr>
                     <th>ОГРН</th>
                     <td>{{ coop.ogrn }}</td>
                 </tr>
@@ -64,18 +85,6 @@
                 <tr>
                     <th>КПП</th>
                     <td>{{ coop.kpp }}</td>
-                </tr>
-                <tr>
-                    <th>Директор</th>
-                    <td>{{ coop.director }}</td>
-                </tr>
-                <tr>
-                    <th>Описание</th>
-                    <td>{{ coop.description }}</td>
-                </tr>
-                <tr>
-                    <th>Адрес</th>
-                    <td>{{ coop.address }}</td>
                 </tr>
                 <tr>
                     <th>Налоговые ставки для не пайщиков</th>

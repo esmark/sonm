@@ -7,6 +7,7 @@ namespace App\Controller\Account;
 use App\Entity\Cooperative;
 use App\Entity\CooperativeHistory;
 use App\Entity\CooperativeMember;
+use App\Entity\Geo\City;
 use App\Entity\Order;
 use App\Form\Type\CooperativeCreateFormType;
 use App\Form\Type\CooperativeFormType;
@@ -42,9 +43,13 @@ class CoopController extends AbstractController
         if ($request->isMethod('POST')) {
             $form->handleRequest($request);
 
-            if ($form->get('create')->isClicked() and $form->isValid()) {
-                $coop = $form->getData();
+            /** @var Cooperative $coop */
+            $coop = $form->getData();
 
+            // @todo пока в ручную подставляется город, по хорошему надо сделать кастомный EntityType, который будет дружить с аяксом.
+            $coop->setCity($em->find(City::class, (int) $request->request->get('cooperative')['city']));
+
+            if ($form->get('create')->isClicked() and $form->isValid()) {
                 $member = new CooperativeMember();
                 $member
                     ->setCooperative($coop)
@@ -235,9 +240,13 @@ class CoopController extends AbstractController
                 return $this->redirectToRoute('account_coop_show', ['id' => $coop->getId()]);
             }
 
-            if ($form->get('update')->isClicked() and $form->isValid()) {
-                $coop = $form->getData();
+            /** @var Cooperative $coop */
+            $coop = $form->getData();
 
+            // @todo пока в ручную подставляется город, по хорошему надо сделать кастомный EntityType, который будет дружить с аяксом.
+            $coop->setCity($em->find(City::class, (int) $request->request->get('cooperative')['city']));
+
+            if ($form->get('update')->isClicked() and $form->isValid()) {
                 $uow = $em->getUnitOfWork();
                 $uow->computeChangeSets();
 

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\Doctrine\StatusTrait;
+use App\Entity\Geo\City;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -106,6 +107,13 @@ class Cooperative
      * @Assert\NotBlank()
      */
     protected $title;
+
+    /**
+     * @var City|null
+     *
+     * @ORM\ManyToOne(targetEntity="App\Entity\Geo\City", cascade={"persist"}, fetch="EXTRA_LAZY")
+     */
+    protected $city;
 
     /**
      * @var CooperativeHistory[]|Collection
@@ -483,6 +491,26 @@ class Cooperative
     public function setTitle(string $title): self
     {
         $this->title = $title;
+
+        return $this;
+    }
+
+    /**
+     * @return City|null
+     */
+    public function getCity(): ?City
+    {
+        return $this->city;
+    }
+
+    /**
+     * @param City|null $city
+     *
+     * @return $this
+     */
+    public function setCity(?City $city): self
+    {
+        $this->city = $city;
 
         return $this;
     }
