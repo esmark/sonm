@@ -36,7 +36,7 @@ composer i
 
 Обновление схемы БД
 ```
-bin/console doctrine:migrations:migrate --no-interaction
+bin/migrate
 ```
 
 В случае, если будут проблеммы с доступами к файлам, то нужно обнулить кеш
