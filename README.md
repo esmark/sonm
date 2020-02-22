@@ -53,13 +53,31 @@ bin/clear_cache
 Для импортирования данных ФИАС в БД, выполнить команду:
 
 ```
-bin/console app:geo:fias-update -vvv
+bin/console app:geo:fias-update
 ```
+
+### Данные о численности населения по городам
+
+После загрузки данных из фиас, рекомендуется загрузить данные о популяции.
+Это позволит в формах автокомплита городов подгружать списки более походящими.
+
+```
+bin/console app:geo:population-update
+``` 
 
 ### MaxMind GeoLite2
 
 Для распознования по IP адресу, зарегистрироваться на https://dev.maxmind.com/geoip/geoip2/geolite2/ 
 и скачать файл `GeoLite2-City.mmdb`, который нужно будет расположить по данному пути: `/var/MaxMind/GeoLite2-City.mmdb`  
+
+Настройка веб-сервера
+---------------------
+
+Пример конфига для nginx находится тут `doc/nginx-sonm.conf`
+
+Для Microsoft IIS конфиг `web.config` уже находится в папке `public` 
+
+Для `apache` @todo 
 
 Запуск в Docker
 ---------------
