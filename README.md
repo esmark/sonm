@@ -70,9 +70,10 @@ bin/console app:geo:population-update
 Для распознования по IP адресу, зарегистрироваться на https://dev.maxmind.com/geoip/geoip2/geolite2/ 
 и скачать файл `GeoLite2-City.mmdb`, который нужно будет расположить по данному пути: `/var/MaxMind/GeoLite2-City.mmdb`  
 
+
 ### База с координатами от GeoNames Gazetteer
 
-Распаковать файл http://download.geonames.org/export/dump/RU.zip в `/var/geonames-RU.txt` затем выполнить команду
+Распаковать файл [http://download.geonames.org/export/dump/RU.zip](http://download.geonames.org/export/dump/RU.zip) в `/var/geonames-RU.txt` затем выполнить команду
 
 ```
 bin/console app:geo:geonames-update
