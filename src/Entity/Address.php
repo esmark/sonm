@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Smart\CoreBundle\Doctrine\ColumnTrait;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -117,6 +119,13 @@ class Address
      */
     protected $flat;
 
+    /**
+     * @var Order[]|Collection
+     *
+     * @ORM\OneToMany(targetEntity="Order", mappedBy="shippingAddress", cascade={"persist"}, fetch="EXTRA_LAZY")
+     * @ORM\OrderBy({"created_at" = "DESC"})
+     */
+    protected $orders;
 
     /**
      * Address constructor.
@@ -130,6 +139,7 @@ class Address
         $this->province     = '';
         $this->postcode     = '';
         $this->street       = '';
+        $this->orders       = new ArrayCollection();
     }
 
     /**
@@ -362,6 +372,26 @@ class Address
     public function setFlat(?string $flat): self
     {
         $this->flat = $flat;
+
+        return $this;
+    }
+
+    /**
+     * @return Order[]|Collection
+     */
+    public function getOrders()
+    {
+        return $this->orders;
+    }
+
+    /**
+     * @param Order[]|Collection $orders
+     *
+     * @return $this
+     */
+    public function setOrders($orders): self
+    {
+        $this->orders = $orders;
 
         return $this;
     }

@@ -22,21 +22,27 @@
 
     <p>Итого на сумму: <b>{{ order.amount }}</b> p</p>
 
-    {% if order.status != 0 %}
-        <h3>Адрес доставки</h3>
-
-        {% if order.shippingAddress is empty %}
-            <p>не указан</p>
-        {% else %}
-            {{ order.shippingAddress }}
-        {% endif %}
-
-        <br>
+    {% if order.status != 0 %} {# заказ уже офомлен - отоюражении информации о нём #}
 
         <h3>Способ доставки</h3>
 
-        <p>@todo </p>
+        <p>{{ order.shippingMethod }}</p>
 
+        <br>
+
+        {% if order.shippingAddress %}
+            <h3>Адрес доставки</h3>
+
+            {% if order.shippingAddress is empty %}
+                <p>не указан</p>
+            {% else %}
+                <p>{{ order.shippingAddress }}</p>
+            {% endif %}
+        {% else %}
+            <h3>Адрес точки выдачи</h3>
+
+            <p>{{ order.shippingPickUpLocation.address }}</p>
+        {% endif %}
         <br>
 
         <h3>Оплата</h3>
@@ -54,43 +60,71 @@
                 </li>
             {% endfor %}
         </ul>
-    {% else %}
-        <form method="post">
+    {% else %} {# процедура офомления заказа #}
 
-            <h3>Адрес доставки</h3>
+        {# доставка #}
+        {% if order.checkoutStatus == 'cart' %}
+            <h3>Выберите метод доставки</h3>
 
-            {% if addresses is empty %}
-                <p><a href="{{ path('account_address_create') }}">Добавьте адрес, а затем вернитесь к оформлению заказа</a></p>
-            {% else %}
-                <select name="address">
-                    {% for address in addresses %}
-                        <option value="{{ address.id }}">{{ address }}</option>
+            <form method="post">
+                <select name="sm">
+                    {% for sm in shipping_methods %}
+                        <option value="{{ sm.id }}">{{ sm }}</option>
                     {% endfor %}
                 </select>
-                <br>
-            {% endif %}
-
-            <br>
-
+                &nbsp;
+                <button class="btn btn-success">Выбрать</button>
+            </form>
+        {% else %}
             <h3>Способ доставки</h3>
 
-            <p>@todo </p>
+            <p>{{ order.shippingMethod }} - <a href="?choose_another_shipping_method">Выбрать другой</a></p>
 
             <br>
+        {% endif %}
 
-            <h3>Выберите метод оплаты</h3>
+        {# Адрессация #}
+        {% if order.checkoutStatus == 'shipping_selected' %}
+            {% if addresing_form %}
+                {{ form(addresing_form) }}
+            {% else %}
+                <p><a href="{{ path('account_address_create') }}">Добавьте адрес, а затем вернитесь к оформлению заказа</a></p>
+            {% endif %}
+        {% elseif order.checkoutStatus != 'cart' %}
+            {% if order.shippingAddress %}
+                <h3>Адрес доставки</h3>
 
-            <select name="pm">
-                {% for pm in payment_methods %}
-                    <option value="{{ pm.id }}">{{ pm }}</option>
-                {% endfor %}
-            </select>
+                {% if order.shippingAddress is empty %}
+                    <p>не указан</p>
+                {% else %}
+                    <p>{{ order.shippingAddress }}</p>
+                {% endif %}
+            {% else %}
+                <h3>Адрес точки выдачи</h3>
 
-            <br>
-            <br>
+                <p>{{ order.shippingPickUpLocation.address }}</p>
+            {% endif %}
+        {% endif %}
 
-            <button class="btn btn-success">Оплатить <b>{{ order.amount }}</b> p</button>
-        </form>
+        {# Оплата #}
+        {% if order.checkoutStatus == 'addressed' %}
+             <h3>Выберите метод оплаты</h3>
+
+            {% if order.shippingPrice > 0 %}
+                <p>Итоговая сумма к оплате: {{ order.amount + order.shippingPrice }} ({{ order.amount }} + {{ order.shippingPrice }} за доставку)</p>
+            {% endif %}
+
+            <form method="post">
+                <select name="pm">
+                    {% for pm in payment_methods %}
+                        <option value="{{ pm.id }}">{{ pm }}</option>
+                    {% endfor %}
+                </select>
+                &nbsp;
+                <button class="btn btn-success">Оплатить <b>{{ order.amount + order.shippingPrice }}</b></button>
+            </form>
+        {% endif %}
+
     {% endif %}
 
 {% endblock %}

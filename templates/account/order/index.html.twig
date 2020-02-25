@@ -32,7 +32,7 @@
                     {% endfor %}
                     </ul>
                 </td>
-                <td>{{ order.amount }}</td>
+                <td>{{ order.amount + order.shippingPrice }}</td>
                 <td><a href="{{ path('coop_show', {'slug': order.cooperative.slug }) }}">{{ order.cooperative }}</a></td>
                 <td>{{ order.statusAsText }}</td>
                 <td>{{ order.paymentStatus }}</td>

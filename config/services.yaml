@@ -28,6 +28,7 @@ services:
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
 
+    # Методы платежей
     app.payment.method.ym:
         class: App\Payment\YandexMoneyPayment
         tags: ['app.payment.method']
@@ -35,6 +36,17 @@ services:
     App\Payment\CashPayment:
         tags: ['app.payment.method']
 
+    # Методы доставки
+    App\Shipping\Courier:
+        tags: ['app.shipping.method']
+
+    App\Shipping\Pickup:
+        tags: ['app.shipping.method']
+
+    App\Shipping\PochtaRu:
+        tags: ['app.shipping.method']
+
+    # Меню
     app.menu.main:
         class: App\Menu\MainMenu
         arguments: ['@knp_menu.factory']

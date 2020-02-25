@@ -14,7 +14,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * Способы доставки
  *
  * @ORM\Entity()
- * @ORM\Table(name="shipments_methods",
+ * @ORM\Table(name="shippings_methods",
  *      indexes={
  *          @ORM\Index(columns={"is_enabled"}),
  *      }
@@ -22,7 +22,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  *
  * @ORM\HasLifecycleCallbacks()
  */
-class ShipmentMethod
+class ShippingMethod
 {
     use ColumnTrait\Id;
     use ColumnTrait\IsEnabled;
@@ -36,7 +36,7 @@ class ShipmentMethod
     protected $title;
 
     /**
-     * Имя сервиса. Например: 'app.payment.cash' или 'App\Payment\CashPayment'
+     * Имя сервиса. Например: 'app.shipping.pickup' или 'App\Shipping\Pickup'
      *
      * @var string
      *
@@ -45,7 +45,7 @@ class ShipmentMethod
     protected $service;
 
     /**
-     * Имя класса. Например: 'App\Payment\CashPayment'
+     * Имя класса. Например: 'App\Shipping\Pickup'
      *
      * @var string
      *

@@ -47,17 +47,11 @@ class Order
 
     const CHECKOUT_CART              = 'cart';              // Начало оформления заказа
     const CHECKOUT_COMPLETED         = 'completed';         // Оформлен
-    const CHECKOUT_ADDRESSED         = 'addressed';         // Выбор адреса доставки
+    const CHECKOUT_ADDRESSED         = 'addressed';         // Выбран адрес доставки или точки самовывоза
     const CHECKOUT_SHIPPING_SELECTED = 'shipping_selected'; // Метод доставки выбран
     const CHECKOUT_SHIPPING_SKIPPED  = 'shipping_skipped';  // Метод доставки пропущен
     const CHECKOUT_PAYMENT_SELECTED  = 'payment_selected';  // Метод платежа выбран
     const CHECKOUT_PAYMENT_SKIPPED   = 'payment_skipped';   // Метод платежа пропущен
-
-    const SHIPPING_CART              = 'cart';              // Начало оформления заказа
-    const SHIPPING_READY             = 'ready';             // Готово к отправке
-    const SHIPPING_CANCELLED         = 'cancelled';         // Доставка отменена
-    const SHIPPING_PARTIALLY_SHIPPED = 'partially_shipped'; // Частично отгруженный @todo ?
-    const SHIPPING_SHIPPED           = 'shipped';           // Отгруженный
 
     const PAYMENT_CART                  = 'cart';                 // Начало оформления заказа
     const PAYMENT_AWAITING_PAYMENT      = 'awaiting_payment';     // Ожидание оплаты
@@ -68,6 +62,12 @@ class Order
     const PAYMENT_PAID                  = 'paid';                 // Оплачен
     const PAYMENT_PARTIALLY_REFUNDED    = 'partially_refunded';   // Частичнй возврат @todo ?
     const PAYMENT_REFUNDED              = 'refunded';             // Возврат
+
+    const SHIPPING_CART              = 'cart';              // Начало оформления заказа
+    const SHIPPING_READY             = 'ready';             // Готово к отправке
+    const SHIPPING_CANCELLED         = 'cancelled';         // Доставка отменена
+    const SHIPPING_PARTIALLY_SHIPPED = 'partially_shipped'; // Частично отгруженный @todo ?
+    const SHIPPING_SHIPPED           = 'shipped';           // Отгруженный
 
     /**
      * Сумма заказа
@@ -81,7 +81,7 @@ class Order
     /**
      * @var string
      *
-     * @ORM\Column(type="string", length=16, nullable=false)
+     * @ORM\Column(type="string", length=24, nullable=false)
      */
     protected $checkoutStatus;
 
@@ -120,20 +120,29 @@ class Order
     protected $shippingStatus;
 
     /**
+     * Трек-номер для отслеживания доставки
+     *
+     * @var string|null
+     *
+     * @ORM\Column(type="string", length=32, nullable=true)
+     */
+    protected $shippingTracking;
+
+    /**
+     * Стоимость доставки
+     *
+     * @var integer
+     *
+     * @ORM\Column(type="integer", nullable=false, options={"default":0})
+     */
+    protected $shippingPrice;
+
+    /**
      * @var Cooperative
      *
      * @ORM\ManyToOne(targetEntity="Cooperative")
      */
     protected $cooperative;
-
-    /**
-     * Адрес доставки
-     *
-     * @var Address|null
-     *
-     * @ORM\ManyToOne(targetEntity="Address")
-     */
-    protected $shippingAddress;
 
     /**
      * @var OrderLine[]|Collection
@@ -149,6 +158,38 @@ class Order
      * @ORM\OneToMany(targetEntity="Payment", mappedBy="order", cascade={"persist"}, fetch="EXTRA_LAZY")
      */
     protected $payments;
+
+    /**
+     * Адрес доставки
+     *
+     * Если NULL, значит "самовывоз"
+     *
+     * @var Address|null
+     *
+     * @ORM\ManyToOne(targetEntity="Address", inversedBy="orders", cascade={"persist"}, fetch="EXTRA_LAZY")
+     */
+    protected $shippingAddress;
+
+    /**
+     * Точка самовывоза
+     *
+     * Если NULL, значит доставляется по адресу
+     *
+     * @var PickUpLocation|null
+     *
+     * @ORM\ManyToOne(targetEntity="PickUpLocation")
+     */
+    protected $shippingPickUpLocation;
+
+    /**
+     * Если NULL, значит товар не требует физической доставки.
+     *
+     * @var ShippingMethod|null
+     *
+     * @ORM\ManyToOne(targetEntity="ShippingMethod", cascade={"persist"}, fetch="EXTRA_LAZY")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    protected $shippingMethod;
 
     /**
      * @var User
@@ -169,6 +210,7 @@ class Order
         $this->lines          = new ArrayCollection();
         $this->payments       = new ArrayCollection();
         $this->paymentStatus  = self::PAYMENT_CART;
+        $this->shippingPrice  = 0;
         $this->shippingStatus = self::SHIPPING_CART;
     }
 
@@ -313,26 +355,6 @@ class Order
     }
 
     /**
-     * @return Address|null
-     */
-    public function getShippingAddress(): ?Address
-    {
-        return $this->shippingAddress;
-    }
-
-    /**
-     * @param Address|null $shippingAddress
-     *
-     * @return $this
-     */
-    public function setShippingAddress(?Address $shippingAddress): self
-    {
-        $this->shippingAddress = $shippingAddress;
-
-        return $this;
-    }
-
-    /**
      * @return Payment[]|Collection
      */
     public function getPayments(): Collection
@@ -388,6 +410,106 @@ class Order
     public function setCheckoutCompletedAt(\DateTime $checkoutCompletedAt): self
     {
         $this->checkoutCompletedAt = $checkoutCompletedAt;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getShippingTracking(): ?string
+    {
+        return $this->shippingTracking;
+    }
+
+    /**
+     * @param string|null $shippingTracking
+     *
+     * @return $this
+     */
+    public function setShippingTracking(?string $shippingTracking): self
+    {
+        $this->shippingTracking = $shippingTracking;
+
+        return $this;
+    }
+
+    /**
+     * @return Address|null
+     */
+    public function getShippingAddress(): ?Address
+    {
+        return $this->shippingAddress;
+    }
+
+    /**
+     * @param Address|null $shippingAddress
+     *
+     * @return $this
+     */
+    public function setShippingAddress(?Address $shippingAddress): self
+    {
+        $this->shippingAddress = $shippingAddress;
+
+        return $this;
+    }
+
+    /**
+     * @return PickUpLocation|null
+     */
+    public function getShippingPickUpLocation(): ?PickUpLocation
+    {
+        return $this->shippingPickUpLocation;
+    }
+
+    /**
+     * @param PickUpLocation|null $shippingPickUpLocation
+     *
+     * @return $this
+     */
+    public function setShippingPickUpLocation(?PickUpLocation $shippingPickUpLocation): self
+    {
+        $this->shippingPickUpLocation = $shippingPickUpLocation;
+
+        return $this;
+    }
+
+    /**
+     * @return ShippingMethod|null
+     */
+    public function getShippingMethod(): ?ShippingMethod
+    {
+        return $this->shippingMethod;
+    }
+
+    /**
+     * @param ShippingMethod|null $shippingMethod
+     *
+     * @return $this
+     */
+    public function setShippingMethod(?ShippingMethod $shippingMethod): self
+    {
+        $this->shippingMethod = $shippingMethod;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getShippingPrice(): int
+    {
+        return $this->shippingPrice;
+    }
+
+    /**
+     * @param int $shippingPrice
+     *
+     * @return $this
+     */
+    public function setShippingPrice(int $shippingPrice): self
+    {
+        $this->shippingPrice = $shippingPrice;
 
         return $this;
     }

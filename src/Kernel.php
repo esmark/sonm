@@ -3,6 +3,7 @@
 namespace App;
 
 use App\DependencyInjection\Compiler\PaymentMethodsPass;
+use App\DependencyInjection\Compiler\ShippingMethodsPass;
 use App\Payment\PaymentInterface;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\Config\Loader\LoaderInterface;
@@ -57,6 +58,7 @@ class Kernel extends BaseKernel
     protected function build(ContainerBuilder $container)
     {
         $container->addCompilerPass(new PaymentMethodsPass());
+        $container->addCompilerPass(new ShippingMethodsPass());
 
 //        $container->registerForAutoconfiguration(PaymentInterface::class)
 //            ->addTag('app.payment.method')

@@ -29,10 +29,29 @@ class PickUpLocation
 
     /**
      * @var string
+     *
      * @ORM\Column(type="string")
      * @Assert\NotNull(message="This value can not be empty.")
      */
     protected $address;
+
+    /**
+     * Есть возможность приёма наличными
+     *
+     * @var bool
+     *
+     * @ORM\Column(type="boolean", nullable=false, options={"default":0})
+     */
+    protected $has_cash_acceptance;
+
+    /**
+     * Есть возможность приёма оплыты платёжных карт.
+     *
+     * @var bool
+     *
+     * @ORM\Column(type="boolean", nullable=false, options={"default":0})
+     */
+    protected $has_pos_terminal;
 
     /**
      * @var float|null
@@ -60,9 +79,11 @@ class PickUpLocation
      */
     public function __construct()
     {
-        $this->cooperatives = new ArrayCollection();
-        $this->created_at   = new \DateTime();
-        $this->is_enabled   = true;
+        $this->cooperatives        = new ArrayCollection();
+        $this->created_at          = new \DateTime();
+        $this->is_enabled          = true;
+        $this->has_cash_acceptance = false;
+        $this->has_pos_terminal    = false;
     }
 
     /**
@@ -149,6 +170,46 @@ class PickUpLocation
     public function setCooperatives($cooperatives): self
     {
         $this->cooperatives = $cooperatives;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isHasCashAcceptance(): bool
+    {
+        return $this->has_cash_acceptance;
+    }
+
+    /**
+     * @param bool $has_cash_acceptance
+     *
+     * @return $this
+     */
+    public function setHasCashAcceptance(bool $has_cash_acceptance): self
+    {
+        $this->has_cash_acceptance = $has_cash_acceptance;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isHasPosTerminal(): bool
+    {
+        return $this->has_pos_terminal;
+    }
+
+    /**
+     * @param bool $has_pos_terminal
+     *
+     * @return $this
+     */
+    public function setHasPosTerminal(bool $has_pos_terminal): self
+    {
+        $this->has_pos_terminal = $has_pos_terminal;
 
         return $this;
     }

@@ -45,6 +45,7 @@ class ProductFormType extends AbstractType
                 },
                 'required' => false,
             ])
+            ->add('is_physical')
             /*
             ->add('image_id', ImageFormType::class, [
                 'mapped' => true,

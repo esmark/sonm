@@ -3,6 +3,7 @@ Cancel: Отменить
 Category: Категория
 City: Город
 Change password: Сменить пароль
+Choose: Выбрать
 Common: Основное
 Cooperative: Кооператив
 Cooperatives: Кооперативы
@@ -22,6 +23,8 @@ Firstname: Имя
 Final date: Финальная дата
 Flat: Квартира
 Geoposition: Местоположение
+Has cash acceptance: Есть приём наличными
+Has pos terminal: Есть POS-терминал
 Height: Высота
 Homepage: Главная
 House: Дом
@@ -31,6 +34,7 @@ Invite: Приглашение участника
 Invited users: Приглашенные участники
 Is allow marketplace: Доступ к "Столу заказов"
 Is enabled: Включено
+Is physical: Является физическим?
 Image file: Картинка
 Image: Картинка
 Inn: ИНН

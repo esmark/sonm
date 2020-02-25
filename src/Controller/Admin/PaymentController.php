@@ -39,7 +39,7 @@ class PaymentController extends AbstractController
     {
         $order = $payment->getOrder();
 
-        if ($payment->getAmount() == $order->getAmount()) {
+        if ($payment->getAmount() == $order->getAmount() + $order->getShippingPrice()) {
             $order->setPaymentStatus(Order::PAYMENT_PAID);
         } else {
             $order->setPaymentStatus(Order::PAYMENT_PARTIALLY_PAID);

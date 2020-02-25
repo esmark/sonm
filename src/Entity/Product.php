@@ -74,6 +74,18 @@ class Product
     protected $is_enabled;
 
     /**
+     * Товар является физическим т.е. трубует физической доставки.
+     *
+     * А вот например "пай", "изготовление сайта", "информационные услуги"  - это "не физические товары, они не требуют доставки,
+     * значит не используют пункты выдачи и т.д.
+     *
+     * @var bool
+     *
+     * @ORM\Column(type="boolean", nullable=false,  options={"default":1})
+     */
+    protected $is_physical;
+
+    /**
      * @var string|null
      *
      * @ORM\Column(type="text", nullable=true)
@@ -194,13 +206,14 @@ class Product
      */
     public function __construct()
     {
-        $this->created_at = new \DateTime();
-        $this->is_enabled = true;
-        $this->measure    = self::MEASURE_NONE;
-        $this->status     = self::STATUS_AVAILABLE;
-        $this->variants   = new ArrayCollection();
-        $this->priceMin   = 0;
-        $this->priceMax   = 0;
+        $this->created_at  = new \DateTime();
+        $this->is_enabled  = true;
+        $this->is_physical = true;
+        $this->measure     = self::MEASURE_NONE;
+        $this->status      = self::STATUS_AVAILABLE;
+        $this->variants    = new ArrayCollection();
+        $this->priceMin    = 0;
+        $this->priceMax    = 0;
     }
 
     /**
@@ -553,6 +566,26 @@ class Product
     public function setTaxRate(?TaxRate $taxRate): self
     {
         $this->taxRate = $taxRate;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isIsPhysical(): bool
+    {
+        return $this->is_physical;
+    }
+
+    /**
+     * @param bool $is_physical
+     *
+     * @return $this
+     */
+    public function setIsPhysical(bool $is_physical): self
+    {
+        $this->is_physical = $is_physical;
 
         return $this;
     }

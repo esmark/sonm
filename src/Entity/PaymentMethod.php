@@ -36,6 +36,15 @@ class PaymentMethod
     protected $title;
 
     /**
+     * Тип
+     *
+     * @var string
+     *
+     * ORM\Column(type="string", length=100, unique=true)
+     */
+    protected $type;
+
+    /**
      * Имя сервиса. Например: 'app.payment.cash' или 'App\Payment\CashPayment'
      *
      * @var string
