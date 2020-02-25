@@ -128,7 +128,7 @@ class PopulationUpdateCommand extends Command
 
                 $i++;
 
-                $population = str_replace(['Численность населения', 'Количество жителей'], '', $node->filter('span')->text(''));
+                $population = str_replace(['Численность населения', 'Количество жителей'], '', $node->filter('span')->text('', $normalizeWhitespace = false));
                 $population = str_replace([' '], '', $population);
 
                 Try_City_Name_With_E:
