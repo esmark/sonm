@@ -12,7 +12,7 @@
     {% if member.status == 0 %}
         <a href="{{ path('account_coop_show', {'id': member.cooperative.id}) }}?approve_member={{ member.id }}" class="btn btn-success btn-sm" onclick="return confirm('Вы уверены, что хотите принять участника как ассоциированного пайщика?')">Принять как АП</a>
         <a href="{{ path('account_coop_show', {'id': member.cooperative.id}) }}?decline_member={{ member.id }}" class="btn btn-danger btn-sm" onclick="return confirm('Вы уверены, что хотите отказать в заявке?')">Отклонить</a>
-    {% if member.status == 1 %}
+    {% elseif member.status == 1 %}
         <a href="{{ path('account_coop_show', {'id': member.cooperative.id}) }}?approve_member={{ member.id }}" class="btn btn-success btn-sm" onclick="return confirm('Вы уверены, что хотите принять участника как действительного пайщика?')">Принять как ДП</a>
         <a href="{{ path('account_coop_show', {'id': member.cooperative.id}) }}?decline_member={{ member.id }}" class="btn btn-danger btn-sm" onclick="return confirm('Вы уверены, что хотите отказать в заявке?')">Отклонить</a>
     {% elseif member.cooperative.memberByUser(app.user).status == 4 %}
