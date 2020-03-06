@@ -2,7 +2,8 @@
 
 {% block title %}Заказы - {{ parent() }}{% endblock %}
 
-{% block account_content %}
+{% block content %}
+    {{ parent() }}
 
     <h1>Заказы - <a href="{{ path('account_coop_show', {'id': coop.id}) }}">{{ coop }}</a></h1>
 

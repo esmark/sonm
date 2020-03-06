@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Menu;
 
 use Knp\Menu\FactoryInterface;
+use Knp\Menu\ItemInterface;
 
 class MainMenu
 {
@@ -27,7 +28,7 @@ class MainMenu
      *
      * @return \Knp\Menu\ItemInterface
      */
-    public function top(array $options)
+    public function top(array $options): ItemInterface
     {
         $menu = $this->factory->createItem('root', [
             'childrenAttributes'    => [
@@ -65,7 +66,7 @@ class MainMenu
      *
      * @return \Knp\Menu\ItemInterface
      */
-    public function account(array $options)
+    public function account(array $options): ItemInterface
     {
         $menu = $this->factory->createItem('root', [
             'childrenAttributes'    => [
@@ -74,12 +75,31 @@ class MainMenu
         ]);
 
         $menu->addChild('My orders',        ['route' => 'account_order']);
-        $menu->addChild('My payments',        ['route' => 'account_payment']);
-        $menu->addChild('My balance',       ['route' => 'account_balance']);
+        $menu->addChild('My products',      ['route' => 'account_product']);
+        $menu->addChild('My payments',      ['route' => 'account_payment']);
         $menu->addChild('My cooperatives',  ['route' => 'account_coop']);
+        $menu->addChild('Member book',      ['route' => 'account_balance']);
+        $menu->addChild('My profile',       ['route' => 'account_profile']);
+
+        return $menu;
+    }
+
+    /**
+     * @param array $options
+     *
+     * @return ItemInterface
+     */
+    public function profile(array $options): ItemInterface
+    {
+        $menu = $this->factory->createItem('root', [
+            'childrenAttributes'    => [
+                'class' => 'nav _flex-column nav-pills',
+            ],
+        ]);
+
+        $menu->addChild('My profile',       ['route' => 'account_profile']);
         $menu->addChild('My addresses',     ['route' => 'account_address']);
         $menu->addChild('Profile of intentions', ['route' => 'account_worksheet']);
-        $menu->addChild('Profile',          ['route' => 'account_profile']);
         $menu->addChild('Telegram',         ['route' => 'account_telegram']);
         $menu->addChild('Geoposition',      ['route' => 'account_geoposition']);
         $menu->addChild('Change password',  ['route' => 'account_password']);

@@ -1,7 +1,6 @@
-{% extends 'account/_layout.html.twig' %}
+{% extends 'account/_profile.html.twig' %}
 
 {% block account_content %}
-    <h2>Мой профиль</h2>
     {% if form is defined %}
         <p><b>Логин:</b> {{ app.user.username }}</p>
 
@@ -17,4 +16,4 @@
 
         {{ form(form) }}
     {% endif %}
-{% endblock account_content %}
+{% endblock %}

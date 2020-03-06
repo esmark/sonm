@@ -1,6 +1,8 @@
 {% extends 'account/_layout.html.twig' %}
 
-{% block account_content %}
+{% block content %}
+    {{ parent() }}
+
     <h2>Редактирование участника</h2>
 
     <p><b>Кооператив</b>: {{ member.cooperative }}</p>

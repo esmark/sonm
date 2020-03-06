@@ -3,16 +3,12 @@
 {% block title %}Личный кабинет{% endblock %}
 
 {% block content %}
-    <h1>Личный кабинет</h1>
+{#    <h1>Личный кабинет</h1>#}
 
-    <div class="row">
-        <div class="col-xl-2">
-            {{ knp_menu_render('account') }}
-        </div>
-
-        <div class="col">
-            {% block account_content '' %}
-        </div>
-
+    <div style="margin: 8px 0;">
+        {{ knp_menu_render('account') }}
     </div>
+
+{#    {% block account_content '' %}#}
+
 {% endblock %}

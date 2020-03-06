@@ -57,12 +57,38 @@ class AccountController extends AbstractController
     }
 
     /**
+     * @Route("/product/", name="account_product")
+     */
+    public function product(EntityManagerInterface $em): Response
+    {
+        return $this->render('account/product.html.twig', [
+            'products' => $em->getRepository(Product::class)->findBy(['user' => $this->getUser()], ['created_at' => 'DESC']),
+        ]);
+    }
+
+    /**
      * @todo историю
      *
-     * @Route("/product/new/{coop}/", name="account_product_new")
+     * @Route("/product/new/", name="account_product_new")
      */
-    public function productNew(Cooperative $coop, Request $request, EntityManagerInterface $em): Response
+    public function productNew(Request $request, EntityManagerInterface $em): Response
     {
+        if ($request->query->has('coop')) {
+            $coop = $em->find(Cooperative::class, $request->query->get('coop'));
+        }
+
+        if (!isset($coop) or empty($coop)) {
+            $member = $em->getRepository(CooperativeMember::class)->findOneBy(['user' => $this->getUser()]);
+
+            if (!empty($member)) {
+                $coop = $member->getCooperative();
+            }
+        }
+
+        if (empty($coop)) {
+            return $this->redirectToRoute('account_coop');
+        }
+
         $isAllowAccess = false;
         foreach ($coop->getMembers() as $member) {
             if ($member->getUser() == $this->getUser()
@@ -107,10 +133,7 @@ class AccountController extends AbstractController
             $form->handleRequest($request);
 
             if ($form->get('cancel')->isClicked()) {
-                return $this->redirectToRoute('account_coop_show', [
-                    'id' => $coop->getId(),
-                    'tab' => 'nav-product-tab',
-                ]);
+                return $this->redirectToRoute('account_product');
             }
 
             if ($form->get('create')->isClicked() and $form->isValid()) {
@@ -119,10 +142,7 @@ class AccountController extends AbstractController
 
                 $this->addFlash('success', 'Товар добавлен');
 
-                return $this->redirectToRoute('account_coop_show', [
-                    'id' => $coop->getId(),
-                    'tab' => 'nav-product-tab',
-                ]);
+                return $this->redirectToRoute('account_product');
             }
         }
 
@@ -157,13 +177,10 @@ class AccountController extends AbstractController
         if (!$isAllowAccess) {
             $this->addFlash('error', 'Нет доступа для изменения товаров');
 
-            return $this->redirectToRoute('account_coop_show', [
-                'id'  => $coop->getId(),
-                'tab' => 'nav-product-tab',
-            ]);
+            return $this->redirectToRoute('account_product');
         }
 
-        $coop = $product->getCooperative();
+        //$coop = $product->getCooperative();
         $form = $this->createForm(ProductFormType::class, $product);
         $form->remove('create');
 
@@ -171,10 +188,7 @@ class AccountController extends AbstractController
             $form->handleRequest($request);
 
             if ($form->get('cancel')->isClicked()) {
-                return $this->redirectToRoute('account_coop_show', [
-                    'id'  => $coop->getId(),
-                    'tab' => 'nav-product-tab',
-                ]);
+                return $this->redirectToRoute('account_product');
             }
 
             if ($form->get('update')->isClicked() and $form->isValid()) {
@@ -183,10 +197,7 @@ class AccountController extends AbstractController
 
                 $this->addFlash('success', 'Товар обновлён');
 
-                return $this->redirectToRoute('account_coop_show', [
-                    'id'  => $coop->getId(),
-                    'tab' => 'nav-product-tab',
-                ]);
+                return $this->redirectToRoute('account_product');
             }
         }
 

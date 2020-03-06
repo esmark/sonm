@@ -2,7 +2,8 @@
 
 {% block title %}Кооператив: {{ coop }} {{ parent() }}{% endblock %}
 
-{% block account_content %}
+{% block content %}
+    {{ parent() }}
 
     <p style="float: right; margin-top: 8px;">
         {% if is_allow_edit %}

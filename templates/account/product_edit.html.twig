@@ -1,10 +1,12 @@
 {% extends 'account/_layout.html.twig' %}
 
-{% block account_content %}
+{% block content %}
+    {{ parent() }}
+
     <h2>Изменение товара или услуги</h2>
 
     {{ form(form) }}
-{% endblock account_content %}
+{% endblock %}
 
 {% block js %}
     {{ parent() }}

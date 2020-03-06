@@ -1,4 +1,4 @@
-{% extends 'account/_layout.html.twig' %}
+{% extends 'account/_profile.html.twig' %}
 
 {% block css %}
     {{ parent() }}
@@ -23,6 +23,12 @@
 
 {% block account_content %}
     <h2>Моё местоположение</h2>
+
+    <div class="alert alert-danger" role="alert">
+        На данный момент в базе есть города только по России, по другим странам будут добавлены позже...
+    </div>
+
+    <p>Сначала выберите город и скорее всего система выставит приблизительные координаты, после чего можно уточнить геопозицию</p>
 
     {{ form_start(form) }}
     {{ form_row(form.city) }}

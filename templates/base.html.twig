@@ -117,19 +117,14 @@
                     <ul class="navbar-nav">
                         {% if app.user %}
                             <ul class="navbar-nav">
-                                {% if is_granted('ROLE_ADMIN') %}
-                                    <li class="nav-item">
-                                        <a class="nav-link py-0 {% if 'admin_' in app.request.get('_route') %} active{% endif %}" href="{{ path('admin') }}">Админка</a>
-                                    </li>
-                                {% endif %}
-
+{#
                                 <li class="nav-item">
                                     <a class="nav-link py-0 {% if 'account_' in app.request.get('_route') %} active{% endif %}" href="{{ path('account_coop') }}">Личный кабинет</a>
                                 </li>
-
+#}
                                 <li class="nav-item">
-                                    <a class="nav-link py-0 {% if 'basket' in app.request.get('_route') %} active{% endif %}" href="{{ path('basket') }}">
-                                        Корзина
+                                    <a class="nav-link py-0 {% if 'basket' in app.request.get('_route') %} active{% endif %}" href="{{ path('basket') }}" title="Корзина">
+                                        <i class="fas fa-shopping-basket"></i>
                                         {% if app.user.basketAmount %}
                                             <span class="badge badge-light">{{ app.user.basketAmount }}</span>
                                         {% endif %}
@@ -137,8 +132,8 @@
                                 </li>
 
                                 <li class="nav-item">
-                                    <a class="nav-link py-0 {% if 'account_balance' in app.request.get('_route') %} active{% endif %}" href="{{ path('account_balance') }}">
-                                        Баланс
+                                    <a class="nav-link py-0 {% if 'account_balance' in app.request.get('_route') %} active{% endif %}" href="{{ path('account_balance') }}" title="Баланс">
+                                        <i class="fas fa-coins"></i>
 {#                                        {% if app.user.basketAmount %}#}
                                             <span class="badge badge-light">0</span>
 {#                                        {% endif %}#}
@@ -153,13 +148,18 @@
                                     {{ app.user }}
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="{{ path('account_profile') }}">Мой профиль</a>
+                                    <a class="dropdown-item" href="{{ path('account_balance') }}">Книжка пайщика</a>
+                                    <a class="dropdown-item" href="{{ path('account_coop') }}">Мои кооперативы</a>
+                                    <a class="dropdown-item" href="{{ path('account_order') }}">Мои товары</a>
                                     <a class="dropdown-item" href="{{ path('account_order') }}">Мои заказы</a>
 
-                                    <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="{{ path('account_profile') }}">Мой профиль</a>
+                                    {% if is_granted('ROLE_ADMIN') %}
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item {% if 'admin_' in app.request.get('_route') %} active{% endif %}" href="{{ path('admin') }}">Админка</a>
+                                    {% endif %}
 
                                     <div class="dropdown-divider"></div>
-
                                     <a class="dropdown-item" href="{{ path('security_logout') }}">Выход</a>
                                 </div>
                             </li>

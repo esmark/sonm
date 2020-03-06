@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Form\Type;
 
 use App\Entity\Category;
+use App\Entity\Cooperative;
 use App\Entity\Product;
 use App\Entity\TaxRate;
 use Doctrine\ORM\EntityRepository;
@@ -26,6 +27,15 @@ class ProductFormType extends AbstractType
         $product = $options['data'];
 
         $builder
+            ->add('cooperative', EntityType::class, [
+                'class' => Cooperative::class,
+                'query_builder' => function (EntityRepository $er) use ($product) {
+                    return $er->createQueryBuilder('e')
+                        ->join('e.members', 'memberz', 'WITH', 'memberz.user = :user')
+                        ->setParameter('user', $product->getUser())
+                        ->orderBy('e.title', 'ASC');
+                },
+            ])
             ->add('title', null, ['attr' => ['autofocus' => true]])
             ->add('category', EntityType::class, [
                 'class' => Category::class,
