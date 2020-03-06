@@ -1,0 +1,30 @@
+#!/bin/bash
+
+if [ ! -d "var" ]; then
+    mkdir var
+    mkdir var/cache
+    mkdir var/db_dumps
+    #mkdir var/db_dumps/mysql
+    mkdir var/db_dumps/postgresql
+    mkdir var/log
+    mkdir var/mailspool
+    echo "  var directory created"
+fi
+
+if [ ! -d "var/sessions" ]; then
+    mkdir var/sessions
+    echo "  Sessions directory created"
+fi
+
+if [ ! -d "public/uploads" ]; then
+    mkdir public/uploads
+    echo "Options -Indexes" > public/uploads/.htaccess
+    echo "  public/uploads created"
+fi
+
+# update files permissions
+chmod -R 0777 var
+find bin -type f -exec chmod 777 {} \;
+#find public/_media -type f -exec chmod 666 {} \;
+#find public/images -type f -exec chmod 666 {} \;
+find public/uploads -type f -exec chmod 666 {} \;
