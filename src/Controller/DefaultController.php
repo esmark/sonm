@@ -16,4 +16,12 @@ class DefaultController extends AbstractController
             'controller_name' => 'DefaultController',
         ]);
     }
+
+    /**
+     * @Route("/terms_of_use/", name="terms_of_use")
+     */
+    public function termsOfUse()
+    {
+        return $this->render('default/terms_of_use.html.twig');
+    }
 }

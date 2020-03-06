@@ -6,11 +6,13 @@ namespace App\Form\Type;
 
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\IsTrue;
 
 class UserRegisterFormType extends AbstractType
 {
@@ -31,6 +33,12 @@ class UserRegisterFormType extends AbstractType
                 'first_options'   => ['label' => 'Password'],
                 'second_options'  => ['label' => 'Password confirmation'],
                 'invalid_message' => 'Пароли не совпадают',
+            ])
+            ->add('termsOfUse', CheckboxType::class, [
+                'mapped' => false,
+                'translation_domain' => false,
+                'label' => 'Согласен с #TERMS_OF_USE_LINK#',
+                'constraints' => new IsTrue(),
             ])
             ->add('register', SubmitType::class, ['attr' => ['class' => 'btn-success']])
         ;

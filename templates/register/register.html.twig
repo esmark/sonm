@@ -8,8 +8,38 @@
         <div class="col-sm-8">
             <h1>Регистрация</h1>
 
-            {{ form(form) }}
+{#            {{ form(form) }}#}
+
+            {{ form_start(form) }}
+            {{ form_row(form.username) }}
+            {{ form_row(form.email) }}
+            {{ form_row(form.firstname) }}
+            {{ form_row(form.lastname) }}
+            {{ form_row(form.plainPassword) }}
+
+            {% set termsOfUseFormGroup %}
+                {{ form_row(form.termsOfUse) }}
+            {% endset %}
+
+            {{ termsOfUseFormGroup|replace({'#TERMS_OF_USE_LINK#': '<a href="/terms_of_use/" target="_blank">обработкой персональных данных</a>'})|raw }}
+
+            {{ form_end(form) }}
         </div>
         <div class="col-sm"></div>
     </div>
 {% endblock %}
+
+{#
+{% block js %}
+    {{ parent() }}
+
+    <script>
+      $(document).ready( function() {
+        let str = $('.form-check-label').text()
+        let newStr = str.replace(/#TERMS_OF_USE_LINK#/, '<a href="/">обработкой персональных данных</a>')
+        $('.form-check-label').text(newStr)
+      });
+    </script>
+
+{% endblock js %}
+#}
