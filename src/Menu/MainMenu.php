@@ -56,6 +56,11 @@ class MainMenu
             ->setLinkAttribute('class', 'nav-link py-0')
         ;
 
+        $menu->addChild('Joint Purchases', ['route' => 'jp'])
+            ->setAttribute('class', 'nav-item')
+            ->setLinkAttribute('class', 'nav-link py-0')
+        ;
+
         return $menu;
     }
 

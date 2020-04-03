@@ -153,6 +153,9 @@
     "illuminate/support": {
         "version": "v5.8.36"
     },
+    "imagine/imagine": {
+        "version": "1.2.3"
+    },
     "irazasyed/telegram-bot-sdk": {
         "version": "v3.0.0"
     },
@@ -170,6 +173,19 @@
     },
     "league/flysystem": {
         "version": "1.0.63"
+    },
+    "liip/imagine-bundle": {
+        "version": "1.8",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "1.8",
+            "ref": "1d42bc3f713130582e6e0c475c49bc327ab0a2a2"
+        },
+        "files": [
+            "./config/packages/liip_imagine.yaml",
+            "./config/routes/liip_imagine.yaml"
+        ]
     },
     "maxmind-db/reader": {
         "version": "v1.6.0"
@@ -280,6 +296,9 @@
         "version": "dev-master"
     },
     "smart-core/felib-bundle": {
+        "version": "dev-master"
+    },
+    "smart-core/media-bundle": {
         "version": "dev-master"
     },
     "sonata-project/intl-bundle": {

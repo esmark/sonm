@@ -22,8 +22,14 @@ if [ ! -d "public/uploads" ]; then
     echo "  public/uploads created"
 fi
 
+if [ ! -d "usr" ]; then
+    mkdir usr
+fi
+
 # update files permissions
 chmod -R 0777 var
+chmod 777 usr
+
 find bin -type f -exec chmod 777 {} \;
 #find public/_media -type f -exec chmod 666 {} \;
 #find public/images -type f -exec chmod 666 {} \;
