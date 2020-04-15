@@ -66,6 +66,7 @@ class ZJointPurchaseController extends AbstractController
     }
 
     /**
+     * @IsGranted("ROLE_USER")
      * @Route("/{jp}/orders/", name="jp_orders")
      */
     public function orders(JointPurchase $jp, Request $request, EntityManagerInterface $em): Response
@@ -81,7 +82,8 @@ class ZJointPurchaseController extends AbstractController
     }
 
     /**
-     * @Route("/{jp}/", name="jp_show")
+     * @IsGranted("ROLE_USER")
+     * @Route("/{id}/", name="jp_show")
      */
     public function show(JointPurchase $jp, Request $request): Response
     {
