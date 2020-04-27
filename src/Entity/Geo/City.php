@@ -18,6 +18,7 @@ use Smart\CoreBundle\Doctrine\ColumnTrait;
  *          @ORM\Index(columns={"created_at"}),
  *          @ORM\Index(columns={"areacode"}),
  *          @ORM\Index(columns={"centstatus"}),
+ *          @ORM\Index(columns={"engname"}),
  *          @ORM\Index(columns={"name_canonical"}),
  *          @ORM\Index(columns={"offname"}),
  *          @ORM\Index(columns={"population"}),
