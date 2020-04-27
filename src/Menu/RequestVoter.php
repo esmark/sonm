@@ -10,24 +10,13 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 class RequestVoter implements VoterInterface
 {
-    /** @var RequestStack */
     protected $requestStack;
 
-    /**
-     * RequestVoter constructor.
-     *
-     * @param RequestStack $requestStack
-     */
     public function __construct(RequestStack $requestStack)
     {
         $this->requestStack = $requestStack;
     }
 
-    /**
-     * @param ItemInterface $item
-     *
-     * @return bool
-     */
     public function matchItem(ItemInterface $item): bool
     {
         $request = $this->requestStack->getCurrentRequest();

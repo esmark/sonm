@@ -21,7 +21,6 @@ abstract class AbstractShipping implements ShippingInterface
     /** @var Order */
     protected $order;
 
-    /** @var EntityManagerInterface */
     protected $em;
 
     public function setEntityManager(EntityManagerInterface $em): void

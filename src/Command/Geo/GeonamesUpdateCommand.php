@@ -4,12 +4,7 @@ declare(strict_types=1);
 
 namespace App\Command\Geo;
 
-use App\Entity\Geo\Abbreviation;
 use App\Entity\Geo\City;
-use App\Entity\Geo\Province;
-use App\Entity\Geo\Region;
-use App\Entity\Geo\Settlement;
-use App\Entity\Geo\Street;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -43,7 +38,6 @@ class GeonamesUpdateCommand extends Command
 {
     protected static $defaultName = 'app:geo:geonames-update';
 
-    /** @var SymfonyStyle */
     private $io;
     private $em;
     private $kernel;
@@ -70,12 +64,6 @@ class GeonamesUpdateCommand extends Command
         $this->io = new SymfonyStyle($input, $output);
     }
 
-    /**
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     *
-     * @return int|void|null
-     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $stopwatch = new Stopwatch();

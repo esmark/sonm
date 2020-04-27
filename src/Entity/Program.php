@@ -36,9 +36,6 @@ class Program
      */
     protected $cooperatives;
 
-    /**
-     * Program constructor.
-     */
     public function __construct()
     {
         $this->cooperatives = new ArrayCollection();
@@ -46,9 +43,6 @@ class Program
         $this->is_enabled   = true;
     }
 
-    /**
-     * @return string
-     */
     public function __toString(): string
     {
         return $this->getTitle();

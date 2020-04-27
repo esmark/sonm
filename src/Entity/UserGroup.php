@@ -32,9 +32,6 @@ class UserGroup
      */
     protected $roles;
 
-    /**
-     * UserGroup constructor.
-     */
     public function __construct(array $roles = [])
     {
         $this->created_at   = new \DateTime();
@@ -42,19 +39,11 @@ class UserGroup
         $this->roles        = $roles;
     }
 
-    /**
-     * @return string
-     */
     public function __toString(): string
     {
         return (string) $this->getTitle();
     }
 
-    /**
-     * @param string $role
-     *
-     * @return $this
-     */
     public function addRole(string $role): self
     {
         if (!$this->hasRole($role)) {
@@ -64,21 +53,11 @@ class UserGroup
         return $this;
     }
 
-    /**
-     * @param string $role
-     *
-     * @return bool
-     */
     public function hasRole(string $role): bool
     {
         return in_array(strtoupper($role), $this->roles, true);
     }
 
-    /**
-     * @param string $role
-     *
-     * @return $this
-     */
     public function removeRole(string $role): self
     {
         if (false !== $key = array_search(strtoupper($role), $this->roles, true)) {
@@ -89,19 +68,11 @@ class UserGroup
         return $this;
     }
 
-    /**
-     * @return array
-     */
     public function getRoles(): array
     {
         return $this->roles;
     }
 
-    /**
-     * @param array $roles
-     *
-     * @return $this
-     */
     public function setRoles(array $roles): self
     {
         $this->roles = $roles;

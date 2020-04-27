@@ -280,9 +280,6 @@ class User extends UserModel
      */
     protected $oauths;
 
-    /**
-     * User constructor.
-     */
     public function __construct()
     {
         parent::__construct();
@@ -297,9 +294,6 @@ class User extends UserModel
         $this->payments     = new ArrayCollection();
     }
 
-    /**
-     * @return string
-     */
     public function __toString(): string
     {
         if (empty($this->getFirstname()) and empty($this->getLastname())) {
@@ -311,8 +305,6 @@ class User extends UserModel
 
     /**
      * Является ли юзер действующим участником какого-либо кооператива?
-     *
-     * @return bool
      */
     public function isMember(): bool
     {
@@ -329,19 +321,11 @@ class User extends UserModel
         return false;
     }
 
-    /**
-     * @return string|null
-     */
     public function getFirstname(): ?string
     {
         return $this->firstname;
     }
 
-    /**
-     * @param string|null $firstname
-     *
-     * @return $this
-     */
     public function setFirstname(?string $firstname): self
     {
         $this->firstname = $firstname;
@@ -349,19 +333,11 @@ class User extends UserModel
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getLastname(): ?string
     {
         return $this->lastname;
     }
 
-    /**
-     * @param string|null $lastname
-     *
-     * @return $this
-     */
     public function setLastname(?string $lastname): self
     {
         $this->lastname = $lastname;
@@ -369,19 +345,11 @@ class User extends UserModel
         return $this;
     }
 
-    /**
-     * @return float|null
-     */
     public function getLatitude(): ?float
     {
         return $this->latitude ? (float) $this->latitude : null;
     }
 
-    /**
-     * @param float|null $latitude
-     *
-     * @return $this
-     */
     public function setLatitude(?float $latitude): self
     {
         $this->latitude = $latitude;
@@ -389,19 +357,11 @@ class User extends UserModel
         return $this;
     }
 
-    /**
-     * @return float|null
-     */
     public function getLongitude(): ?float
     {
         return $this->longitude ? (float) $this->longitude : null;
     }
 
-    /**
-     * @param float|null $longitude
-     *
-     * @return $this
-     */
     public function setLongitude(?float $longitude): self
     {
         $this->longitude = $longitude;
@@ -409,19 +369,11 @@ class User extends UserModel
         return $this;
     }
 
-    /**
-     * @return int|null
-     */
     public function getTelegramUserId(): ?int
     {
         return $this->telegram_user_id;
     }
 
-    /**
-     * @param int|null $telegram_user_id
-     *
-     * @return $this
-     */
     public function setTelegramUserId(?int $telegram_user_id): self
     {
         $this->telegram_user_id = $telegram_user_id;
@@ -429,19 +381,11 @@ class User extends UserModel
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getTelegramUsername(): ?string
     {
         return $this->telegram_username;
     }
 
-    /**
-     * @param string|null $telegram_username
-     *
-     * @return $this
-     */
     public function setTelegramUsername(?string $telegram_username): self
     {
         $this->telegram_username = $telegram_username;
@@ -469,11 +413,6 @@ class User extends UserModel
         return $this;
     }
 
-    /**
-     * @param string $provider
-     *
-     * @return UserOauth|null
-     */
     public function getOauthByProvider(string $provider): ?UserOauth
     {
         foreach ($this->oauths as $oauth) {
@@ -485,17 +424,11 @@ class User extends UserModel
         throw new \Exception("Провайдер $provider не найден");
     }
 
-    /**
-     * @return int
-     */
     public function getVkIdentifier(): int
     {
         return (int) $this->getOauthByProvider('vkontakte')->getIdentifier();
     }
 
-    /**
-     * @return array
-     */
     public function getGroupNames(): array
     {
         $names = [];
@@ -514,21 +447,11 @@ class User extends UserModel
         return $this->groups ?: $this->groups = new ArrayCollection();
     }
 
-    /**
-     * @param string $name
-     *
-     * @return bool
-     */
     public function hasGroup(string $name): bool
     {
         return in_array($name, $this->getGroupNames());
     }
 
-    /**
-     * @param UserGroup $group
-     *
-     * @return $this
-     */
     public function addGroup(UserGroup $group): self
     {
         if (!$this->getGroups()->contains($group)) {
@@ -538,11 +461,6 @@ class User extends UserModel
         return $this;
     }
 
-    /**
-     * @param UserGroup $group
-     *
-     * @return $this
-     */
     public function removeGroup(UserGroup $group): self
     {
         if ($this->getGroups()->contains($group)) {
@@ -552,9 +470,6 @@ class User extends UserModel
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getBasketAmount(): int
     {
         $amount = 0;
@@ -626,19 +541,11 @@ class User extends UserModel
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getPurposeGive(): ?string
     {
         return $this->purpose_give;
     }
 
-    /**
-     * @param string|null $purpose_give
-     *
-     * @return $this
-     */
     public function setPurposeGive(?string $purpose_give): self
     {
         $this->purpose_give = $purpose_give;
@@ -646,19 +553,11 @@ class User extends UserModel
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getPurposeTake(): ?string
     {
         return $this->purpose_take;
     }
 
-    /**
-     * @param string|null $purpose_take
-     *
-     * @return $this
-     */
     public function setPurposeTake(?string $purpose_take): self
     {
         $this->purpose_take = $purpose_take;
@@ -666,10 +565,7 @@ class User extends UserModel
         return $this;
     }
 
-    /**
-     * @return Worksheet|null
-     */
-    public function getWorksheet(): Worksheet
+    public function getWorksheet(): ?Worksheet
     {
         if (empty($this->worksheet)) {
             return new Worksheet();
@@ -678,31 +574,18 @@ class User extends UserModel
         return unserialize($this->worksheet);
     }
 
-    /**
-     * @param Worksheet|null $worksheet
-     *
-     * @return $this
-     */
-    public function setWorksheet(Worksheet $worksheet): self
+    public function setWorksheet(?Worksheet $worksheet): self
     {
         $this->worksheet = serialize($worksheet);
 
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getPatronymic(): ?string
     {
         return $this->patronymic;
     }
 
-    /**
-     * @param string|null $patronymic
-     *
-     * @return $this
-     */
     public function setPatronymic(?string $patronymic): self
     {
         $this->patronymic = $patronymic;
@@ -710,19 +593,11 @@ class User extends UserModel
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getPhone(): ?string
     {
         return $this->phone;
     }
 
-    /**
-     * @param string|null $phone
-     *
-     * @return $this
-     */
     public function setPhone(?string $phone): self
     {
         $this->phone = $phone;
@@ -730,19 +605,11 @@ class User extends UserModel
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getSocialLinks(): ?string
     {
         return $this->social_links;
     }
 
-    /**
-     * @param string|null $social_links
-     *
-     * @return $this
-     */
     public function setSocialLinks(?string $social_links): self
     {
         $this->social_links = $social_links;
@@ -750,19 +617,11 @@ class User extends UserModel
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getEducation(): ?string
     {
         return $this->education;
     }
 
-    /**
-     * @param string|null $education
-     *
-     * @return $this
-     */
     public function setEducation(?string $education): self
     {
         $this->education = $education;
@@ -770,19 +629,11 @@ class User extends UserModel
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getState(): ?string
     {
         return $this->state;
     }
 
-    /**
-     * @param string|null $state
-     *
-     * @return $this
-     */
     public function setState(?string $state): self
     {
         $this->state = $state;
@@ -790,19 +641,11 @@ class User extends UserModel
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getSchools(): ?string
     {
         return $this->schools;
     }
 
-    /**
-     * @param string|null $schools
-     *
-     * @return $this
-     */
     public function setSchools(?string $schools): self
     {
         $this->schools = $schools;
@@ -810,19 +653,11 @@ class User extends UserModel
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getActivity(): ?string
     {
         return $this->activity;
     }
 
-    /**
-     * @param string|null $activity
-     *
-     * @return $this
-     */
     public function setActivity(?string $activity): self
     {
         $this->activity = $activity;
@@ -830,19 +665,11 @@ class User extends UserModel
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getParticipate(): ?string
     {
         return $this->participate;
     }
 
-    /**
-     * @param string|null $participate
-     *
-     * @return $this
-     */
     public function setParticipate(?string $participate): self
     {
         $this->participate = $participate;
@@ -850,19 +677,11 @@ class User extends UserModel
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getSkills(): ?string
     {
         return $this->skills;
     }
 
-    /**
-     * @param string|null $skills
-     *
-     * @return $this
-     */
     public function setSkills(?string $skills): self
     {
         $this->skills = $skills;
@@ -870,27 +689,16 @@ class User extends UserModel
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function hasRelative(): bool
     {
         return $this->has_relative;
     }
 
-    /**
-     * @return bool
-     */
     public function getHasRelative(): bool
     {
         return $this->has_relative;
     }
 
-    /**
-     * @param bool $has_relative
-     *
-     * @return $this
-     */
     public function setHasRelative(bool $has_relative): self
     {
         $this->has_relative = $has_relative;
@@ -898,19 +706,11 @@ class User extends UserModel
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getStatus(): ?string
     {
         return $this->status;
     }
 
-    /**
-     * @param string|null $status
-     *
-     * @return $this
-     */
     public function setStatus(?string $status): self
     {
         $this->status = $status;
@@ -938,19 +738,11 @@ class User extends UserModel
         return $this;
     }
 
-    /**
-     * @return City|null
-     */
     public function getCity(): ?City
     {
         return $this->city;
     }
 
-    /**
-     * @param City|null $city
-     *
-     * @return $this
-     */
     public function setCity(?City $city): self
     {
         $this->city = $city;

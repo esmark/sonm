@@ -12,8 +12,6 @@ class MainMenu
     private $factory;
 
     /**
-     * @param FactoryInterface $factory
-     *
      * Add any other dependency you need
      */
     public function __construct(FactoryInterface $factory)
@@ -23,10 +21,6 @@ class MainMenu
 
     /**
      * Главное меню
-     *
-     * @param array $options
-     *
-     * @return \Knp\Menu\ItemInterface
      */
     public function top(array $options): ItemInterface
     {
@@ -65,11 +59,7 @@ class MainMenu
     }
 
     /**
-     * Профиль пользователя
-     *
-     * @param array $options
-     *
-     * @return \Knp\Menu\ItemInterface
+     * Аккаут пользователя
      */
     public function account(array $options): ItemInterface
     {
@@ -90,9 +80,7 @@ class MainMenu
     }
 
     /**
-     * @param array $options
-     *
-     * @return ItemInterface
+     * Профиль пользователя
      */
     public function profile(array $options): ItemInterface
     {

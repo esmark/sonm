@@ -45,9 +45,6 @@ class TaxRate
      */
     protected $cooperatives;
 
-    /**
-     * TaxRate constructor.
-     */
     public function __construct()
     {
         $this->created_at   = new \DateTime();
@@ -55,27 +52,16 @@ class TaxRate
         $this->percent      = 0;
     }
 
-    /**
-     * @return string
-     */
     public function __toString(): string
     {
         return $this->getTitle() . ' (' . $this->percent . '%)';
     }
 
-    /**
-     * @return int
-     */
     public function getPercent(): int
     {
         return $this->percent;
     }
 
-    /**
-     * @param int $percent
-     *
-     * @return $this
-     */
     public function setPercent(int $percent): self
     {
         $this->percent = $percent;

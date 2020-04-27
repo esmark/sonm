@@ -85,9 +85,6 @@ class City
      */
     protected $settlements;
 
-    /**
-     * City constructor.
-     */
     public function __construct()
     {
         $this->created_at  = new \DateTime();
@@ -95,27 +92,16 @@ class City
         $this->settlements = new ArrayCollection();
     }
 
-    /**
-     * @return string
-     */
     public function __toString(): string
     {
         return $this->getShortname() . '. ' . $this->getOffname();
     }
 
-    /**
-     * @return Abbreviation
-     */
     public function getAbbreviation(): Abbreviation
     {
         return $this->abbreviation;
     }
 
-    /**
-     * @param Abbreviation $abbreviation
-     *
-     * @return $this
-     */
     public function setAbbreviation(Abbreviation $abbreviation): self
     {
         $this->abbreviation = $abbreviation;
@@ -123,19 +109,11 @@ class City
         return $this;
     }
 
-    /**
-     * @return Province
-     */
     public function getProvince(): Province
     {
         return $this->province;
     }
 
-    /**
-     * @param Province $province
-     *
-     * @return $this
-     */
     public function setProvince(Province $province): self
     {
         $this->province = $province;
@@ -143,19 +121,11 @@ class City
         return $this;
     }
 
-    /**
-     * @return Region
-     */
     public function getRegion(): Region
     {
         return $this->region;
     }
 
-    /**
-     * @param Region $region
-     *
-     * @return $this
-     */
     public function setRegion(Region $region): self
     {
         $this->region = $region;

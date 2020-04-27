@@ -58,88 +58,53 @@ class UserOauth
      */
     protected $provider;
 
-    /**
-     * UserOauth constructor.
-     */
     public function __construct()
     {
         $this->created_at   = new \DateTime();
         $this->provider     = 'vkontakte';
     }
 
-    /**
-     * @return User
-     */
     public function getUser(): User
     {
         return $this->user;
     }
 
-    /**
-     * @param User $user
-     *
-     * @return $this
-     */
-    public function setUser($user): self
+    public function setUser(User $user): self
     {
         $this->user = $user;
 
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getAccessToken(): string
     {
         return $this->access_token;
     }
 
-    /**
-     * @param string $access_token
-     *
-     * @return $this
-     */
-    public function setAccessToken($access_token): self
+    public function setAccessToken(string $access_token): self
     {
         $this->access_token = $access_token;
 
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getRefreshToken(): ?string
     {
         return $this->refresh_token;
     }
 
-    /**
-     * @param string|null $refresh_token
-     *
-     * @return $this
-     */
-    public function setRefreshToken($refresh_token): self
+    public function setRefreshToken(?string $refresh_token): self
     {
         $this->refresh_token = $refresh_token;
 
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getIdentifier(): int
     {
         return (int) $this->identifier;
     }
 
-    /**
-     * @param int $identifier
-     *
-     * @return $this
-     */
     public function setIdentifier(int $identifier): self
     {
         $this->identifier = $identifier;
@@ -147,19 +112,11 @@ class UserOauth
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getProvider(): string
     {
         return $this->provider;
     }
 
-    /**
-     * @param string $provider
-     *
-     * @return $this
-     */
     public function setProvider($provider): self
     {
         $this->provider = $provider;

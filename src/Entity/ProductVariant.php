@@ -145,9 +145,6 @@ class ProductVariant
      */
     protected $product;
 
-    /**
-     * ProductVariant constructor.
-     */
     public function __construct()
     {
         $this->baskets      = new ArrayCollection();
@@ -155,25 +152,16 @@ class ProductVariant
         $this->status       = self::STATUS_AVAILABLE;
     }
 
-    /**
-     * @return string
-     */
     public function __toString(): string
     {
         return $this->title;
     }
 
-    /**
-     * @return int
-     */
     public function getPrice(): ?int
     {
         return $this->price;
     }
 
-    /**
-     * @return int
-     */
     public function getPriceTotal(): ?int
     {
         if (empty($this->quantity)) {
@@ -183,11 +171,6 @@ class ProductVariant
         return $this->price * $this->quantity;
     }
 
-    /**
-     * @param int $price
-     *
-     * @return $this
-     */
     public function setPrice(?int $price): self
     {
         $this->price = $price;
@@ -195,19 +178,11 @@ class ProductVariant
         return $this;
     }
 
-    /**
-     * @return int|null
-     */
     public function getQuantity(): ?int
     {
         return $this->quantity;
     }
 
-    /**
-     * @param int|null $quantity
-     *
-     * @return $this
-     */
     public function setQuantity(?int $quantity): self
     {
         $this->quantity = $quantity;
@@ -215,19 +190,11 @@ class ProductVariant
         return $this;
     }
 
-    /**
-     * @return int|null
-     */
     public function getQuantityReserved(): ?int
     {
         return $this->quantity_reserved;
     }
 
-    /**
-     * @param int|null $quantity_reserved
-     *
-     * @return $this
-     */
     public function setQuantityReserved(?int $quantity_reserved): self
     {
         $this->quantity_reserved = $quantity_reserved;
@@ -255,19 +222,11 @@ class ProductVariant
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getSku(): ?string
     {
         return $this->sku;
     }
 
-    /**
-     * @param string|null $sku
-     *
-     * @return $this
-     */
     public function setSku(?string $sku): self
     {
         $this->sku = $sku;
@@ -275,19 +234,11 @@ class ProductVariant
         return $this;
     }
 
-    /**
-     * @return Product
-     */
     public function getProduct(): Product
     {
         return $this->product;
     }
 
-    /**
-     * @param Product $product
-     *
-     * @return $this
-     */
     public function setProduct(Product $product): self
     {
         $this->product = $product;
@@ -295,19 +246,11 @@ class ProductVariant
         return $this;
     }
 
-    /**
-     * @return Cooperative
-     */
     public function getCooperative(): Cooperative
     {
         return $this->cooperative;
     }
 
-    /**
-     * @param Cooperative $cooperative
-     *
-     * @return $this
-     */
     public function setCooperative(Cooperative $cooperative): self
     {
         $this->cooperative = $cooperative;
@@ -315,19 +258,11 @@ class ProductVariant
         return $this;
     }
 
-    /**
-     * @return int|null
-     */
     public function getWidth(): ?int
     {
         return $this->width;
     }
 
-    /**
-     * @param int|null $width
-     *
-     * @return $this
-     */
     public function setWidth(?int $width): self
     {
         $this->width = $width;
@@ -335,19 +270,11 @@ class ProductVariant
         return $this;
     }
 
-    /**
-     * @return int|null
-     */
     public function getHeight(): ?int
     {
         return $this->height;
     }
 
-    /**
-     * @param int|null $height
-     *
-     * @return $this
-     */
     public function setHeight(?int $height): self
     {
         $this->height = $height;
@@ -355,19 +282,11 @@ class ProductVariant
         return $this;
     }
 
-    /**
-     * @return int|null
-     */
     public function getDepth(): ?int
     {
         return $this->depth;
     }
 
-    /**
-     * @param int|null $depth
-     *
-     * @return $this
-     */
     public function setDepth(?int $depth): self
     {
         $this->depth = $depth;
@@ -375,19 +294,11 @@ class ProductVariant
         return $this;
     }
 
-    /**
-     * @return float|null
-     */
     public function getWeight(): ?float
     {
         return $this->weight;
     }
 
-    /**
-     * @param float|null $weight
-     *
-     * @return $this
-     */
     public function setWeight(?float $weight): self
     {
         $this->weight = $weight;

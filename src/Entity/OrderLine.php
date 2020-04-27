@@ -49,27 +49,16 @@ class OrderLine
      */
     protected $productVariant;
 
-    /**
-     * OrderLine constructor.
-     */
     public function __construct()
     {
 
     }
 
-    /**
-     * @return Order
-     */
     public function getOrder(): Order
     {
         return $this->order;
     }
 
-    /**
-     * @param Order $order
-     *
-     * @return $this
-     */
     public function setOrder(Order $order): self
     {
         $this->order = $order;
@@ -77,19 +66,11 @@ class OrderLine
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getQuantity(): int
     {
         return $this->quantity;
     }
 
-    /**
-     * @param int $quantity
-     *
-     * @return $this
-     */
     public function setQuantity(int $quantity): self
     {
         $this->quantity = $quantity;
@@ -97,19 +78,11 @@ class OrderLine
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getPrice(): int
     {
         return $this->price;
     }
 
-    /**
-     * @param int $price
-     *
-     * @return $this
-     */
     public function setPrice(int $price): self
     {
         $this->price = $price;
@@ -117,19 +90,11 @@ class OrderLine
         return $this;
     }
 
-    /**
-     * @return ProductVariant
-     */
     public function getProductVariant(): ProductVariant
     {
         return $this->productVariant;
     }
 
-    /**
-     * @param ProductVariant $productVariant
-     *
-     * @return $this
-     */
     public function setProductVariant(ProductVariant $productVariant): self
     {
         $this->productVariant = $productVariant;

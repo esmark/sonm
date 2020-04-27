@@ -22,12 +22,6 @@ class UserAuthenticator extends AbstractGuardAuthenticator
 
     private $security;
 
-    /**
-     * UserAuthenticator constructor.
-     *
-     * @param EntityManagerInterface $em
-     * @param Security               $security
-     */
     public function __construct(EntityManagerInterface $em, Security $security)
     {
         $this->em = $em;

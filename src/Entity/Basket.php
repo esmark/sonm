@@ -48,27 +48,16 @@ class Basket
      */
     protected $user;
 
-    /**
-     * Basket constructor.
-     */
     public function __construct()
     {
         $this->created_at = new \DateTime();
     }
 
-    /**
-     * @return int
-     */
     public function getQuantity(): int
     {
         return $this->quantity;
     }
 
-    /**
-     * @param int $quantity
-     *
-     * @return $this
-     */
     public function setQuantity(int $quantity): self
     {
         $this->quantity = $quantity;
@@ -76,19 +65,11 @@ class Basket
         return $this;
     }
 
-    /**
-     * @return ProductVariant
-     */
     public function getProductVariant(): ProductVariant
     {
         return $this->productVariant;
     }
 
-    /**
-     * @param ProductVariant $productVariant
-     *
-     * @return $this
-     */
     public function setProductVariant(ProductVariant $productVariant): self
     {
         $this->productVariant = $productVariant;
@@ -96,19 +77,11 @@ class Basket
         return $this;
     }
 
-    /**
-     * @return User
-     */
     public function getUser(): User
     {
         return $this->user;
     }
 
-    /**
-     * @param User $user
-     *
-     * @return $this
-     */
     public function setUser(User $user): self
     {
         $this->user = $user;

@@ -127,9 +127,6 @@ class Address
      */
     protected $orders;
 
-    /**
-     * Address constructor.
-     */
     public function __construct()
     {
         $this->created_at   = new \DateTime();
@@ -142,9 +139,6 @@ class Address
         $this->orders       = new ArrayCollection();
     }
 
-    /**
-     * @return string
-     */
     public function __toString(): string
     {
         $str = $this->postcode. ', '.$this->province.' обл, '.$this->city.', ул.'.$this->street.', дом.'.$this->house;
@@ -156,19 +150,11 @@ class Address
         return $str;
     }
 
-    /**
-     * @return string
-     */
     public function getFirstname(): string
     {
         return $this->firstname;
     }
 
-    /**
-     * @param string $firstname
-     *
-     * @return $this
-     */
     public function setFirstname(?string $firstname): self
     {
         $this->firstname = $firstname;
@@ -176,19 +162,11 @@ class Address
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getLastname(): string
     {
         return $this->lastname;
     }
 
-    /**
-     * @param string $lastname
-     *
-     * @return $this
-     */
     public function setLastname(?string $lastname): self
     {
         $this->lastname = $lastname;
@@ -196,19 +174,11 @@ class Address
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getPatronymic(): ?string
     {
         return $this->patronymic;
     }
 
-    /**
-     * @param string|null $patronymic
-     *
-     * @return $this
-     */
     public function setPatronymic(?string $patronymic): self
     {
         $this->patronymic = $patronymic;
@@ -216,19 +186,11 @@ class Address
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getPhone(): ?string
     {
         return $this->phone;
     }
 
-    /**
-     * @param string|null $phone
-     *
-     * @return $this
-     */
     public function setPhone(?string $phone): self
     {
         $this->phone = $phone;
@@ -236,19 +198,11 @@ class Address
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getPostcode(): string
     {
         return $this->postcode;
     }
 
-    /**
-     * @param string $postcode
-     *
-     * @return $this
-     */
     public function setPostcode(?string $postcode): self
     {
         $this->postcode = $postcode;
@@ -256,19 +210,11 @@ class Address
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getCountryCode(): string
     {
         return $this->country_code;
     }
 
-    /**
-     * @param string $country_code
-     *
-     * @return $this
-     */
     public function setCountryCode(string $country_code): self
     {
         $this->country_code = $country_code;
@@ -276,19 +222,11 @@ class Address
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getProvince(): string
     {
         return $this->province;
     }
 
-    /**
-     * @param string $province
-     *
-     * @return $this
-     */
     public function setProvince(?string $province): self
     {
         $this->province = $province;
@@ -296,19 +234,11 @@ class Address
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getCity(): string
     {
         return $this->city;
     }
 
-    /**
-     * @param string $city
-     *
-     * @return $this
-     */
     public function setCity(?string $city): self
     {
         $this->city = $city;
@@ -316,19 +246,11 @@ class Address
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getStreet(): string
     {
         return $this->street;
     }
 
-    /**
-     * @param string $street
-     *
-     * @return $this
-     */
     public function setStreet(?string $street): self
     {
         $this->street = $street;
@@ -336,19 +258,11 @@ class Address
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getHouse(): string
     {
         return $this->house;
     }
 
-    /**
-     * @param string $house
-     *
-     * @return $this
-     */
     public function setHouse(?string $house): self
     {
         $this->house = $house;
@@ -356,19 +270,11 @@ class Address
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getFlat(): ?string
     {
         return $this->flat;
     }
 
-    /**
-     * @param string|null $flat
-     *
-     * @return $this
-     */
     public function setFlat(?string $flat): self
     {
         $this->flat = $flat;

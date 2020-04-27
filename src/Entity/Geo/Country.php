@@ -10,12 +10,18 @@ use Smart\CoreBundle\Doctrine\ColumnTrait;
 /**
  * Страны
  *
- * @ORM\Entity(repositoryClass="App\Repository\CityRepository")
+ * @ORM\Entity()
  * @ORM\Table(name="geo_countries",
  *      indexes={
  *          @ORM\Index(columns={"created_at"}),
- *          @ORM\Index(columns={"engname"}),
- *          @ORM\Index(columns={"offname"}),
+ *      },
+ *      uniqueConstraints={
+ *          @ORM\UniqueConstraint(columns={"engname"}),
+ *          @ORM\UniqueConstraint(columns={"name_canonical"}),
+ *          @ORM\UniqueConstraint(columns={"offname"}),
+ *          @ORM\UniqueConstraint(columns={"iso_code_alpha_2"}),
+ *          @ORM\UniqueConstraint(columns={"iso_code_alpha_3"}),
+ *          @ORM\UniqueConstraint(columns={"iso_code_numeric"}),
  *      }
  * )
  */
@@ -24,7 +30,6 @@ class Country
     use ColumnTrait\Id;
     use ColumnTrait\CreatedAt;
 
-    use Columns\CodeTrait;
     use Columns\NameCanonicalTrait;
     use Columns\OffnameTrait;
     use Columns\EngnameTrait;
@@ -34,21 +39,21 @@ class Country
      *
      * @ORM\Column(type="string", length=2)
      */
-    protected $isoCodeAlpha2;
+    protected $iso_code_alpha_2;
 
     /**
      * @var string
      *
      * @ORM\Column(type="string", length=3)
      */
-    protected $isoCodeAlpha3;
+    protected $iso_code_alpha_3;
 
     /**
      * @var integer
      *
      * @ORM\Column(type="smallint")
      */
-    protected $isoCodeNumeric;
+    protected $iso_code_numeric;
 
     /**
      * Constructor.
@@ -66,63 +71,40 @@ class Country
         return $this->getOffname();
     }
 
-    /**
-     * @return string
-     */
     public function getIsoCodeAlpha2(): string
     {
-        return $this->isoCodeAlpha2;
+        return $this->iso_code_alpha_2;
     }
 
-    /**
-     * @param string $isoCodeAlpha2
-     *
-     * @return $this
-     */
-    public function setIsoCodeAlpha2(string $isoCodeAlpha2): self
+    public function setIsoCodeAlpha2(string $iso_code_alpha_2): self
     {
-        $this->isoCodeAlpha2 = $isoCodeAlpha2;
+        $this->iso_code_alpha_2 = $iso_code_alpha_2;
 
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getIsoCodeAlpha3(): string
     {
-        return $this->isoCodeAlpha3;
+        return $this->iso_code_alpha_3;
     }
 
-    /**
-     * @param string $isoCodeAlpha3
-     *
-     * @return $this
-     */
-    public function setIsoCodeAlpha3(string $isoCodeAlpha3): self
+    public function setIsoCodeAlpha3(string $iso_code_alpha_3): self
     {
-        $this->isoCodeAlpha3 = $isoCodeAlpha3;
+        $this->iso_code_alpha_3 = $iso_code_alpha_3;
 
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getIsoCodeNumeric(): int
     {
-        return $this->isoCodeNumeric;
+        return $this->iso_code_numeric;
     }
 
-    /**
-     * @param int $isoCodeNumeric
-     *
-     * @return $this
-     */
-    public function setIsoCodeNumeric(int $isoCodeNumeric): self
+    public function setIsoCodeNumeric(int $iso_code_numeric): self
     {
-        $this->isoCodeNumeric = $isoCodeNumeric;
+        $this->iso_code_numeric = $iso_code_numeric;
 
         return $this;
     }
+
 }

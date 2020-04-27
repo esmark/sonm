@@ -13,13 +13,7 @@ class AppExtension extends AbstractExtension
     protected $tgBotName;
     protected $em;
 
-    /**
-     * AppExtension constructor.
-     *
-     * @param EntityManagerInterface $em
-     * @param string                 $tgBotName
-     */
-    public function __construct(EntityManagerInterface $em, $tgBotName)
+    public function __construct(EntityManagerInterface $em, string $tgBotName)
     {
         $this->em          = $em;
         $this->tgBotName   = $tgBotName;
@@ -35,8 +29,6 @@ class AppExtension extends AbstractExtension
 
     /**
      * Returns a list of functions to add to the existing list.
-     *
-     * @return array An array of functions
      */
     public function getFunctions(): array
     {
@@ -45,9 +37,6 @@ class AppExtension extends AbstractExtension
         ];
     }
 
-    /**
-     * @return string|null
-     */
     public function getTgBotName(): ?string
     {
         return $this->tgBotName;

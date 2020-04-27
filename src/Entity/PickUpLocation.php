@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Smart\CoreBundle\Doctrine\ColumnTrait;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -74,9 +75,6 @@ class PickUpLocation
      */
     protected $cooperatives;
 
-    /**
-     * PickUpLocation constructor.
-     */
     public function __construct()
     {
         $this->cooperatives        = new ArrayCollection();
@@ -86,27 +84,16 @@ class PickUpLocation
         $this->has_pos_terminal    = false;
     }
 
-    /**
-     * @return string
-     */
     public function __toString(): string
     {
         return $this->getTitle();
     }
 
-    /**
-     * @return float|null
-     */
     public function getLatitude(): ?float
     {
         return $this->latitude ? (float) $this->latitude : null;
     }
 
-    /**
-     * @param float|null $latitude
-     *
-     * @return $this
-     */
     public function setLatitude(?float $latitude): self
     {
         $this->latitude = $latitude;
@@ -114,19 +101,11 @@ class PickUpLocation
         return $this;
     }
 
-    /**
-     * @return float|null
-     */
     public function getLongitude(): ?float
     {
         return $this->longitude ? (float) $this->longitude : null;
     }
 
-    /**
-     * @param float|null $longitude
-     *
-     * @return $this
-     */
     public function setLongitude(?float $longitude): self
     {
         $this->longitude = $longitude;
@@ -134,19 +113,11 @@ class PickUpLocation
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getAddress(): ?string
     {
         return $this->address;
     }
 
-    /**
-     * @param string $address
-     *
-     * @return $this
-     */
     public function setAddress(string $address): self
     {
         $this->address = $address;
@@ -155,38 +126,30 @@ class PickUpLocation
     }
 
     /**
-     * @return Cooperative[]|ArrayCollection
+     * @return Cooperative[]|Collection
      */
-    public function getCooperatives()
+    public function getCooperatives(): Collection
     {
         return $this->cooperatives;
     }
 
     /**
-     * @param Cooperative[]|ArrayCollection $cooperatives
+     * @param Cooperative[]|Collection $cooperatives
      *
      * @return $this
      */
-    public function setCooperatives($cooperatives): self
+    public function setCooperatives(Collection $cooperatives): self
     {
         $this->cooperatives = $cooperatives;
 
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function isHasCashAcceptance(): bool
     {
         return $this->has_cash_acceptance;
     }
 
-    /**
-     * @param bool $has_cash_acceptance
-     *
-     * @return $this
-     */
     public function setHasCashAcceptance(bool $has_cash_acceptance): self
     {
         $this->has_cash_acceptance = $has_cash_acceptance;
@@ -194,19 +157,11 @@ class PickUpLocation
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function isHasPosTerminal(): bool
     {
         return $this->has_pos_terminal;
     }
 
-    /**
-     * @param bool $has_pos_terminal
-     *
-     * @return $this
-     */
     public function setHasPosTerminal(bool $has_pos_terminal): self
     {
         $this->has_pos_terminal = $has_pos_terminal;

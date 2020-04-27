@@ -18,9 +18,6 @@ class BasketRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param User        $user
-     * @param Cooperative $coop
-     *
      * @return Basket[]
      */
     public function findByUserAndCoop(User $user, Cooperative $coop): array

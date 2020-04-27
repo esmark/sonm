@@ -201,9 +201,6 @@ class Product
      */
     protected $variants;
 
-    /**
-     * Product constructor.
-     */
     public function __construct()
     {
         $this->created_at  = new \DateTime();
@@ -255,9 +252,6 @@ class Product
         */
     }
 
-    /**
-     * @return bool
-     */
     public function isStatusAccessToOrder(): bool
     {
         if ($this->status == self::STATUS_AVAILABLE or $this->status == self::STATUS_ON_DEMAND) {
@@ -267,27 +261,16 @@ class Product
         return false;
     }
 
-    /**
-     * @return int
-     */
     public function getMeasure(): int
     {
         return $this->measure;
     }
 
-    /**
-     * @return string
-     */
     public function getMeasureAsText(): string
     {
         return self::$measure_values[$this->measure];
     }
 
-    /**
-     * @param int $measure
-     *
-     * @return $this
-     */
     public function setMeasure(int $measure): self
     {
         $this->measure = $measure;
@@ -295,27 +278,16 @@ class Product
         return $this;
     }
 
-    /**
-     * @return array
-     */
     static public function getMeasureChoiceValues(): array
     {
         return self::$measure_values;
     }
 
-    /**
-     * @return string|null
-     */
     public function getImageId(): ?string
     {
         return $this->image_id;
     }
 
-    /**
-     * @param string|null $image_id
-     *
-     * @return $this
-     */
     public function setImageId(?string $image_id): self
     {
         $this->image_id = $image_id;
@@ -323,19 +295,11 @@ class Product
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getShortDescription(): ?string
     {
         return $this->short_description;
     }
 
-    /**
-     * @param string|null $short_description
-     *
-     * @return $this
-     */
     public function setShortDescription(?string $short_description): self
     {
         $this->short_description = $short_description;
@@ -343,19 +307,11 @@ class Product
         return $this;
     }
 
-    /**
-     * @return Category
-     */
     public function getCategory(): ?Category
     {
         return $this->category;
     }
 
-    /**
-     * @param Category $category
-     *
-     * @return $this
-     */
     public function setCategory(Category $category): self
     {
         $this->category = $category;
@@ -363,19 +319,11 @@ class Product
         return $this;
     }
 
-    /**
-     * @return Cooperative
-     */
     public function getCooperative(): Cooperative
     {
         return $this->cooperative;
     }
 
-    /**
-     * @param Cooperative $cooperative
-     *
-     * @return $this
-     */
     public function setCooperative(Cooperative $cooperative): self
     {
         $this->cooperative = $cooperative;
@@ -383,19 +331,11 @@ class Product
         return $this;
     }
 
-    /**
-     * @return int|null
-     */
     public function getWidth(): ?int
     {
         return $this->width;
     }
 
-    /**
-     * @param int|null $width
-     *
-     * @return $this
-     */
     public function setWidth(?int $width): self
     {
         $this->width = $width;
@@ -403,19 +343,11 @@ class Product
         return $this;
     }
 
-    /**
-     * @return int|null
-     */
     public function getHeight(): ?int
     {
         return $this->height;
     }
 
-    /**
-     * @param int|null $height
-     *
-     * @return $this
-     */
     public function setHeight(?int $height): self
     {
         $this->height = $height;
@@ -423,19 +355,11 @@ class Product
         return $this;
     }
 
-    /**
-     * @return int|null
-     */
     public function getDepth(): ?int
     {
         return $this->depth;
     }
 
-    /**
-     * @param int|null $depth
-     *
-     * @return $this
-     */
     public function setDepth(?int $depth): self
     {
         $this->depth = $depth;
@@ -443,19 +367,11 @@ class Product
         return $this;
     }
 
-    /**
-     * @return float|null
-     */
     public function getWeight(): ?float
     {
         return $this->weight ? (float) $this->weight : null;
     }
 
-    /**
-     * @param float|null $weight
-     *
-     * @return $this
-     */
     public function setWeight(?float $weight): self
     {
         $this->weight = $weight;
@@ -463,11 +379,6 @@ class Product
         return $this;
     }
 
-    /**
-     * @param ProductVariant $variant
-     *
-     * @return $this
-     */
     public function addVariant(ProductVariant $variant): self
     {
         if (!$this->variants->contains($variant)) {
@@ -498,9 +409,6 @@ class Product
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getPriceRange(): string
     {
         if ($this->priceMin == $this->priceMax) {
@@ -510,19 +418,11 @@ class Product
         return $this->priceMin . ' - ' . $this->priceMax;
     }
 
-    /**
-     * @return int
-     */
     public function getPriceMin(): int
     {
         return $this->priceMin;
     }
 
-    /**
-     * @param int $priceMin
-     *
-     * @return $this
-     */
     public function setPriceMin(int $priceMin): self
     {
         $this->priceMin = $priceMin;
@@ -530,19 +430,11 @@ class Product
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getPriceMax(): int
     {
         return $this->priceMax;
     }
 
-    /**
-     * @param int $priceMax
-     *
-     * @return $this
-     */
     public function setPriceMax(int $priceMax): self
     {
         $this->priceMax = $priceMax;
@@ -550,19 +442,11 @@ class Product
         return $this;
     }
 
-    /**
-     * @return TaxRate|null
-     */
     public function getTaxRate(): ?TaxRate
     {
         return $this->taxRate;
     }
 
-    /**
-     * @param TaxRate|null $taxRate
-     *
-     * @return $this
-     */
     public function setTaxRate(?TaxRate $taxRate): self
     {
         $this->taxRate = $taxRate;
@@ -570,19 +454,11 @@ class Product
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function isIsPhysical(): bool
     {
         return $this->is_physical;
     }
 
-    /**
-     * @param bool $is_physical
-     *
-     * @return $this
-     */
     public function setIsPhysical(bool $is_physical): self
     {
         $this->is_physical = $is_physical;

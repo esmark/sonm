@@ -54,35 +54,21 @@ class Abbreviation
      */
     protected $shortname;
 
-    /**
-     * Abbreviation constructor.
-     */
     public function __construct()
     {
         $this->created_at = new \DateTime();
     }
 
-    /**
-     * @return string
-     */
     public function __toString(): string
     {
         return $this->getFullname();
     }
 
-    /**
-     * @return int
-     */
     public function getCode(): int
     {
         return $this->code;
     }
 
-    /**
-     * @param int $code
-     *
-     * @return $this
-     */
     public function setCode(int $code): self
     {
         $this->code = $code;
@@ -90,19 +76,11 @@ class Abbreviation
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getLevel(): int
     {
         return $this->level;
     }
 
-    /**
-     * @param int $level
-     *
-     * @return $this
-     */
     public function setLevel(int $level): self
     {
         $this->level = $level;
@@ -110,19 +88,11 @@ class Abbreviation
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getShortname(): string
     {
         return $this->shortname;
     }
 
-    /**
-     * @param string $shortname
-     *
-     * @return $this
-     */
     public function setShortname(string $shortname): self
     {
         $this->shortname = trim($shortname);

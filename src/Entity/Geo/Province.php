@@ -67,36 +67,22 @@ class Province
      */
     protected $cities;
 
-    /**
-     * Province constructor.
-     */
     public function __construct()
     {
         $this->created_at = new \DateTime();
         $this->cities     = new ArrayCollection();
     }
 
-    /**
-     * @return string
-     */
     public function __toString(): string
     {
         return $this->getOffname() . ' ' . $this->getShortname() . '.';
     }
 
-    /**
-     * @return Abbreviation
-     */
     public function getAbbreviation(): Abbreviation
     {
         return $this->abbreviation;
     }
 
-    /**
-     * @param Abbreviation $abbreviation
-     *
-     * @return $this
-     */
     public function setAbbreviation(Abbreviation $abbreviation): self
     {
         $this->abbreviation = $abbreviation;
@@ -124,19 +110,11 @@ class Province
         return $this;
     }
 
-    /**
-     * @return Region
-     */
     public function getRegion(): Region
     {
         return $this->region;
     }
 
-    /**
-     * @param Region $region
-     *
-     * @return $this
-     */
     public function setRegion(Region $region): self
     {
         $this->region = $region;

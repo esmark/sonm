@@ -69,18 +69,12 @@ class Payment
      */
     protected $user;
 
-    /**
-     * Payment constructor.
-     */
     public function __construct()
     {
         $this->created_at   = new \DateTime();
         $this->status       = self::STATUS_AWAITING_PAYMENT;
     }
 
-    /**
-     * @return string
-     */
     public function getStatusBadgeColor(): string
     {
         switch ($this->status) {
@@ -92,22 +86,14 @@ class Payment
                 return 'danger';
         }
 
-        return 'loght';
+        return 'light';
     }
 
-    /**
-     * @return PaymentMethod
-     */
     public function getMethod(): PaymentMethod
     {
         return $this->method;
     }
 
-    /**
-     * @param PaymentMethod $method
-     *
-     * @return $this
-     */
     public function setMethod(PaymentMethod $method): self
     {
         $this->method = $method;
@@ -115,19 +101,11 @@ class Payment
         return $this;
     }
 
-    /**
-     * @return Order
-     */
     public function getOrder(): Order
     {
         return $this->order;
     }
 
-    /**
-     * @param Order $order
-     *
-     * @return $this
-     */
     public function setOrder(Order $order): self
     {
         $this->order = $order;
@@ -135,19 +113,11 @@ class Payment
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getAmount(): int
     {
         return $this->amount;
     }
 
-    /**
-     * @param int $amount
-     *
-     * @return $this
-     */
     public function setAmount(int $amount): self
     {
         $this->amount = $amount;
@@ -155,19 +125,11 @@ class Payment
         return $this;
     }
 
-    /**
-     * @return User
-     */
     public function getUser(): User
     {
         return $this->user;
     }
 
-    /**
-     * @param User $user
-     *
-     * @return $this
-     */
     public function setUser(User $user): self
     {
         $this->user = $user;

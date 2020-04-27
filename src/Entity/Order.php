@@ -199,9 +199,6 @@ class Order
      */
     protected $user;
 
-    /**
-     * Order constructor.
-     */
     public function __construct()
     {
         $this->checkoutStatus = self::CHECKOUT_CART;
@@ -214,19 +211,11 @@ class Order
         $this->shippingStatus = self::SHIPPING_CART;
     }
 
-    /**
-     * @return Cooperative
-     */
     public function getCooperative(): Cooperative
     {
         return $this->cooperative;
     }
 
-    /**
-     * @param Cooperative $cooperative
-     *
-     * @return $this
-     */
     public function setCooperative(Cooperative $cooperative): self
     {
         $this->cooperative = $cooperative;
@@ -234,19 +223,11 @@ class Order
         return $this;
     }
 
-    /**
-     * @return User
-     */
     public function getUser(): User
     {
         return $this->user;
     }
 
-    /**
-     * @param User $user
-     *
-     * @return $this
-     */
     public function setUser(User $user): self
     {
         $this->user = $user;
@@ -274,19 +255,11 @@ class Order
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getAmount(): int
     {
         return $this->amount;
     }
 
-    /**
-     * @param int $amount
-     *
-     * @return $this
-     */
     public function setAmount(int $amount): self
     {
         $this->amount = $amount;
@@ -294,19 +267,11 @@ class Order
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getToken(): string
     {
         return $this->token;
     }
 
-    /**
-     * @param string $token
-     *
-     * @return $this
-     */
     public function setToken(string $token): self
     {
         $this->token = $token;
@@ -314,19 +279,11 @@ class Order
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getPaymentStatus(): string
     {
         return $this->paymentStatus;
     }
 
-    /**
-     * @param string $paymentStatus
-     *
-     * @return $this
-     */
     public function setPaymentStatus(string $paymentStatus): self
     {
         $this->paymentStatus = $paymentStatus;
@@ -334,19 +291,11 @@ class Order
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getShippingStatus(): string
     {
         return $this->shippingStatus;
     }
 
-    /**
-     * @param string $shippingStatus
-     *
-     * @return $this
-     */
     public function setShippingStatus(string $shippingStatus): self
     {
         $this->shippingStatus = $shippingStatus;
@@ -374,19 +323,11 @@ class Order
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getCheckoutStatus(): string
     {
         return $this->checkoutStatus;
     }
 
-    /**
-     * @param string $checkoutStatus
-     *
-     * @return $this
-     */
     public function setCheckoutStatus(string $checkoutStatus): self
     {
         $this->checkoutStatus = $checkoutStatus;
@@ -394,19 +335,11 @@ class Order
         return $this;
     }
 
-    /**
-     * @return \DateTime
-     */
     public function getCheckoutCompletedAt(): \DateTime
     {
         return $this->checkoutCompletedAt;
     }
 
-    /**
-     * @param \DateTime $checkoutCompletedAt
-     *
-     * @return $this
-     */
     public function setCheckoutCompletedAt(\DateTime $checkoutCompletedAt): self
     {
         $this->checkoutCompletedAt = $checkoutCompletedAt;
@@ -414,19 +347,11 @@ class Order
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getShippingTracking(): ?string
     {
         return $this->shippingTracking;
     }
 
-    /**
-     * @param string|null $shippingTracking
-     *
-     * @return $this
-     */
     public function setShippingTracking(?string $shippingTracking): self
     {
         $this->shippingTracking = $shippingTracking;
@@ -434,19 +359,11 @@ class Order
         return $this;
     }
 
-    /**
-     * @return Address|null
-     */
     public function getShippingAddress(): ?Address
     {
         return $this->shippingAddress;
     }
 
-    /**
-     * @param Address|null $shippingAddress
-     *
-     * @return $this
-     */
     public function setShippingAddress(?Address $shippingAddress): self
     {
         $this->shippingAddress = $shippingAddress;
@@ -454,19 +371,11 @@ class Order
         return $this;
     }
 
-    /**
-     * @return PickUpLocation|null
-     */
     public function getShippingPickUpLocation(): ?PickUpLocation
     {
         return $this->shippingPickUpLocation;
     }
 
-    /**
-     * @param PickUpLocation|null $shippingPickUpLocation
-     *
-     * @return $this
-     */
     public function setShippingPickUpLocation(?PickUpLocation $shippingPickUpLocation): self
     {
         $this->shippingPickUpLocation = $shippingPickUpLocation;
@@ -474,19 +383,11 @@ class Order
         return $this;
     }
 
-    /**
-     * @return ShippingMethod|null
-     */
     public function getShippingMethod(): ?ShippingMethod
     {
         return $this->shippingMethod;
     }
 
-    /**
-     * @param ShippingMethod|null $shippingMethod
-     *
-     * @return $this
-     */
     public function setShippingMethod(?ShippingMethod $shippingMethod): self
     {
         $this->shippingMethod = $shippingMethod;
@@ -494,19 +395,11 @@ class Order
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getShippingPrice(): int
     {
         return $this->shippingPrice;
     }
 
-    /**
-     * @param int $shippingPrice
-     *
-     * @return $this
-     */
     public function setShippingPrice(int $shippingPrice): self
     {
         $this->shippingPrice = $shippingPrice;

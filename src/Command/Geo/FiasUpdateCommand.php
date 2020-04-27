@@ -25,11 +25,9 @@ class FiasUpdateCommand extends Command
 {
     protected static $defaultName = 'app:geo:fias-update';
 
-    /** @var SymfonyStyle */
     private $io;
     private $em;
     private $kernel;
-    /** @var int */
     protected $startTime;
 
     protected function configure()
@@ -57,10 +55,6 @@ class FiasUpdateCommand extends Command
         $this->io = new SymfonyStyle($input, $output);
     }
 
-    /**
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     */
     protected function __interact(InputInterface $input, OutputInterface $output)
     {
         $region = $input->getArgument('region');
@@ -72,12 +66,6 @@ class FiasUpdateCommand extends Command
         }
     }
 
-    /**
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     *
-     * @return int|void|null
-     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $stopwatch = new Stopwatch();
@@ -290,11 +278,6 @@ class FiasUpdateCommand extends Command
         return 0;
     }
 
-    /**
-     * @param array $rec
-     *
-     * @return City
-     */
     protected function factoryCity(array $rec): City
     {
         $em = $this->em;
@@ -337,11 +320,6 @@ class FiasUpdateCommand extends Command
         return $city;
     }
 
-    /**
-     * @param array $rec
-     *
-     * @return Region
-     */
     protected function factoryRegion(array $rec): Region
     {
         $em = $this->em;
@@ -373,11 +351,6 @@ class FiasUpdateCommand extends Command
         return $region;
     }
 
-    /**
-     * @param array $rec
-     *
-     * @return Province
-     */
     protected function factoryProvince(array $rec): Province
     {
         $em = $this->em;
@@ -411,11 +384,6 @@ class FiasUpdateCommand extends Command
         return $province;
     }
 
-    /**
-     * @param array $rec
-     *
-     * @return Settlement
-     */
     protected function factorySettlement(array $rec): Settlement
     {
         $em = $this->em;
@@ -464,11 +432,6 @@ class FiasUpdateCommand extends Command
         return $settlement;
     }
 
-    /**
-     * @param array $rec
-     *
-     * @return Street
-     */
     protected function factoryStreet(array $rec): Street
     {
         $em = $this->em;

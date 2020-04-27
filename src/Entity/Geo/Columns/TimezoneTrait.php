@@ -13,19 +13,11 @@ trait TimezoneTrait
      */
     protected $timezone;
 
-    /**
-     * @return string|null
-     */
     public function getTimezone(): ?string
     {
         return $this->timezone;
     }
 
-    /**
-     * @param string|null $timezone
-     *
-     * @return $this
-     */
     public function setTimezone(?string $timezone): self
     {
         $this->timezone = trim($timezone);

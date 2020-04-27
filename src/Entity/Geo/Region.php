@@ -73,9 +73,6 @@ class Region
      */
     protected $cities;
 
-    /**
-     * Region constructor.
-     */
     public function __construct()
     {
         $this->created_at = new \DateTime();
@@ -83,27 +80,16 @@ class Region
         $this->provinces  = new ArrayCollection();
     }
 
-    /**
-     * @return string
-     */
     public function __toString(): string
     {
         return $this->getOffname() . ' ' . $this->getShortname() . '.';
     }
 
-    /**
-     * @return Abbreviation
-     */
     public function getAbbreviation(): Abbreviation
     {
         return $this->abbreviation;
     }
 
-    /**
-     * @param Abbreviation $abbreviation
-     *
-     * @return $this
-     */
     public function setAbbreviation(Abbreviation $abbreviation): self
     {
         $this->abbreviation = $abbreviation;
@@ -124,26 +110,18 @@ class Region
      *
      * @return $this
      */
-    public function setCities($cities): self
+    public function setCities(Collection $cities): self
     {
         $this->cities = $cities;
 
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getFullnameCanonical(): string
     {
         return $this->fullname_canonical;
     }
 
-    /**
-     * @param string $fullname_canonical
-     *
-     * @return $this
-     */
     public function setFullnameCanonical(string $fullname_canonical): self
     {
         $this->fullname_canonical = trim($fullname_canonical);

@@ -65,9 +65,6 @@ class CooperativeMember
      */
     protected $user;
 
-    /**
-     * CooperativeMember constructor.
-     */
     public function __construct(?Cooperative $cooperative = null, ?User $user = null)
     {
         $this->created_at   = new \DateTime();
@@ -77,19 +74,11 @@ class CooperativeMember
         $this->user         = $user;
     }
 
-    /**
-     * @return Cooperative
-     */
     public function getCooperative(): Cooperative
     {
         return $this->cooperative;
     }
 
-    /**
-     * @param Cooperative $cooperative
-     *
-     * @return $this
-     */
     public function setCooperative(Cooperative $cooperative): self
     {
         $this->cooperative = $cooperative;
@@ -97,19 +86,11 @@ class CooperativeMember
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function isIsAllowMarketplace(): bool
     {
         return $this->is_allow_marketplace;
     }
 
-    /**
-     * @param bool $is_allow_marketplace
-     *
-     * @return $this
-     */
     public function setIsAllowMarketplace(bool $is_allow_marketplace): self
     {
         $this->is_allow_marketplace = $is_allow_marketplace;
@@ -117,19 +98,11 @@ class CooperativeMember
         return $this;
     }
 
-    /**
-     * @return User
-     */
     public function getUser(): User
     {
         return $this->user;
     }
 
-    /**
-     * @param User $user
-     *
-     * @return $this
-     */
     public function setUser(User $user): self
     {
         $this->user = $user;

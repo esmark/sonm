@@ -16,9 +16,6 @@ class CityRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param string $str
-     * @param int    $limit
-     *
      * @return City[]
      */
     public function search($str, $limit = 20): array

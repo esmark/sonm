@@ -26,18 +26,12 @@ class Category
     use ColumnTrait\CreatedAt;
     use ColumnTrait\Position;
 
-    /**
-     * Category constructor.
-     */
     public function __construct()
     {
         $this->created_at = new \DateTime();
         $this->position   = 0;
     }
 
-    /**
-     * @return string
-     */
     public function __toString(): string
     {
         return $this->title;

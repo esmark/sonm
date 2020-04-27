@@ -27,7 +27,6 @@ class PopulationUpdateCommand extends Command
 {
     protected static $defaultName = 'app:geo:population-update';
 
-    /** @var SymfonyStyle */
     private $io;
     private $em;
     private $kernel;
@@ -58,12 +57,6 @@ class PopulationUpdateCommand extends Command
         $this->io = new SymfonyStyle($input, $output);
     }
 
-    /**
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     *
-     * @return int|void|null
-     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $stopwatch = new Stopwatch();

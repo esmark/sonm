@@ -171,9 +171,6 @@ class Cooperative
      */
     protected $taxRateDefault;
 
-    /**
-     * Cooperative constructor.
-     */
     public function __construct()
     {
         $this->created_at   = new \DateTime();
@@ -191,27 +188,16 @@ class Cooperative
         $this->taxRates          = new ArrayCollection();
     }
 
-    /**
-     * @return string
-     */
     public function __toString(): string
     {
         return $this->getTitle();
     }
 
-    /**
-     * @return int
-     */
     public function getOgrn(): int
     {
         return (int) $this->ogrn;
     }
 
-    /**
-     * @param int $ogrn
-     *
-     * @return $this
-     */
     public function setOgrn(int $ogrn): self
     {
         $this->ogrn = $ogrn;
@@ -219,19 +205,11 @@ class Cooperative
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getInn(): int
     {
         return (int) $this->inn;
     }
 
-    /**
-     * @param int $inn
-     *
-     * @return $this
-     */
     public function setInn(int $inn): self
     {
         $this->inn = $inn;
@@ -239,19 +217,11 @@ class Cooperative
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getKpp(): int
     {
         return (int) $this->kpp;
     }
 
-    /**
-     * @param int $kpp
-     *
-     * @return $this
-     */
     public function setKpp(int $kpp): self
     {
         $this->kpp = $kpp;
@@ -259,19 +229,11 @@ class Cooperative
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getDirector(): string
     {
         return $this->director;
     }
 
-    /**
-     * @param string $director
-     *
-     * @return $this
-     */
     public function setDirector(string $director): self
     {
         $this->director = $director;
@@ -339,11 +301,6 @@ class Cooperative
         return $this;
     }
 
-    /**
-     * @param User $user
-     *
-     * @return CooperativeMember|null
-     */
     public function getMemberByUser(User $user): ?CooperativeMember
     {
         foreach ($this->getMembers() as $member) {
@@ -355,19 +312,11 @@ class Cooperative
         return null;
     }
 
-    /**
-     * @return \DateTime|null
-     */
     public function getRegisterDate(): ?\DateTime
     {
         return $this->register_date;
     }
 
-    /**
-     * @param \DateTime|null $register_date
-     *
-     * @return $this
-     */
     public function setRegisterDate(?\DateTime $register_date): self
     {
         $this->register_date = $register_date;
@@ -435,19 +384,11 @@ class Cooperative
         return $this;
     }
 
-    /**
-     * @return TaxRate|null
-     */
     public function getTaxRateDefault(): ?TaxRate
     {
         return $this->taxRateDefault;
     }
 
-    /**
-     * @param TaxRate|null $taxRateDefault
-     *
-     * @return $this
-     */
     public function setTaxRateDefault(?TaxRate $taxRateDefault): self
     {
         $this->taxRateDefault = $taxRateDefault;
@@ -455,19 +396,11 @@ class Cooperative
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getSlug(): string
     {
         return $this->slug;
     }
 
-    /**
-     * @param string $slug
-     *
-     * @return $this
-     */
     public function setSlug(string $slug): self
     {
         $this->slug = $slug;
@@ -475,19 +408,11 @@ class Cooperative
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getTitle(): string
     {
         return $this->title;
     }
 
-    /**
-     * @param string $title
-     *
-     * @return $this
-     */
     public function setTitle(string $title): self
     {
         $this->title = $title;
@@ -495,19 +420,11 @@ class Cooperative
         return $this;
     }
 
-    /**
-     * @return City|null
-     */
     public function getCity(): ?City
     {
         return $this->city;
     }
 
-    /**
-     * @param City|null $city
-     *
-     * @return $this
-     */
     public function setCity(?City $city): self
     {
         $this->city = $city;

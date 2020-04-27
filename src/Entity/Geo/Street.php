@@ -86,35 +86,21 @@ class Street
      */
     protected $region;
 
-    /**
-     * Street constructor.
-     */
     public function __construct()
     {
         $this->created_at = new \DateTime();
     }
 
-    /**
-     * @return string
-     */
     public function __toString(): string
     {
         return $this->getOffname() . ' ' . $this->getShortname() . '.';
     }
 
-    /**
-     * @return Abbreviation
-     */
     public function getAbbreviation(): Abbreviation
     {
         return $this->abbreviation;
     }
 
-    /**
-     * @param Abbreviation $abbreviation
-     *
-     * @return $this
-     */
     public function setAbbreviation(Abbreviation $abbreviation): self
     {
         $this->abbreviation = $abbreviation;
@@ -122,19 +108,11 @@ class Street
         return $this;
     }
 
-    /**
-     * @return City|null
-     */
     public function getCity(): ?City
     {
         return $this->city;
     }
 
-    /**
-     * @param City|null $city
-     *
-     * @return $this
-     */
     public function setCity(?City $city): self
     {
         $this->city = $city;
@@ -142,19 +120,11 @@ class Street
         return $this;
     }
 
-    /**
-     * @return Settlement|null
-     */
     public function getSettlement(): ?Settlement
     {
         return $this->settlement;
     }
 
-    /**
-     * @param Settlement|null $settlement
-     *
-     * @return $this
-     */
     public function setSettlement(?Settlement $settlement): self
     {
         $this->settlement = $settlement;
@@ -162,19 +132,11 @@ class Street
         return $this;
     }
 
-    /**
-     * @return Province
-     */
     public function getProvince(): Province
     {
         return $this->province;
     }
 
-    /**
-     * @param Province $province
-     *
-     * @return $this
-     */
     public function setProvince(Province $province): self
     {
         $this->province = $province;
@@ -182,19 +144,11 @@ class Street
         return $this;
     }
 
-    /**
-     * @return Region
-     */
     public function getRegion(): Region
     {
         return $this->region;
     }
 
-    /**
-     * @param Region $region
-     *
-     * @return $this
-     */
     public function setRegion(Region $region): self
     {
         $this->region = $region;

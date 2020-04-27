@@ -60,9 +60,6 @@ class ShippingMethod
      */
     protected $cooperatives;
 
-    /**
-     * ShipmentMethod constructor.
-     */
     public function __construct()
     {
         $this->created_at   = new \DateTime();
@@ -70,27 +67,16 @@ class ShippingMethod
         $this->cooperatives = new ArrayCollection();
     }
 
-    /**
-     * @return string
-     */
     public function __toString(): string
     {
         return $this->title;
     }
 
-    /**
-     * @return string
-     */
     public function getService(): string
     {
         return $this->service;
     }
 
-    /**
-     * @param string $service
-     *
-     * @return $this
-     */
     public function setService(string $service): self
     {
         $this->service = $service;
@@ -98,19 +84,11 @@ class ShippingMethod
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getClass(): string
     {
         return $this->class;
     }
 
-    /**
-     * @param string $class
-     *
-     * @return $this
-     */
     public function setClass(string $class): self
     {
         $this->class = $class;
@@ -118,19 +96,11 @@ class ShippingMethod
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getTitle(): string
     {
         return $this->title;
     }
 
-    /**
-     * @param string $title
-     *
-     * @return $this
-     */
     public function setTitle(string $title): self
     {
         $this->title = $title;

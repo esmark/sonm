@@ -62,9 +62,6 @@ class PaymentMethod
      */
     protected $class;
 
-    /**
-     * PaymentMethod constructor.
-     */
     public function __construct()
     {
         $this->created_at   = new \DateTime();
@@ -72,27 +69,16 @@ class PaymentMethod
         $this->cooperatives = new ArrayCollection();
     }
 
-    /**
-     * @return string
-     */
     public function __toString(): string
     {
         return $this->title;
     }
 
-    /**
-     * @return string
-     */
     public function getService(): string
     {
         return $this->service;
     }
 
-    /**
-     * @param string $service
-     *
-     * @return $this
-     */
     public function setService(string $service): self
     {
         $this->service = $service;
@@ -100,19 +86,11 @@ class PaymentMethod
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getClass(): string
     {
         return $this->class;
     }
 
-    /**
-     * @param string $class
-     *
-     * @return $this
-     */
     public function setClass(string $class): self
     {
         $this->class = $class;
@@ -120,19 +98,11 @@ class PaymentMethod
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getTitle(): string
     {
         return $this->title;
     }
 
-    /**
-     * @param string $title
-     *
-     * @return $this
-     */
     public function setTitle(string $title): self
     {
         $this->title = $title;

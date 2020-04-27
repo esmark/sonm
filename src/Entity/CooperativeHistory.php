@@ -74,9 +74,6 @@ class CooperativeHistory
      */
     protected $cooperative;
 
-    /**
-     * CooperativeHistory constructor.
-     */
     public function __construct(?Cooperative $cooperative = null)
     {
         $this->created_at   = new \DateTime();
@@ -84,19 +81,11 @@ class CooperativeHistory
         $this->action       = self::ACTION_CREATE;
     }
 
-    /**
-     * @return Cooperative
-     */
     public function getCooperative(): Cooperative
     {
         return $this->cooperative;
     }
 
-    /**
-     * @param Cooperative $cooperative
-     *
-     * @return $this
-     */
     public function setCooperative(Cooperative $cooperative): self
     {
         $this->cooperative = $cooperative;
@@ -104,9 +93,6 @@ class CooperativeHistory
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getActionAsText(): string
     {
         if (isset(self::$action_values[$this->action])) {
@@ -116,19 +102,11 @@ class CooperativeHistory
         return 'N/A';
     }
 
-    /**
-     * @return int
-     */
     public function getAction(): int
     {
         return $this->action;
     }
 
-    /**
-     * @param int $action
-     *
-     * @return $this
-     */
     public function setAction(int $action): self
     {
         $this->action = $action;
@@ -136,19 +114,11 @@ class CooperativeHistory
         return $this;
     }
 
-    /**
-     * @return array|null
-     */
     public function getNewValue(): ?array
     {
         return $this->new_value;
     }
 
-    /**
-     * @param array|null $new_value
-     *
-     * @return $this
-     */
     public function setNewValue(?array $new_value): self
     {
         $this->new_value = $new_value;
@@ -156,19 +126,11 @@ class CooperativeHistory
         return $this;
     }
 
-    /**
-     * @return array|null
-     */
     public function getOldValue(): ?array
     {
         return $this->old_value;
     }
 
-    /**
-     * @param array|null $old_value
-     *
-     * @return $this
-     */
     public function setOldValue(?array $old_value): self
     {
         $this->old_value = $old_value;
