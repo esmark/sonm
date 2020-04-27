@@ -225,6 +225,34 @@ class User extends UserModel
     protected $purpose_take;
 
     /**
+     * Пригласивший пользователь
+     *
+     * @var User|null
+     *
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="invited_users")
+     */
+    protected $invited_by_user;
+
+    /**
+     * Приглашение, которое было использовано.
+     *
+     * @var Invite|null
+     *
+     * @ORM\OneToOne(targetEntity="Invite", cascade={"persist"})
+     */
+    protected $invite;
+
+    /**
+     * Приглашенные пользователи
+     *
+     * @var User[]|Collection
+     *
+     * @ORM\OneToMany(targetEntity="User", mappedBy="invited_by_user", fetch="EXTRA_LAZY")
+     * @ORM\OrderBy({"id" = "DESC"})
+     */
+    protected $invited_users;
+
+    /**
      * @var City|null
      *
      * @ORM\ManyToOne(targetEntity="App\Entity\Geo\City", cascade={"persist"}, fetch="EXTRA_LAZY")
@@ -284,14 +312,15 @@ class User extends UserModel
     {
         parent::__construct();
 
-        $this->is_enabled   = true;
-        $this->has_relative = false;
-        $this->email        = '';
-        $this->baskets      = new ArrayCollection();
-        $this->orders       = new ArrayCollection();
-        $this->groups       = new ArrayCollection();
-        $this->oauths       = new ArrayCollection();
-        $this->payments     = new ArrayCollection();
+        $this->is_enabled    = true;
+        $this->has_relative  = false;
+        $this->email         = '';
+        $this->baskets       = new ArrayCollection();
+        $this->orders        = new ArrayCollection();
+        $this->groups        = new ArrayCollection();
+        $this->oauths        = new ArrayCollection();
+        $this->payments      = new ArrayCollection();
+        $this->invited_users = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -746,6 +775,50 @@ class User extends UserModel
     public function setCity(?City $city): self
     {
         $this->city = $city;
+
+        return $this;
+    }
+
+    /**
+     * @return User[]|Collection
+     */
+    public function getInvitedUsers(): Collection
+    {
+        return $this->invited_users;
+    }
+
+    /**
+     * @param User[]|Collection $invited_users
+     *
+     * @return $this
+     */
+    public function setInvitedUsers(Collection $invited_users): self
+    {
+        $this->invited_users = $invited_users;
+
+        return $this;
+    }
+
+    public function getInvitedByUser(): ?User
+    {
+        return $this->invited_by_user;
+    }
+
+    public function setInvitedByUser(?User $invited_by_user): self
+    {
+        $this->invited_by_user = $invited_by_user;
+
+        return $this;
+    }
+
+    public function getInvite(): ?Invite
+    {
+        return $this->invite;
+    }
+
+    public function setInvite(?Invite $invite): self
+    {
+        $this->invite = $invite;
 
         return $this;
     }
