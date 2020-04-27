@@ -13,7 +13,7 @@ class AppExtension extends AbstractExtension
     protected $tgBotName;
     protected $em;
 
-    public function __construct(EntityManagerInterface $em, string $tgBotName)
+    public function __construct(EntityManagerInterface $em, ?string $tgBotName)
     {
         $this->em          = $em;
         $this->tgBotName   = $tgBotName;
