@@ -33,6 +33,8 @@ class ProductRepository extends ServiceEntityRepository
             $qb->setParameter('search', '%'.$filters['search'].'%');
         }
 
+        $qb->orderBy('e.created_at', 'DESC');
+
         return $qb;
     }
 }

@@ -94,20 +94,20 @@ class ProductController extends AbstractController
                     // $fileId = $mc->upload('of', $image); @todo
 
                     if ($oldImage) {
-                        $mc->getCollection('jp')->remove((int) $oldImage);
+                        $mc->getCollection('jp')->remove($oldImage);
                         // $mc->remove('of', (int) $oldImage); @todo
                     }
 
                     $product->setImageId((string) $fileId);
                 } elseif (isset($_POST['_delete_']['image_id'])) {
-                    $mc->getCollection('jp')->remove((int) $oldImage);
+                    $mc->getCollection('jp')->remove($oldImage);
 
                     $product->setImageId(null);
                 } else {
                     $product->setImageId((string) $oldImage);
                 }
 
-                $em->persist($form->getData());
+                $em->persist($product);
                 $em->flush();
 
                 $this->addFlash('success', 'Товар обновлён');
