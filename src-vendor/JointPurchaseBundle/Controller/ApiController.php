@@ -17,6 +17,11 @@ use Symfony\Component\Routing\Annotation\Route;
 class ApiController extends AbstractController
 {
     /**
+     * Ожидаемые GET параметры:
+     *  product
+     *  quantity
+     *  comment
+     *
      * @Route("/api/order.update", name="jp_api_order_update", methods={"POST"})
      */
     public function orderUpdate(Request $request, EntityManagerInterface $em): JsonResponse
@@ -50,7 +55,7 @@ class ApiController extends AbstractController
             $comment  = $request->request->get('comment');
             $quantity = (int) $request->request->get('quantity');
 
-            $orderLine = $em->getRepository(JointPurchaseOrderLine::class)->findOneBy(['product' => $product]);
+            $orderLine = $em->getRepository(JointPurchaseOrderLine::class)->findOneByProductAndUser($product, $this->getUser());
 
             if (empty($orderLine)) {
                 $order = $em->getRepository(JointPurchaseOrder::class)->findOneBy(['joint_purchase' => $product->getJointPurchase(), 'user' => $this->getUser()]);
